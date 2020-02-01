@@ -60,6 +60,9 @@ jobs:
       - name: Install Dependencies
         run: yarn
 
+      - name: Build Packages
+        run: yarn run build
+
       - name: Authenticate with Registry
         run: |
           yarn logout

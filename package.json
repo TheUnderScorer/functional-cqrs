@@ -13,7 +13,6 @@
     "dev": "lerna run dev --parallel",
     "prod": "lerna run prod --parallel",
     "stop": "lerna run stop --parallel",
-    "prepare-packages": "lerna run prepare-package --parallel",
     "clean": "lerna run clean --parallel",
     "lint": "eslint . --format=pretty --ext .ts",
     "lint:fix": "eslint . --format=pretty --ext .ts --fix",
