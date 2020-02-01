@@ -8,26 +8,25 @@
     "esModuleInterop": true,
     "baseUrl": ".",
     "paths": {
-      "@ts-cqrs/global-typings": ["./packages/global-typings/src"],
-      "@ts-cqrs/containers": ["./packages/containers/src"],
-      "@ts-cqrs/exceptions": ["./packages/exceptions/src"],
-      "@ts-cqrs/decorators": ["./packages/decorators/src"],
-      "@ts-cqrs/buses": ["./packages/buses/src"],
-      "@ts-cqrs/core": ["./packages/core/src"]
-  },
-    "types": ["node", "jest"],
+      "@functional-cqrs/cli": [
+        "./packages/cli/src"
+      ],
+      "@functional-cqrs/typings": [
+        "./packages/typings/src"
+      ]
+    },
+    "types": [
+      "node",
+      "jest"
+    ],
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true
   },
-  "exclude": ["node_modules"],
+  "exclude": [
+    "node_modules"
+  ],
   "include": [
-    "packages/decorators",
-    "packages/containers",
-    "packages/exceptions",
-    "packages/global-typings",
-    "packages/buses",
-    "packages/core",
-    "app",
-    "index.ts"
+    "packages/typings",
+    "packages/cli"
   ]
 }

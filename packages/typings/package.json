@@ -1,0 +1,21 @@
+{
+  "name": "@functional-cqrs/typings",
+  "version": "0.0.1",
+  "description": "Stores typings related to functional-cqrs",
+  "license": "UNLICENSED",
+  "publishConfig": {
+    "access": "public"
+  },
+  "main": "build/index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/TheUnderScorer/functional-cqrs.git"
+  },
+  "scripts": {
+    "dev": "tsc -p tsconfig.build.json -w",
+    "build": "yarn run clean && tsc -p tsconfig.build.json",
+    "prod": "node build/index.js",
+    "clean": "rm -rf build .cache",
+    "test": "jest --config ../../jest.config.js"
+  }
+}

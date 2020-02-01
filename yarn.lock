@@ -296,6 +296,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@functional-cqrs/typings@workspace:packages/typings":
+  version: 0.0.0-use.local
+  resolution: "@functional-cqrs/typings@workspace:packages/typings"
+  languageName: unknown
+  linkType: soft
+
 "@jest/console@npm:^24.7.1, @jest/console@npm:^24.9.0":
   version: 24.9.0
   resolution: "@jest/console@npm:24.9.0"
@@ -4228,9 +4234,7 @@ fsevents@^1.2.7:
     jest-circus: ^24.9.0
     lerna: ^3.18.4
     prettier: ^1.19.1
-    reflect-metadata: ^0.1.13
     ts-jest: ^24.1.0
-    tsyringe: ^4.0.1
     typescript: ^3.7.2
   languageName: unknown
   linkType: soft
@@ -8250,13 +8254,6 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"reflect-metadata@npm:^0.1.13":
-  version: 0.1.13
-  resolution: "reflect-metadata@npm:0.1.13"
-  checksum: 23840f6c77e72dc8eafba1abf32fb62d3a6224539d3ffc618bbc5df2bfabf825bd6a6e9c8498037b16839f34c53a52c86660ff0472eecce742930bc38492304c
-  languageName: node
-  linkType: hard
-
 "regenerator-runtime@npm:^0.12.0":
   version: 0.12.1
   resolution: "regenerator-runtime@npm:0.12.1"
@@ -9519,7 +9516,7 @@ resolve@1.1.7:
   languageName: node
   linkType: hard
 
-"tslib@npm:^1.8.1, tslib@npm:^1.9.0, tslib@npm:^1.9.3":
+"tslib@npm:^1.8.1, tslib@npm:^1.9.0":
   version: 1.10.0
   resolution: "tslib@npm:1.10.0"
   checksum: 626387669b38797372530d84df93dafcc0eca2b3bad31b109c7308b2e8d9c4ed0ba94113eb08a6946aa1fbee3b619fb69dd81f8681654bbc806cf8f208caeb47
@@ -9534,15 +9531,6 @@ resolve@1.1.7:
   peerDependencies:
     typescript: ">=2.8.0 || >= 3.2.0-dev || >= 3.3.0-dev || >= 3.4.0-dev || >= 3.5.0-dev || >= 3.6.0-dev || >= 3.6.0-beta || >= 3.7.0-dev || >= 3.7.0-beta"
   checksum: 89cec1c98dcf1db1cd6737399822277299a180c241cc30b711fcd95bec504b0f62e1ddfcc117c6bda0be8ce10b8ff23da546a393c46610132452553114aa5e77
-  languageName: node
-  linkType: hard
-
-"tsyringe@npm:^4.0.1":
-  version: 4.0.1
-  resolution: "tsyringe@npm:4.0.1"
-  dependencies:
-    tslib: ^1.9.3
-  checksum: ef256ad7182a558c63823e9825bcf7476148da7ebf1da9665a0ff881862a91e7d97bbde86f98d87dd9ceb2b067b4c59b7c3ff3f4adcd8a50a08a7296525b3a11
   languageName: node
   linkType: hard
 
