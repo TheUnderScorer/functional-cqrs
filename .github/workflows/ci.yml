@@ -1,0 +1,76 @@
+name: CI
+on: [push, pull_request]
+jobs:
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+
+      - name: Set Node.js 12.x
+        uses: actions/setup-node@v1.1.0
+        with:
+          version: 12.x
+
+      - name: Install dependencies
+        run: yarn install
+
+      - name: Lint
+        run: yarn run lint
+
+      - name: Typecheck
+        run: yarn run typecheck
+
+      - name: Docker
+        run: yarn run up
+
+      - name: Tests
+        run: yarn run test --coverage --ci
+
+      - name: Coveralls
+        uses: coverallsapp/github-action@master
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+  release:
+    needs: test
+    name: Publish
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/master'
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v1
+
+      - name: Set Node.js 12.x
+        uses: actions/setup-node@v1.1.0
+        with:
+          version: 12.x
+
+      - name: Configure CI Git User
+        run: |
+          git config --global user.name 'TheUnderScorer'
+          git config --global user.email 'przemyslawzydek@gmail.com'
+          git remote set-url origin https://TheUnderScorer:$GITHUB_TOKEN@github.com/TheUnderScorer/functional-cqrs
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Checkout and pull branch
+        run: git checkout "${GITHUB_REF:11}" && git pull
+
+      - name: Install Dependencies
+        run: yarn
+
+      - name: Authenticate with Registry
+        run: |
+          yarn logout
+          echo "@functional-cqrs:registry=http://registry.npmjs.org/" > .npmrc
+          echo "registry=http://registry.npmjs.org/" >> .npmrc
+          echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> .npmrc
+          npm whoami
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Publish package
+        run: lerna publish --yes
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}

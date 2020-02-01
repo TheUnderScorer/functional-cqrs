@@ -1,0 +1,12 @@
+.gitignore
+.npmrc
+.eslintignore
+.prettierignore
+.DS_Store
+build
+coverage
+yarn.lock
+*.db
+*.sql
+*.properties
+*Dockerfile*

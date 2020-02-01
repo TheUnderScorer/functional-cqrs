@@ -1,0 +1,47 @@
+{
+  "name": "functional-cqrs",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
+  "author": "Przemysław Żydek <przemyslawzydek@gmail.com>",
+  "scripts": {
+    "build": "lerna run build --stream",
+    "test": "lerna run test --stream",
+    "test:e2e": "jest --config jest.e2e.config.js",
+    "coverage": "lerna run test --stream -- --coverage --coverageReporters html",
+    "dev": "lerna run dev --parallel",
+    "prod": "lerna run prod --parallel",
+    "stop": "lerna run stop --parallel",
+    "prepare-packages": "lerna run prepare-package --parallel",
+    "clean": "lerna run clean --parallel",
+    "lint": "eslint . --format=pretty --ext .ts",
+    "lint:fix": "eslint . --format=pretty --ext .ts --fix",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@types/jest": "^24.0.23",
+    "@typescript-eslint/eslint-plugin": "^2.7.0",
+    "@typescript-eslint/parser": "^2.7.0",
+    "eslint": "^6.6.0",
+    "eslint-config-prettier": "^6.5.0",
+    "eslint-config-xo": "^0.27.2",
+    "eslint-config-xo-typescript": "^0.21.0",
+    "eslint-formatter-pretty": "^3.0.0",
+    "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-jest": "^23.0.4",
+    "eslint-plugin-monorepo": "^0.2.1",
+    "eslint-plugin-prettier": "^3.1.1",
+    "eslint-plugin-react": "^7.16.0",
+    "jest": "^24.9.0",
+    "jest-circus": "^24.9.0",
+    "lerna": "^3.18.4",
+    "prettier": "^1.19.1",
+    "ts-jest": "^24.1.0",
+    "typescript": "^3.7.2"
+  },
+  "dependencies": {
+    "reflect-metadata": "^0.1.13",
+    "tsyringe": "^4.0.1"
+  }
+}

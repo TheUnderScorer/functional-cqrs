@@ -1,0 +1,33 @@
+{
+  "extends": "./tsconfig.base",
+  "compilerOptions": {
+    "module": "commonjs",
+    "sourceMap": true,
+    "outDir": "build",
+    "target": "esnext",
+    "esModuleInterop": true,
+    "baseUrl": ".",
+    "paths": {
+      "@ts-cqrs/global-typings": ["./packages/global-typings/src"],
+      "@ts-cqrs/containers": ["./packages/containers/src"],
+      "@ts-cqrs/exceptions": ["./packages/exceptions/src"],
+      "@ts-cqrs/decorators": ["./packages/decorators/src"],
+      "@ts-cqrs/buses": ["./packages/buses/src"],
+      "@ts-cqrs/core": ["./packages/core/src"]
+  },
+    "types": ["node", "jest"],
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true
+  },
+  "exclude": ["node_modules"],
+  "include": [
+    "packages/decorators",
+    "packages/containers",
+    "packages/exceptions",
+    "packages/global-typings",
+    "packages/buses",
+    "packages/core",
+    "app",
+    "index.ts"
+  ]
+}

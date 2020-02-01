@@ -1,0 +1,24 @@
+{
+  "root": true,
+  "env": {
+    "jest": true,
+    "browser": true
+  },
+  "plugins": ["jest"],
+  "extends": [
+    "plugin:jest/recommended",
+    "plugin:monorepo/recommended",
+    "xo",
+    "xo-typescript",
+    "plugin:react/recommended",
+    "plugin:prettier/recommended",
+    "prettier/@typescript-eslint"
+  ],
+  "rules": {
+    // Enabled by `xo`
+    "valid-jsdoc": "off",
+    "@typescript-eslint/explicit-function-return-type": "off",
+    "capitalized-comments": "off",
+    "@typescript-eslint/member-naming": "off"
+  }
+}

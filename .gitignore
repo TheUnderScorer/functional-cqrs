@@ -1,0 +1,20 @@
+# Module related files
+node_modules
+packages/*/node_modules
+packages/*/tmp/*
+packages/*/yarn-error.log
+
+# Lerna files
+lerna.debug.log
+
+# Builds
+packages/*/build
+packages/*/*.tsbuildinfo
+
+# IDE related files
+.idea
+
+
+# Coverage
+coverage
+

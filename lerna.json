@@ -1,0 +1,21 @@
+{
+  "packages": ["packages/*"],
+  "npmClient": "yarn",
+  "useWorkspaces": true,
+  "command": {
+    "version": {
+      "conventionalCommits": true,
+      "changelogPreset": "emojis",
+      "exact": true,
+      "message": "🔖 Publish"
+    },
+    "publish": {
+      "conventionalCommits": true,
+      "changelogPreset": "emojis",
+      "exact": true,
+      "message": "🔖 Publish"
+    }
+  },
+  "ignoreChanges": ["**/__fixtures__/**", "**/*.test.ts", "**/*.md"],
+  "version": "independent"
+}
