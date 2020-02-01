@@ -13,6 +13,15 @@
       ],
       "@functional-cqrs/typings": [
         "./packages/typings/src"
+      ],
+      "@functional-cqrs/buses": [
+        "./packages/buses/src"
+      ],
+      "@functional-cqrs/stores": [
+        "./packages/stores/src"
+      ],
+      "@functional-cqrs/core": [
+        "./packages/core/src"
       ]
     },
     "types": [
@@ -27,6 +36,9 @@
   ],
   "include": [
     "packages/typings",
-    "packages/cli"
+    "packages/cli",
+    "packages/buses",
+    "packages/stores",
+    "packages/core"
   ]
 }

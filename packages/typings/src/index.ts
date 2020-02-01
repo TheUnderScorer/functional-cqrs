@@ -3,6 +3,10 @@ export interface Command<Payload = any> {
   payload: Payload;
 }
 
-export type CommandHandler<CommandType extends Command, ReturnValue = any> = (
-  command: CommandType
-) => ReturnValue;
+export type CommandHandlersStore = Map<string, CommandHandler<any>>;
+
+export type CommandHandler<
+  CommandType extends Command = Command,
+  Context = any,
+  ReturnValue = any
+> = (context: Context) => (command: CommandType) => ReturnValue;
