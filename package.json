@@ -17,7 +17,7 @@
     "lint:fix": "eslint . --format=pretty --ext .ts --fix",
     "typecheck": "tsc --noEmit",
     "cli": "node packages/cli",
-    "publish-ci": "lerna publish --conventional-commits"
+    "publish-ci": "lerna publish --yes"
   },
   "devDependencies": {
     "@types/jest": "^24.0.23",
