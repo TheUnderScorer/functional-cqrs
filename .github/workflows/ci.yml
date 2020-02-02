@@ -18,7 +18,7 @@ jobs:
           yarn --version
 
       - name: Install dependencies
-        run: yarn install --pure-lockfile
+        run: yarn install --immutable --immutable-cache
 
       - name: Lint
         run: yarn run lint
@@ -65,7 +65,7 @@ jobs:
         run: git checkout "${GITHUB_REF:11}" && git pull
 
       - name: Install Dependencies
-        run: yarn install --pure-lockfile
+        run: yarn install --immutable --immutable-cache
 
       - name: Build Packages
         run: yarn run build
