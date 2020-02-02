@@ -11,6 +11,7 @@ import { Arguments, CommandBuilder } from 'yargs';
 
 import { getFullPackageName, writeJson, log } from './utils';
 
+// eslint-disable-next-line @typescript-eslint/member-ordering
 type TSConfigJson = { compilerOptions?: CompilerOptions; [key: string]: any };
 
 // Constants
