@@ -1,6 +1,6 @@
 import { createCqrs } from './cqrs';
 import { sync as globSync } from 'glob';
-import { TestCommand, TestContext } from './__test__/test.handler';
+import { eventCalls, TestCommand, TestContext } from './__test__/test.handler';
 
 describe('createCqrs', () => {
   test('should return buses and loaded handlers count', async () => {
@@ -11,6 +11,11 @@ describe('createCqrs', () => {
         "buses": Object {
           "commandsBus": Object {
             "execute": [Function],
+            "setEventsBus": [Function],
+          },
+          "eventsBus": Object {
+            "dispatch": [Function],
+            "setCommandsBus": [Function],
           },
         },
         "loadedHandlers": 0,
@@ -29,7 +34,7 @@ describe('createCqrs', () => {
     expect(loadedHandlers).toEqual(1);
   });
 
-  test('execute command on created cqrs', async () => {
+  test('execute command and dispatch event on created cqrs', async () => {
     const globHandler = jest.fn((path: string) => globSync(path));
 
     const context: TestContext = {
@@ -42,6 +47,8 @@ describe('createCqrs', () => {
       context,
     });
 
+    const dispatchSpy = jest.spyOn(buses.eventsBus, 'dispatch');
+
     const command: TestCommand = {
       type: 'TestCommand',
       payload: false,
@@ -50,5 +57,8 @@ describe('createCqrs', () => {
     const { payload, version } = await buses.commandsBus.execute(command);
     expect(payload).toEqual(command.payload);
     expect(version).toEqual(context.version);
+
+    expect(dispatchSpy).toHaveBeenCalledTimes(1);
+    expect(eventCalls).toEqual(1);
   });
 });
