@@ -21,11 +21,8 @@ jobs:
       - name: Typecheck
         run: yarn run typecheck
 
-      - name: Docker
-        run: yarn run up
-
       - name: Tests
-        run: yarn run test --coverage --ci
+        run: yarn run coverage --ci
 
       - name: Coveralls
         uses: coverallsapp/github-action@master
