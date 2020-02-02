@@ -1,16 +1,22 @@
-import { Command, CommandsBus, EventsBus } from '@functional-cqrs/typings';
-import { commandHandlersStore } from '@functional-cqrs/stores';
+import {
+  Command,
+  CommandHandlersStore,
+  CommandsBus,
+  EventsBus,
+  QueriesBus,
+} from '@functional-cqrs/typings';
 
 export const createCommandBus = <Context = any>(
-  context: Context
-): CommandsBus => {
+  store: CommandHandlersStore
+) => (context: Context): CommandsBus => {
   let eventsBus: EventsBus;
+  let queriesBus: QueriesBus;
 
   return {
     execute: <CommandType extends Command = Command, ReturnValue = any>(
       command: CommandType
     ): Promise<ReturnValue> | ReturnValue => {
-      const handler = commandHandlersStore.get(command.type);
+      const handler = store.get(command.type);
 
       if (!handler) {
         throw new Error(`No handler for command ${command.type} found.`);
@@ -18,11 +24,15 @@ export const createCommandBus = <Context = any>(
 
       return handler({
         ...context,
+        queriesBus,
         eventsBus,
       })(command);
     },
     setEventsBus: (bus: EventsBus) => {
       eventsBus = bus;
+    },
+    setQueriesBus: (bus: QueriesBus) => {
+      queriesBus = bus;
     },
   };
 };
