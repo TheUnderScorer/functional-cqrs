@@ -71,6 +71,6 @@ jobs:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Publish package
-        run: lerna publish --yes
+        run: yarn run publish-ci
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
