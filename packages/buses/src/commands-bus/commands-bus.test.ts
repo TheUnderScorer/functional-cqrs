@@ -1,16 +1,24 @@
-import { Command, CommandHandler } from '@functional-cqrs/typings';
+import {
+  Command,
+  CommandHandler,
+  CommandHandlersStore,
+} from '@functional-cqrs/typings';
 import { commandHandler } from '@functional-cqrs/stores';
 import { createCommandBus } from '.';
 
 describe('execute', () => {
+  const store: CommandHandlersStore = new Map<string, CommandHandler<any>>();
+
+  beforeEach(() => {
+    store.clear();
+  });
+
   test('should execute command with context', async () => {
     const ctx = {
       isTest: true,
     };
 
-    interface TestCmd extends Command<boolean> {
-      type: 'TestCmd';
-    }
+    type TestCmd = Command<'TestCmd', boolean>;
 
     const handler: CommandHandler<TestCmd, typeof ctx> = ({
       isTest,
@@ -21,9 +29,9 @@ describe('execute', () => {
       };
     };
 
-    commandHandler<TestCmd, typeof ctx>('TestCmd', handler);
+    commandHandler<TestCmd, typeof ctx>('TestCmd', handler)(store);
 
-    const bus = createCommandBus(ctx);
+    const bus = createCommandBus(store)(ctx);
     const result = await bus.execute<TestCmd>({
       type: 'TestCmd',
       payload: false,

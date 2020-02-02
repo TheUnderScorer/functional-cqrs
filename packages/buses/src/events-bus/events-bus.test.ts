@@ -1,9 +1,19 @@
-import { Event, EventHandler } from '@functional-cqrs/typings';
+import {
+  Event,
+  EventHandler,
+  EventHandlersStore,
+} from '@functional-cqrs/typings';
 import { createEventsBus } from './index';
-import { eventHandler, eventHandlersStore } from '@functional-cqrs/stores';
+import { eventHandler } from '@functional-cqrs/stores';
 
 describe('dispatch', () => {
-  type TestEvent = Event<boolean, 'TestEvent'>;
+  const store: EventHandlersStore = new Map<string, Array<EventHandler<any>>>();
+
+  beforeEach(() => {
+    store.clear();
+  });
+
+  type TestEvent = Event<'TestEvent', boolean>;
 
   interface TestContext {
     isTest: true;
@@ -13,10 +23,6 @@ describe('dispatch', () => {
     isTest: true,
   };
 
-  beforeEach(() => {
-    eventHandlersStore.clear();
-  });
-
   test('should dispatch event with context', async () => {
     const handler: EventHandler<TestEvent, TestContext> = jest.fn(
       ({ isTest }) => ({ payload }) => {
@@ -25,9 +31,9 @@ describe('dispatch', () => {
       }
     );
 
-    eventHandler<TestEvent>('TestEvent', handler);
+    eventHandler<TestEvent>('TestEvent', handler)(store);
 
-    const bus = createEventsBus(context);
+    const bus = createEventsBus(store)(context);
     await bus.dispatch<TestEvent>({
       event: 'TestEvent',
       payload: true,

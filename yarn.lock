@@ -435,12 +435,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@functional-cqrs/buses@0.1.0, @functional-cqrs/buses@workspace:packages/buses":
+"@functional-cqrs/buses@0.2.0, @functional-cqrs/buses@workspace:packages/buses":
   version: 0.0.0-use.local
   resolution: "@functional-cqrs/buses@workspace:packages/buses"
   dependencies:
-    "@functional-cqrs/stores": 0.1.0
-    "@functional-cqrs/typings": 0.1.0
+    "@functional-cqrs/stores": 0.2.0
+    "@functional-cqrs/typings": 0.2.0
   languageName: unknown
   linkType: soft
 
@@ -477,21 +477,21 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@functional-cqrs/core@workspace:packages/core"
   dependencies:
-    "@functional-cqrs/buses": 0.1.0
-    "@functional-cqrs/stores": 0.1.0
-    "@functional-cqrs/typings": 0.1.0
+    "@functional-cqrs/buses": 0.2.0
+    "@functional-cqrs/stores": 0.2.0
+    "@functional-cqrs/typings": 0.2.0
   languageName: unknown
   linkType: soft
 
-"@functional-cqrs/stores@0.1.0, @functional-cqrs/stores@workspace:packages/stores":
+"@functional-cqrs/stores@0.2.0, @functional-cqrs/stores@workspace:packages/stores":
   version: 0.0.0-use.local
   resolution: "@functional-cqrs/stores@workspace:packages/stores"
   dependencies:
-    "@functional-cqrs/typings": 0.1.0
+    "@functional-cqrs/typings": 0.2.0
   languageName: unknown
   linkType: soft
 
-"@functional-cqrs/typings@0.1.0, @functional-cqrs/typings@workspace:packages/typings":
+"@functional-cqrs/typings@0.2.0, @functional-cqrs/typings@workspace:packages/typings":
   version: 0.0.0-use.local
   resolution: "@functional-cqrs/typings@workspace:packages/typings"
   languageName: unknown

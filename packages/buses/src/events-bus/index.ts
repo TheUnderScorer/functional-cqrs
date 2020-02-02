@@ -2,16 +2,20 @@ import {
   CommandsBus,
   Event,
   EventHandler,
+  EventHandlersStore,
   EventsBus,
+  QueriesBus,
 } from '@functional-cqrs/typings';
-import { eventHandlersStore } from '@functional-cqrs/stores';
 
-export const createEventsBus = <Context = any>(context: Context): EventsBus => {
+export const createEventsBus = <Context = any>(store: EventHandlersStore) => (
+  context: Context
+): EventsBus => {
   let commandsBus: CommandsBus;
+  let queriesBus: QueriesBus;
 
   return {
-    dispatch: async <EventType extends Event = Event>(event: Event) => {
-      const handlers = (eventHandlersStore.get(event.event) ?? []) as Array<
+    dispatch: async <EventType extends Event = Event>(event: EventType) => {
+      const handlers = (store.get(event.event) ?? []) as Array<
         EventHandler<EventType, Context>
       >;
 
@@ -20,6 +24,7 @@ export const createEventsBus = <Context = any>(context: Context): EventsBus => {
           handlers.map(handler =>
             handler({
               ...context,
+              queriesBus,
               commandsBus,
             })(event)
           )
@@ -30,6 +35,9 @@ export const createEventsBus = <Context = any>(context: Context): EventsBus => {
     },
     setCommandsBus: bus => {
       commandsBus = bus;
+    },
+    setQueriesBus: bus => {
+      queriesBus = bus;
     },
   };
 };

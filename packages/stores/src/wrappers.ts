@@ -1,11 +1,14 @@
 import {
   Command,
   CommandHandler,
+  CommandHandlersStore,
   Event,
   EventHandler,
   EventHandlersStore,
+  Query,
+  QueryHandler,
+  QueryHandlersStore,
 } from '@functional-cqrs/typings';
-import { commandHandlersStore, eventHandlersStore } from './stores';
 import { pipe } from 'ramda';
 
 type EventHandlerTumple = [EventHandlersStore, EventHandler[]];
@@ -20,8 +23,14 @@ export const commandHandler = <
 >(
   type: CommandType['type'],
   handler: CommandHandler<CommandType, Context, ReturnValueType>
-) => {
-  commandHandlersStore.set(type, handler as CommandHandler);
+) => (store: CommandHandlersStore) => {
+  if (store.has(type)) {
+    console.warn(`Handler for command ${type} already exists.`);
+
+    return handler;
+  }
+
+  store.set(type, handler as CommandHandler);
 
   return handler;
 };
@@ -29,7 +38,7 @@ export const commandHandler = <
 export const eventHandler = <EventType extends Event = Event, Context = any>(
   type: EventType['event'],
   handler: EventHandler<EventType, Context>
-) => {
+) => (store: EventHandlersStore) => {
   const getHandlers = (store: EventHandlersStore): EventHandlerTumple => [
     store,
     store.get(type) ?? [],
@@ -49,7 +58,7 @@ export const eventHandler = <EventType extends Event = Event, Context = any>(
   };
 
   const saveHandlers = ([store, handlers]: EventHandlerTumple) => {
-    handlers.push(handler);
+    handlers.push(handler as EventHandler);
 
     store.set(type, handlers);
 
@@ -57,14 +66,29 @@ export const eventHandler = <EventType extends Event = Event, Context = any>(
   };
 
   try {
-    pipe(
-      getHandlers,
-      checkHandlersUniqueness,
-      saveHandlers
-    )(eventHandlersStore);
+    pipe(getHandlers, checkHandlersUniqueness, saveHandlers)(store);
   } catch (e) {
     console.error(e);
   }
+
+  return handler;
+};
+
+export const queryHandler = <
+  QueryType extends Query = Query,
+  Context = any,
+  ReturnValueType = any
+>(
+  type: QueryType['query'],
+  handler: QueryHandler<QueryType, Context, ReturnValueType>
+) => (store: QueryHandlersStore) => {
+  if (store.has(type)) {
+    console.warn(`Handler for query "${type}" already exists.`);
+
+    return handler;
+  }
+
+  store.set(type, handler);
 
   return handler;
 };
