@@ -18,7 +18,7 @@ jobs:
           yarn --version
 
       - name: Install dependencies
-        run: yarn install
+        run: yarn install --pure-lockfile
 
       - name: Lint
         run: yarn run lint
@@ -65,14 +65,13 @@ jobs:
         run: git checkout "${GITHUB_REF:11}" && git pull
 
       - name: Install Dependencies
-        run: yarn
+        run: yarn install --pure-lockfile
 
       - name: Build Packages
         run: yarn run build
 
       - name: Authenticate with Registry
         run: |
-          yarn logout
           echo "@functional-cqrs:registry=http://registry.npmjs.org/" > .npmrc
           echo "registry=http://registry.npmjs.org/" >> .npmrc
           echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> .npmrc
@@ -81,9 +80,7 @@ jobs:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Update git indexes
-        run: |
-          git update-index --assume-unchanged .npmrc
-          git update-index --assume-unchanged yarn.lock
+        run: git update-index --assume-unchanged .npmrc
 
       - name: Publish package
         run: yarn run publish-ci
