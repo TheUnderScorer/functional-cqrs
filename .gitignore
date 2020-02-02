@@ -10,6 +10,7 @@ lerna.debug.log
 # Builds
 packages/*/build
 packages/*/*.tsbuildinfo
+packages/*/.cache
 
 # IDE related files
 .idea
