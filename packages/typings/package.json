@@ -1,6 +1,6 @@
 {
   "name": "@functional-cqrs/typings",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Stores typings related to functional-cqrs",
   "license": "UNLICENSED",
   "publishConfig": {

@@ -1,6 +1,6 @@
 {
   "name": "@functional-cqrs/stores",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Manages stores that contain handlers",
   "license": "UNLICENSED",
   "publishConfig": {
@@ -19,6 +19,6 @@
     "test": "jest --config ../../jest.config.js"
   },
   "dependencies": {
-    "@functional-cqrs/typings": "^0.0.1"
+    "@functional-cqrs/typings": "0.1.0"
   }
 }
