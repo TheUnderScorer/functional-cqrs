@@ -1,7 +1,11 @@
-import { Command } from '@functional-cqrs/typings';
+import { Command, CommandsBus, EventsBus } from '@functional-cqrs/typings';
 import { commandHandlersStore } from '@functional-cqrs/stores';
 
-export const createCommandBus = <Context = any>(context: Context) => {
+export const createCommandBus = <Context = any>(
+  context: Context
+): CommandsBus => {
+  let eventsBus: EventsBus;
+
   return {
     execute: <CommandType extends Command = Command, ReturnValue = any>(
       command: CommandType
@@ -12,7 +16,13 @@ export const createCommandBus = <Context = any>(context: Context) => {
         throw new Error(`No handler for command ${command.type} found.`);
       }
 
-      return handler(context)(command);
+      return handler({
+        ...context,
+        eventsBus,
+      })(command);
+    },
+    setEventsBus: (bus: EventsBus) => {
+      eventsBus = bus;
     },
   };
 };

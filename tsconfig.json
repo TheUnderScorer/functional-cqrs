@@ -4,7 +4,7 @@
     "module": "commonjs",
     "sourceMap": true,
     "outDir": "build",
-    "target": "esnext",
+    "target": "es2019",
     "esModuleInterop": true,
     "baseUrl": ".",
     "paths": {

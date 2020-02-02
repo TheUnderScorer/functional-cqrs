@@ -1,4 +1,4 @@
-import { createCommandBus } from '@functional-cqrs/buses';
+import { createCommandBus, createEventsBus } from '@functional-cqrs/buses';
 import * as Path from 'path';
 import { sync as globSync } from 'glob';
 import { map, pipe, flatten } from 'ramda';
@@ -35,8 +35,15 @@ const importHandlers = async (
 };
 
 const createBuses = <Context = any>(context?: Context) => {
+  const commandsBus = createCommandBus(context);
+  const eventsBus = createEventsBus(context);
+
+  commandsBus.setEventsBus(eventsBus);
+  eventsBus.setCommandsBus(commandsBus);
+
   return {
-    commandsBus: createCommandBus(context),
+    commandsBus,
+    eventsBus,
   };
 };
 
