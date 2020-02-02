@@ -7,22 +7,24 @@ export interface CqrsConfig<Context = any> {
   handlersPath?: string[];
   importer?: (path: string) => Promise<any>;
   context?: Context;
+  globHandler?: (path: string) => string[];
 }
 
 const importHandlers = async (
-  handlersPath: string[],
-  importer: (path: string) => Promise<any>
+  handlersPath: CqrsConfig['handlersPath'],
+  importer: CqrsConfig['importer'],
+  globHandler: CqrsConfig['globHandler']
 ): Promise<number> => {
   const importsResults = await Promise.all(
     pipe(
-      map<string, string[]>(path => globSync(path)),
+      map<string, string[]>(path => globHandler!(path)),
       flatten,
       map(async path => {
         const actualPath = Path.resolve(path);
 
-        return importer(actualPath);
+        return importer!(actualPath);
       })
-    )(handlersPath)
+    )(handlersPath!)
   );
 
   if (!importsResults.length) {
@@ -40,12 +42,18 @@ const createBuses = <Context = any>(context?: Context) => {
 
 export const createCqrs = async <Context = any>({
   handlersPath = [],
-  importer = path => import(path),
+  importer = async path => import(path),
   context,
+  globHandler = globSync,
 }: CqrsConfig<Context> = {}) => {
-  if (handlersPath) {
-    await importHandlers(handlersPath, importer);
+  let loadedHandlers = 0;
+
+  if (handlersPath.length) {
+    loadedHandlers = await importHandlers(handlersPath, importer, globHandler);
   }
 
-  return createBuses(context);
+  return {
+    loadedHandlers,
+    buses: createBuses(context),
+  };
 };
