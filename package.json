@@ -8,7 +8,7 @@
   "scripts": {
     "build": "lerna run build --stream",
     "test": "jest --config jest.config.js",
-    "coverage": "jest --config jest.config.js --coverage --coverageReporters html",
+    "coverage": "jest --config jest.config.js --coverage",
     "dev": "lerna run dev --parallel",
     "prod": "lerna run prod --parallel",
     "stop": "lerna run stop --parallel",
