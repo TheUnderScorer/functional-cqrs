@@ -12,6 +12,11 @@ jobs:
         with:
           version: 12.x
 
+      - name: Install Yarn 2
+        run: |
+          npm install -g yarn@berry
+          yarn --version
+
       - name: Install dependencies
         run: yarn install
 
@@ -43,6 +48,11 @@ jobs:
         with:
           version: 12.x
 
+      - name: Install Yarn 2
+        run: |
+          npm install -g yarn@berry
+          yarn --version
+
       - name: Configure CI Git User
         run: |
           git config --global user.name 'TheUnderScorer'
@@ -69,6 +79,11 @@ jobs:
           npm whoami
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Update git indexes
+        run: |
+          git update-index --assume-unchanged .npmrc
+          git update-index --assume-unchanged yarn.lock
 
       - name: Publish package
         run: yarn run publish-ci
