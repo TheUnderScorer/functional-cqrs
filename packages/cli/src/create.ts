@@ -99,6 +99,7 @@ const createPackageJson = ({
   license: 'UNLICENSED',
   ...(isPrivate ? { private: true } : { publishConfig: { access: 'public' } }),
   main: 'build/index.js',
+  typings: 'build/index.d.ts',
   repository: {
     type: 'git',
     url: 'https://github.com/TheUnderScorer/functional-cqrs.git',
