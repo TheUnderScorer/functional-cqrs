@@ -1,6 +1,6 @@
 {
   "name": "@functional-cqrs/buses",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Manages CQRS related buses for triggering commands, events etc.",
   "license": "UNLICENSED",
   "publishConfig": {
@@ -20,7 +20,7 @@
     "test": "jest --config ../../jest.config.js"
   },
   "dependencies": {
-    "@functional-cqrs/stores": "0.3.0",
-    "@functional-cqrs/typings": "0.3.0"
+    "@functional-cqrs/stores": "0.3.1",
+    "@functional-cqrs/typings": "0.3.1"
   }
 }

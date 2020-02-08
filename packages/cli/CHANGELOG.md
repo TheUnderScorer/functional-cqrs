@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.1.2](https://github.com/TheUnderScorer/functional-cqrs/compare/@functional-cqrs/cli@1.1.1...@functional-cqrs/cli@1.1.2) (2020-02-08)
+
+
+### Refactoring & Improvements
+
+- Add missing "typings" property to packages ([6ea64fb](https://github.com/TheUnderScorer/functional-cqrs/commit/6ea64fb3bbd273c67119058dd70e60b16a4d2c6d))
+
+**Note:** Version bump only for package @functional-cqrs/cli
+
+
+
+
+
 ## [1.1.1](https://github.com/TheUnderScorer/functional-cqrs/compare/@functional-cqrs/cli@1.1.0...@functional-cqrs/cli@1.1.1) (2020-02-02)
 
 

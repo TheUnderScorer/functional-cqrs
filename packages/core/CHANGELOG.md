@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.3.1](https://github.com/TheUnderScorer/functional-cqrs/compare/@functional-cqrs/core@0.3.0...@functional-cqrs/core@0.3.1) (2020-02-08)
+
+
+### Refactoring & Improvements
+
+- Add missing "typings" property to packages ([6ea64fb](https://github.com/TheUnderScorer/functional-cqrs/commit/6ea64fb3bbd273c67119058dd70e60b16a4d2c6d))
+
+**Note:** Version bump only for package @functional-cqrs/core
+
+
+
+
+
 # [0.3.0](https://github.com/TheUnderScorer/functional-cqrs/compare/@functional-cqrs/core@0.2.0...@functional-cqrs/core@0.3.0) (2020-02-08)
 
 

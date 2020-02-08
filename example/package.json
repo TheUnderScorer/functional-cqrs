@@ -1,6 +1,6 @@
 {
   "name": "example",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "main": "src/index.ts",
   "scripts": {
     "build": "tsc",
@@ -9,7 +9,7 @@
     "start": "ts-node-dev src/index.ts"
   },
   "dependencies": {
-    "@functional-cqrs/core": "^0.3.0",
+    "@functional-cqrs/core": "0.3.1",
     "node-fetch": "^2.6.0"
   },
   "devDependencies": {
