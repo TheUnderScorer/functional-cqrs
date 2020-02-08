@@ -39,6 +39,7 @@
     "packages/cli",
     "packages/buses",
     "packages/stores",
-    "packages/core"
+    "packages/core",
+    "example"
   ]
 }
