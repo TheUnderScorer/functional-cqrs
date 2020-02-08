@@ -19,6 +19,9 @@
     "cli": "node packages/cli",
     "publish-ci": "lerna publish --yes"
   },
+  "engines": {
+    "node": ">=12.13.1"
+  },
   "devDependencies": {
     "@types/jest": "^24.0.23",
     "@types/ramda": "^0.26.40",
