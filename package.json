@@ -3,7 +3,7 @@
   "private": true,
   "workspaces": [
     "packages/*",
-    "example"
+    "examples"
   ],
   "author": "Przemysław Żydek <przemyslawzydek@gmail.com>",
   "scripts": {

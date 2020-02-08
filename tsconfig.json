@@ -40,6 +40,6 @@
     "packages/buses",
     "packages/stores",
     "packages/core",
-    "example"
+    "examples"
   ]
 }
