@@ -1,0 +1,19 @@
+{
+  "name": "example",
+  "version": "1.0.0",
+  "main": "src/index.ts",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc -w",
+    "prod": "node build/index.js",
+    "start": "ts-node-dev src/index.ts"
+  },
+  "dependencies": {
+    "@functional-cqrs/core": "^0.3.0",
+    "node-fetch": "^2.6.0"
+  },
+  "devDependencies": {
+    "@types/node-fetch": "^2.5.4",
+    "ts-node-dev": "^1.0.0-pre.44"
+  }
+}
