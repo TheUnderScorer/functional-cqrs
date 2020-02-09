@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.3.2](https://github.com/TheUnderScorer/functional-cqrs/compare/@functional-cqrs/core@0.3.1...@functional-cqrs/core@0.3.2) (2020-02-09)
+
+
+### Bug Fixes
+
+- Provide missing queries bus to commands bus ([2fbbd6a](https://github.com/TheUnderScorer/functional-cqrs/commit/2fbbd6a6841eb5e78756c6aaefd4627cc21d27b5))
+
+**Note:** Version bump only for package @functional-cqrs/core
+
+
+
+
+
 ## [0.3.1](https://github.com/TheUnderScorer/functional-cqrs/compare/@functional-cqrs/core@0.3.0...@functional-cqrs/core@0.3.1) (2020-02-08)
 
 
