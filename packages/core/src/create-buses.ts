@@ -14,6 +14,7 @@ const createBuses = <Context = any>(
   const queriesBus = createQueriesBus(queryHandlersStore)(context);
 
   commandsBus.setEventsBus(eventsBus);
+  commandsBus.setQueriesBus(queriesBus);
 
   eventsBus.setCommandsBus(commandsBus);
   eventsBus.setQueriesBus(queriesBus);
