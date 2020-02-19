@@ -10,6 +10,7 @@ import {
 } from '@functional-cqrs/typings';
 import importHandlers from './import-handlers';
 import createBuses from './create-buses';
+import loadHandlers, { HandlerToRegister } from './load-handlers';
 
 export interface CqrsConfig<Context = any> {
   commandHandlersPath?: string[];
@@ -18,6 +19,9 @@ export interface CqrsConfig<Context = any> {
   importer?: (path: string) => Promise<Module>;
   context?: Context;
   globHandler?: (path: string) => string[];
+  commandHandlers?: HandlerToRegister[];
+  eventHandlers?: HandlerToRegister[];
+  queryHandlers?: HandlerToRegister[];
 }
 
 export interface Stores {
@@ -33,6 +37,9 @@ export const createCqrs = async <Context = any>({
   importer = async path => import(path),
   context,
   globHandler = globSync,
+  eventHandlers = [],
+  commandHandlers = [],
+  queryHandlers = [],
 }: CqrsConfig<Context> = {}) => {
   let loadedHandlers = 0;
 
@@ -80,6 +87,27 @@ export const createCqrs = async <Context = any>({
       globHandler,
       eventHandlersStore
     );
+  }
+
+  if (eventHandlers.length) {
+    loadedHandlers += loadHandlers({
+      store: eventHandlersStore,
+      handlers: eventHandlers,
+    });
+  }
+
+  if (commandHandlers.length) {
+    loadedHandlers += loadHandlers({
+      store: commandHandlersStore,
+      handlers: commandHandlers,
+    });
+  }
+
+  if (queryHandlers.length) {
+    loadedHandlers += loadHandlers({
+      store: queryHandlersStore,
+      handlers: queryHandlers,
+    });
   }
 
   return {

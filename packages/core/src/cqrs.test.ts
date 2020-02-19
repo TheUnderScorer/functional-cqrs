@@ -1,13 +1,13 @@
 import { createCqrs } from './cqrs';
-import {
+import commandHandler, {
   TestCommand,
   TestContext,
 } from './__test__/default/handlers/test.handler';
-import {
+import eventHandler, {
   eventHandlerCalls,
   resetEventCalls,
 } from './__test__/default/event-handlers/test-event.handler';
-import {
+import queryHandler, {
   items,
   TestQuery,
 } from './__test__/default/query-handlers/test-query.handler';
@@ -95,10 +95,10 @@ describe('createCqrs', () => {
     };
 
     const { buses, loadedHandlers } = await createCqrs({
-      commandHandlersPath: ['**/__test__/default/handlers/*.handler.ts'],
-      eventHandlersPath: ['**/__test__/default/event-handlers/*.handler.ts'],
-      queryHandlersPath: ['**/__test__/default/query-handlers/*.handler.ts'],
       context,
+      commandHandlers: [commandHandler],
+      eventHandlers: [eventHandler],
+      queryHandlers: [queryHandler],
     });
     expect(loadedHandlers).toEqual(3);
 
