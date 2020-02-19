@@ -2,8 +2,7 @@
   "name": "functional-cqrs",
   "private": true,
   "workspaces": [
-    "packages/*",
-    "examples"
+    "packages/*"
   ],
   "author": "Przemysław Żydek <przemyslawzydek@gmail.com>",
   "scripts": {

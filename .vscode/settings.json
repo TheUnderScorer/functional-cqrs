@@ -1,0 +1,12 @@
+{
+  "npm.packageManager": "yarn",
+  "editor.formatOnSave": true,
+  "editor.fontSize": 14,
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "prettier.packageManager": "yarn",
+  "editor.tabSize": 2,
+  "debug.node.autoAttach": "on",
+  "jest.runAllTestsFirst": false,
+  "jest.debugCodeLens.showWhenTestStateIn": ["fail", "unknown", "pass", "skip"],
+  "jest.autoEnable": false
+}
