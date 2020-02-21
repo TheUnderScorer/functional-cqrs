@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.3.3](https://github.com/TheUnderScorer/functional-cqrs/compare/@functional-cqrs/core@0.3.2...@functional-cqrs/core@0.3.3) (2020-02-21)
+
+
+### Miscellaneous
+
+- ✨Add support for passing handlers directly ([8259232](https://github.com/TheUnderScorer/functional-cqrs/commit/8259232ba556f59083081b9e718bd8895a47d764))
+
+**Note:** Version bump only for package @functional-cqrs/core
+
+
+
+
+
 ## [0.3.2](https://github.com/TheUnderScorer/functional-cqrs/compare/@functional-cqrs/core@0.3.1...@functional-cqrs/core@0.3.2) (2020-02-09)
 
 
