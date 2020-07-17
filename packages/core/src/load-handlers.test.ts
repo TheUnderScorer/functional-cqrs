@@ -1,20 +1,20 @@
 import {
-  QueryHandler,
-  EventHandlersStore,
-  EventHandler,
-  CommandHandler,
-  CommandHandlersStore,
-  QueryHandlersStore,
-  Command,
-  Query,
-  Event,
-} from '@functional-cqrs/typings';
-import {
   commandHandler,
   queryHandler,
   eventHandler,
 } from '@functional-cqrs/stores';
 import loadHandlers from './load-handlers';
+import {
+  Command,
+  CommandHandler,
+  CommandHandlersStore,
+  EventHandler,
+  EventHandlersStore,
+  Query,
+  QueryHandler,
+  QueryHandlersStore,
+  Event,
+} from '@functional-cqrs/typings';
 
 const commandHandlersStore: CommandHandlersStore = new Map<
   string,

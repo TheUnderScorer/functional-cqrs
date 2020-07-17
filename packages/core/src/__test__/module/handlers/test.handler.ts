@@ -1,6 +1,6 @@
-import { Command, CommandHandler } from '@functional-cqrs/typings';
 import { commandHandler } from '@functional-cqrs/stores';
 import { TestEvent } from '../../default/event-handlers/test-event.handler';
+import { Command, CommandHandler } from '@functional-cqrs/typings';
 
 export type TestCommand = Command<'TestCommand', boolean>;
 

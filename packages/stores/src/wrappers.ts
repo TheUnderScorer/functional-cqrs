@@ -1,17 +1,17 @@
+import { pipe } from 'ramda';
 import {
   Command,
   CommandHandler,
   CommandHandlersStore,
-  Event,
   EventHandler,
   EventHandlersStore,
   Query,
   QueryHandler,
   QueryHandlersStore,
+  Event,
 } from '@functional-cqrs/typings';
-import { pipe } from 'ramda';
 
-type EventHandlerTumple = [EventHandlersStore, EventHandler[]];
+type EventHandlerTuple = [EventHandlersStore, EventHandler[]];
 
 /**
  * Registers new command handler into global container
@@ -39,7 +39,7 @@ export const eventHandler = <EventType extends Event = Event, Context = any>(
   type: EventType['event'],
   handler: EventHandler<EventType, Context>
 ) => (store: EventHandlersStore) => {
-  const getHandlers = (store: EventHandlersStore): EventHandlerTumple => [
+  const getHandlers = (store: EventHandlersStore): EventHandlerTuple => [
     store,
     store.get(type) ?? [],
   ];
@@ -47,7 +47,7 @@ export const eventHandler = <EventType extends Event = Event, Context = any>(
   const checkHandlersUniqueness = ([
     store,
     handlers,
-  ]: EventHandlerTumple): EventHandlerTumple => {
+  ]: EventHandlerTuple): EventHandlerTuple => {
     if (handlers.find((registeredHandler) => registeredHandler === handler)) {
       throw new Error(
         `Provided handler "${handler.name}" is already registered for event ${type}.`
@@ -57,7 +57,7 @@ export const eventHandler = <EventType extends Event = Event, Context = any>(
     return [store, handlers];
   };
 
-  const saveHandlers = ([store, handlers]: EventHandlerTumple) => {
+  const saveHandlers = ([store, handlers]: EventHandlerTuple) => {
     handlers.push(handler as EventHandler);
 
     store.set(type, handlers);

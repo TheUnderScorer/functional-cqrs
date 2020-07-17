@@ -3,7 +3,7 @@ import * as Path from 'path';
 import { CqrsConfig } from './cqrs';
 import { Module } from '@functional-cqrs/typings';
 
-type ModuleTumple = [Module, string];
+type ModuleTuple = [Module, string];
 
 const importHandlers = async (
   handlersPath: string[],
@@ -16,14 +16,14 @@ const importHandlers = async (
       map<string, string[]>((path) => globHandler!(path)),
       flatten,
       map(
-        async (path): Promise<ModuleTumple> => {
+        async (path): Promise<ModuleTuple> => {
           const actualPath = Path.resolve(path);
 
           return [await importer!(actualPath), actualPath];
         }
       ),
       map(
-        async (modulePromise): Promise<ModuleTumple> => {
+        async (modulePromise): Promise<ModuleTuple> => {
           const [loadedModule, path] = await modulePromise;
 
           if (loadedModule.default) {

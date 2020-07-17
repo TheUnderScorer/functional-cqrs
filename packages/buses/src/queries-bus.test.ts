@@ -1,10 +1,5 @@
-import {
-  Query,
-  QueryHandler,
-  QueryHandlersStore,
-} from '@functional-cqrs/typings';
 import { queryHandler } from '@functional-cqrs/stores';
-import { createQueriesBus } from '.';
+import { createQueriesBus } from './queries-bus';
 
 describe('query', () => {
   const store: QueryHandlersStore = new Map<string, QueryHandler<any>>();

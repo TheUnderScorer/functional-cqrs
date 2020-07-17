@@ -1,10 +1,10 @@
+import { createEventsBus } from './events-bus';
+import { eventHandler } from '@functional-cqrs/stores';
 import {
-  Event,
   EventHandler,
   EventHandlersStore,
+  Event,
 } from '@functional-cqrs/typings';
-import { createEventsBus } from './index';
-import { eventHandler } from '@functional-cqrs/stores';
 
 describe('dispatch', () => {
   const store: EventHandlersStore = new Map<string, Array<EventHandler<any>>>();
