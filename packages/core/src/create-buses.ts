@@ -21,6 +21,10 @@ const createBuses = <Context = any>(
 
   queriesBus.setEventsBus(eventsBus);
 
+  queriesBus.invokeHandlers();
+  eventsBus.invokeSubscribers();
+  commandsBus.invokeHandlers();
+
   return {
     commandsBus,
     eventsBus,

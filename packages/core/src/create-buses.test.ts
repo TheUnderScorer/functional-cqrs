@@ -16,14 +16,16 @@ const ctx = {
   test: true,
 };
 
-test('should create buses with given context', async () => {
-  const result = createBuses(stores, ctx);
+describe('createBuses', () => {
+  it('should create buses with given context', async () => {
+    const result = createBuses(stores, ctx);
 
-  expect(Object.keys(result)).toMatchInlineSnapshot(`
+    expect(Object.keys(result)).toMatchInlineSnapshot(`
     Array [
       "commandsBus",
       "eventsBus",
       "queriesBus",
     ]
   `);
+  });
 });

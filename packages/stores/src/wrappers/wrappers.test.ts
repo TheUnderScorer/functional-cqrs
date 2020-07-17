@@ -1,4 +1,3 @@
-import { commandHandler, eventHandler, queryHandler } from './wrappers';
 import {
   Command,
   CommandHandler,
@@ -9,7 +8,11 @@ import {
   QueryHandler,
   QueryHandlersStore,
   Event,
+  EventHandlerFunction,
 } from '@functional-cqrs/typings';
+import { eventHandler } from './event-handler';
+import { queryHandler } from './query-handler';
+import { commandHandler } from './command-handler';
 
 describe('commandHandler', () => {
   const store: CommandHandlersStore = new Map<string, CommandHandler<any>>();
@@ -18,7 +21,7 @@ describe('commandHandler', () => {
     store.clear();
   });
 
-  test('registers command handler into container', () => {
+  it('registers command handler into container', () => {
     type TestCommand = Command<'TestCommand', boolean>;
 
     const handler: CommandHandler<TestCommand> = () => ({ payload }) => {
@@ -40,11 +43,11 @@ describe('eventHandler', () => {
 
   type TestEvent = Event<'TestEvent', boolean>;
 
-  const handler: EventHandler<TestEvent> = () => ({ payload }) => {
+  const handler: EventHandlerFunction<TestEvent> = () => ({ payload }) => {
     console.log({ payload });
   };
 
-  test('registers event handler into container', () => {
+  it('registers event handler into container', () => {
     eventHandler<TestEvent>('TestEvent', handler)(store);
 
     const handlers = store.get('TestEvent')!;
@@ -53,7 +56,7 @@ describe('eventHandler', () => {
     expect(handlers[0]).toEqual(handler);
   });
 
-  test('does not duplicate handlers', () => {
+  it('does not duplicate handlers', () => {
     eventHandler<TestEvent>('TestEvent', handler)(store);
     eventHandler<TestEvent>('TestEvent', handler)(store);
 
@@ -73,7 +76,7 @@ describe('queryHandler', () => {
 
   type TestQuery = Query<string, 'TestQuery'>;
 
-  test('registers query handler into containers', () => {
+  it('registers query handler into containers', () => {
     const handler: QueryHandler<TestQuery> = () => ({ payload }) => {
       return payload;
     };

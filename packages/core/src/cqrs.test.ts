@@ -17,7 +17,7 @@ describe('createCqrs', () => {
     resetEventCalls();
   });
 
-  test('should return buses and loaded handlers count', async () => {
+  it('should return buses and loaded handlers count', async () => {
     const cqrs = await createCqrs();
 
     expect(cqrs).toMatchInlineSnapshot(`
@@ -25,15 +25,18 @@ describe('createCqrs', () => {
         "buses": Object {
           "commandsBus": Object {
             "execute": [Function],
+            "invokeHandlers": [Function],
             "setEventsBus": [Function],
             "setQueriesBus": [Function],
           },
           "eventsBus": Object {
             "dispatch": [Function],
+            "invokeSubscribers": [Function],
             "setCommandsBus": [Function],
             "setQueriesBus": [Function],
           },
           "queriesBus": Object {
+            "invokeHandlers": [Function],
             "query": [Function],
             "setEventsBus": [Function],
           },
@@ -43,7 +46,7 @@ describe('createCqrs', () => {
     `);
   });
 
-  test('should import handlers using glob pattern', async () => {
+  it('should import handlers using glob pattern', async () => {
     const { loadedHandlers } = await createCqrs({
       commandHandlersPath: ['**/__test__/default/handlers/*.handler.ts'],
       eventHandlersPath: ['**/__test__/default/event-handlers/*.handler.ts'],
@@ -53,7 +56,7 @@ describe('createCqrs', () => {
     expect(loadedHandlers).toEqual(3);
   });
 
-  test('execute command and dispatch event on created cqrs', async () => {
+  it('execute command and dispatch event on created cqrs', async () => {
     const context: TestContext = {
       version: '0.1',
     };
@@ -89,7 +92,7 @@ describe('createCqrs', () => {
     ]);
   });
 
-  test('execute query on created cqrs', async () => {
+  it('execute query on created cqrs', async () => {
     const context: TestContext = {
       version: '0.1',
     };
