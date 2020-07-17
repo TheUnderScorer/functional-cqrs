@@ -1,6 +1,6 @@
 {
   "name": "@functional-cqrs/core",
-  "version": "0.3.3",
+  "version": "0.3.4",
   "description": "Manages core functionalities of functional cqrs",
   "license": "UNLICENSED",
   "publishConfig": {
@@ -21,8 +21,8 @@
     "debug": "ts-node-dev src/index.ts"
   },
   "dependencies": {
-    "@functional-cqrs/buses": "0.3.1",
-    "@functional-cqrs/stores": "0.3.1",
-    "@functional-cqrs/typings": "0.3.1"
+    "@functional-cqrs/buses": "0.3.2",
+    "@functional-cqrs/stores": "0.3.2",
+    "@functional-cqrs/typings": "0.3.2"
   }
 }
