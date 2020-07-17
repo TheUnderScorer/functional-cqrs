@@ -6,9 +6,14 @@ import {
   QueriesBus,
 } from '@functional-cqrs/typings';
 
+export interface PrivateCommandBus<Context> extends CommandsBus<Context> {
+  setEventsBus: (bus: EventsBus) => void;
+  setQueriesBus: (bus: QueriesBus) => void;
+}
+
 export const createCommandBus = <Context = any>(
   store: CommandHandlersStore
-) => (context: Context): CommandsBus => {
+) => (context: Context): PrivateCommandBus<Context> => {
   let eventsBus: EventsBus;
   let queriesBus: QueriesBus;
 

@@ -1,7 +1,7 @@
-import { Query, QueryHandler } from '@functional-cqrs/typings';
 import { TestContext } from '../handlers/test.handler';
 import { queryHandler } from '@functional-cqrs/stores';
 import { TestEvent } from '../event-handlers/test-event.handler';
+import { Query, QueryHandler } from '@functional-cqrs/typings';
 
 export type TestQuery = Query<
   'TestQuery',

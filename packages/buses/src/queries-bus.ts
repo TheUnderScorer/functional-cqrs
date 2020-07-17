@@ -4,9 +4,13 @@ import {
   QueryHandlersStore,
 } from '@functional-cqrs/typings';
 
+export interface PrivateQueriesBus<Context> extends QueriesBus<Context> {
+  setEventsBus: (bus: EventsBus) => void;
+}
+
 export const createQueriesBus = <Context = any>(store: QueryHandlersStore) => (
   context: Context
-): QueriesBus<Context> => {
+): PrivateQueriesBus<Context> => {
   let eventsBus: EventsBus;
 
   return {

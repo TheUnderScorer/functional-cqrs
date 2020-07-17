@@ -1,10 +1,10 @@
 import { Stores } from './cqrs';
+import createBuses from './create-buses';
 import {
   CommandHandler,
   EventHandler,
   QueryHandler,
 } from '@functional-cqrs/typings';
-import createBuses from './create-buses';
 
 const stores: Stores = {
   eventHandlersStore: new Map<string, Array<EventHandler<any>>>(),

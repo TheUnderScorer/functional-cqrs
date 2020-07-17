@@ -1,15 +1,15 @@
+import { commandHandler, eventHandler, queryHandler } from './wrappers';
 import {
   Command,
   CommandHandler,
   CommandHandlersStore,
-  Event,
   EventHandler,
   EventHandlersStore,
   Query,
   QueryHandler,
   QueryHandlersStore,
+  Event,
 } from '@functional-cqrs/typings';
-import { commandHandler, eventHandler, queryHandler } from './wrappers';
 
 describe('commandHandler', () => {
   const store: CommandHandlersStore = new Map<string, CommandHandler<any>>();

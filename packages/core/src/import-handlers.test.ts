@@ -1,3 +1,8 @@
+import importHandlers from './import-handlers';
+import { sync } from 'glob';
+import { testHandler } from './__test__/default/handlers/test.handler';
+import { testEventHandler } from './__test__/default/event-handlers/test-event.handler';
+import { testQueryHandler } from './__test__/default/query-handlers/test-query.handler';
 import {
   CommandHandler,
   CommandHandlersStore,
@@ -6,11 +11,6 @@ import {
   QueryHandler,
   QueryHandlersStore,
 } from '@functional-cqrs/typings';
-import importHandlers from './import-handlers';
-import { sync } from 'glob';
-import { testHandler } from './__test__/default/handlers/test.handler';
-import { testEventHandler } from './__test__/default/event-handlers/test-event.handler';
-import { testQueryHandler } from './__test__/default/query-handlers/test-query.handler';
 
 const importer = async (path: string) => import(path);
 

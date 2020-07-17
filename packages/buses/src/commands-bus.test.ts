@@ -1,10 +1,10 @@
+import { commandHandler } from '@functional-cqrs/stores';
+import { createCommandBus } from './commands-bus';
 import {
   Command,
   CommandHandler,
   CommandHandlersStore,
 } from '@functional-cqrs/typings';
-import { commandHandler } from '@functional-cqrs/stores';
-import { createCommandBus } from '.';
 
 describe('execute', () => {
   const store: CommandHandlersStore = new Map<string, CommandHandler<any>>();

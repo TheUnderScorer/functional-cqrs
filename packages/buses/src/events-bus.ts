@@ -1,15 +1,20 @@
 import {
   CommandsBus,
-  Event,
   EventHandler,
   EventHandlersStore,
   EventsBus,
   QueriesBus,
+  Event,
 } from '@functional-cqrs/typings';
+
+export interface PrivateEventsBus<Context> extends EventsBus<Context> {
+  setCommandsBus: (bus: CommandsBus) => void;
+  setQueriesBus: (bus: QueriesBus) => void;
+}
 
 export const createEventsBus = <Context = any>(store: EventHandlersStore) => (
   context: Context
-): EventsBus => {
+): PrivateEventsBus<Context> => {
   let commandsBus: CommandsBus;
   let queriesBus: QueriesBus;
 
@@ -33,6 +38,7 @@ export const createEventsBus = <Context = any>(store: EventHandlersStore) => (
         console.warn(`No handlers found for event "${event.event}"`);
       }
     },
+
     setCommandsBus: (bus) => {
       commandsBus = bus;
     },

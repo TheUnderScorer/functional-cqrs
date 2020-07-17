@@ -1,6 +1,6 @@
-import { Event, EventHandler } from '@functional-cqrs/typings';
 import { TestContext } from '../handlers/test.handler';
 import { eventHandler } from '@functional-cqrs/stores';
+import { EventHandler, Event } from '@functional-cqrs/typings';
 
 export type TestEvent = Event<'TestEvent', boolean>;
 
