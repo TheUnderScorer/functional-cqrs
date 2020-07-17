@@ -18,9 +18,6 @@ jobs:
       - name: Lint
         run: yarn run lint
 
-      - name: Typecheck
-        run: yarn run typecheck
-
       - name: Tests
         run: yarn run coverage --ci
 
