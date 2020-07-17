@@ -1,5 +1,6 @@
 import {
   Command,
+  CommandHandler,
   CommandHandlersStore,
   CommandsBus,
   EventsBus,
@@ -9,6 +10,11 @@ import {
 export interface PrivateCommandBus<Context> extends CommandsBus<Context> {
   setEventsBus: (bus: EventsBus) => void;
   setQueriesBus: (bus: QueriesBus) => void;
+  invokeHandlers: () => void;
+}
+
+export interface InvokedCommandHandlers {
+  [key: string]: ReturnType<CommandHandler<any>>;
 }
 
 export const createCommandBus = <Context = any>(
@@ -17,27 +23,38 @@ export const createCommandBus = <Context = any>(
   let eventsBus: EventsBus;
   let queriesBus: QueriesBus;
 
+  let invokedCommands: InvokedCommandHandlers;
+
   return {
     execute: <CommandType extends Command = Command, ReturnValue = any>(
       command: CommandType
     ): Promise<ReturnValue> | ReturnValue => {
-      const handler = store.get(command.type);
+      const handler = invokedCommands[command.type];
 
       if (!handler) {
         throw new Error(`No handler for command ${command.type} found.`);
       }
 
-      return handler({
-        ...context,
-        queriesBus,
-        eventsBus,
-      })(command);
+      return handler(command);
     },
     setEventsBus: (bus: EventsBus) => {
       eventsBus = bus;
     },
     setQueriesBus: (bus: QueriesBus) => {
       queriesBus = bus;
+    },
+    invokeHandlers: () => {
+      invokedCommands = Array.from(store.entries()).reduce<
+        InvokedCommandHandlers
+      >((previousValue, [command, handler]) => {
+        previousValue[command] = handler({
+          ...context,
+          eventsBus,
+          queriesBus,
+        });
+
+        return previousValue;
+      }, {});
     },
   };
 };

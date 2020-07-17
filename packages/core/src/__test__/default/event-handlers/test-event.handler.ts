@@ -1,6 +1,6 @@
 import { TestContext } from '../handlers/test.handler';
 import { eventHandler } from '@functional-cqrs/stores';
-import { EventHandler, Event } from '@functional-cqrs/typings';
+import { Event, EventHandlerFunction } from '@functional-cqrs/typings';
 
 export type TestEvent = Event<'TestEvent', boolean>;
 
@@ -15,7 +15,7 @@ export const resetEventCalls = () => {
   eventHandlerCalls = [];
 };
 
-export const testEventHandler: EventHandler<TestEvent, TestContext> = ({
+export const testEventHandler: EventHandlerFunction<TestEvent, TestContext> = ({
   version,
 }) => (event) => {
   eventHandlerCalls.push({

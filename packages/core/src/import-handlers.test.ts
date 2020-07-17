@@ -22,7 +22,7 @@ describe('Import command handlers', () => {
   });
 
   describe('Using ES export', () => {
-    test('should import handlers and load them into store', async () => {
+    it('should import handlers and load them into store', async () => {
       const result = await importHandlers(
         ['**/__test__/default/handlers/*.handler.ts'],
         importer,
@@ -37,7 +37,7 @@ describe('Import command handlers', () => {
   });
 
   describe('Using module.exports', () => {
-    test('should import handlers and load them into store', async () => {
+    it('should import handlers and load them into store', async () => {
       const result = await importHandlers(
         ['**/__test__/module/handlers/*.handler.ts'],
         importer,
@@ -59,7 +59,7 @@ describe('Import event handlers', () => {
   });
 
   describe('Using ES export', () => {
-    test('should import handlers and load them into store', async () => {
+    it('should import handlers and load them into store', async () => {
       const result = await importHandlers(
         ['**/__test__/default/event-handlers/*.handler.ts'],
         importer,
@@ -82,7 +82,7 @@ describe('Import query handlers', () => {
   });
 
   describe('Using ES export', () => {
-    test('should import handlers and load them into store', async () => {
+    it('should import handlers and load them into store', async () => {
       const result = await importHandlers(
         ['**/__test__/default/query-handlers/*.handler.ts'],
         importer,
