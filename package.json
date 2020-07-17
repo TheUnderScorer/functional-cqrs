@@ -15,7 +15,6 @@
     "clean": "lerna run clean --parallel",
     "lint": "eslint . --format=pretty --ext .ts",
     "lint:fix": "eslint . --format=pretty --ext .ts --fix",
-    "typecheck": "tsc --noEmit",
     "publish-ci": "lerna publish --yes"
   },
   "engines": {
