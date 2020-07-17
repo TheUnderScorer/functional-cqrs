@@ -10,7 +10,7 @@ export const createQueriesBus = <Context = any>(store: QueryHandlersStore) => (
   let eventsBus: EventsBus;
 
   return {
-    query: query => {
+    query: (query) => {
       const handler = store.get(query.query);
 
       if (!handler) {
@@ -22,7 +22,7 @@ export const createQueriesBus = <Context = any>(store: QueryHandlersStore) => (
         eventsBus,
       })(query);
     },
-    setEventsBus: bus => {
+    setEventsBus: (bus) => {
       eventsBus = bus;
     },
   };

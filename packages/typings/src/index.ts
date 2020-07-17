@@ -51,8 +51,8 @@ export interface QueriesBus<Context = any> {
 }
 
 export interface Module {
-  default: any;
   [key: string]: any;
+  default: any;
 }
 
 export type CommandHandlersStore = Map<string, CommandHandler<any>>;

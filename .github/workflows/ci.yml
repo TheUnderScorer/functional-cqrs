@@ -12,13 +12,8 @@ jobs:
         with:
           version: 12.x
 
-      - name: Install Yarn 2
-        run: |
-          npm install -g yarn@berry
-          yarn --version
-
       - name: Install dependencies
-        run: yarn install --immutable --immutable-cache
+        run: yarn install --pure-lockfile
 
       - name: Lint
         run: yarn run lint
@@ -48,11 +43,6 @@ jobs:
         with:
           version: 12.x
 
-      - name: Install Yarn 2
-        run: |
-          npm install -g yarn@berry
-          yarn --version
-
       - name: Configure CI Git User
         run: |
           git config --global user.name 'TheUnderScorer'
@@ -65,7 +55,7 @@ jobs:
         run: git checkout "${GITHUB_REF:11}" && git pull
 
       - name: Install Dependencies
-        run: yarn install --immutable --immutable-cache
+        run: yarn install --pure-lockfile
 
       - name: Build Packages
         run: yarn run build

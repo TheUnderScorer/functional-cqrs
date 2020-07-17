@@ -11,8 +11,8 @@ export interface TestContext {
 const testHandler: CommandHandler<TestCommand, TestContext> = ({
   version,
   eventsBus,
-}) => ({ payload }) => {
-  eventsBus.dispatch<TestEvent>({
+}) => async ({ payload }) => {
+  await eventsBus.dispatch<TestEvent>({
     event: 'TestEvent',
     payload: false,
   });

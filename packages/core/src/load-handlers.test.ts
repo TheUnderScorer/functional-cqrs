@@ -40,7 +40,7 @@ beforeEach(() => {
 });
 
 test('load command handler', () => {
-  const handler: CommandHandler<TestCommand> = () => command => {
+  const handler: CommandHandler<TestCommand> = () => (command) => {
     return command;
   };
 
@@ -56,7 +56,7 @@ test('load command handler', () => {
 });
 
 test('load query handler', () => {
-  const handler: QueryHandler<TestQuery> = () => query => {
+  const handler: QueryHandler<TestQuery> = () => (query) => {
     return query;
   };
 
@@ -72,7 +72,7 @@ test('load query handler', () => {
 });
 
 test('load event handler', () => {
-  const handler: EventHandler<TestEvent> = () => event => {
+  const handler: EventHandler<TestEvent> = () => (event) => {
     console.log(event);
   };
 
