@@ -21,7 +21,7 @@ export const createEventsBus = <Context = any>(store: EventHandlersStore) => (
 
       if (handlers.length) {
         await Promise.all(
-          handlers.map(handler =>
+          handlers.map((handler) =>
             handler({
               ...context,
               queriesBus,
@@ -33,10 +33,10 @@ export const createEventsBus = <Context = any>(store: EventHandlersStore) => (
         console.warn(`No handlers found for event "${event.event}"`);
       }
     },
-    setCommandsBus: bus => {
+    setCommandsBus: (bus) => {
       commandsBus = bus;
     },
-    setQueriesBus: bus => {
+    setQueriesBus: (bus) => {
       queriesBus = bus;
     },
   };

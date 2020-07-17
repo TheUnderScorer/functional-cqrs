@@ -8,7 +8,7 @@ export interface LoadHandlersConfig {
 }
 
 const loadHandlers = ({ handlers, store }: LoadHandlersConfig): number => {
-  handlers.forEach(handler => handler(store));
+  handlers.forEach((handler) => handler(store));
 
   return handlers.length;
 };

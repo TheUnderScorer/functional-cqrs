@@ -17,7 +17,7 @@ export const resetEventCalls = () => {
 
 export const testEventHandler: EventHandler<TestEvent, TestContext> = ({
   version,
-}) => event => {
+}) => (event) => {
   eventHandlerCalls.push({
     version,
     event,

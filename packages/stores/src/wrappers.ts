@@ -48,7 +48,7 @@ export const eventHandler = <EventType extends Event = Event, Context = any>(
     store,
     handlers,
   ]: EventHandlerTumple): EventHandlerTumple => {
-    if (handlers.find(registeredHandler => registeredHandler === handler)) {
+    if (handlers.find((registeredHandler) => registeredHandler === handler)) {
       throw new Error(
         `Provided handler "${handler.name}" is already registered for event ${type}.`
       );

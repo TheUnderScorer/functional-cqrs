@@ -34,7 +34,7 @@ export const createCqrs = async <Context = any>({
   commandHandlersPath = [],
   eventHandlersPath = [],
   queryHandlersPath = [],
-  importer = async path => import(path),
+  importer = async (path) => import(path),
   context,
   globHandler = globSync,
   eventHandlers = [],

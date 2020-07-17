@@ -1,8 +1,7 @@
 {
   "root": true,
   "env": {
-    "jest": true,
-    "browser": true
+    "jest": true
   },
   "plugins": ["jest"],
   "extends": [
@@ -10,7 +9,6 @@
     "plugin:monorepo/recommended",
     "xo",
     "xo-typescript",
-    "plugin:react/recommended",
     "plugin:prettier/recommended",
     "prettier/@typescript-eslint"
   ],

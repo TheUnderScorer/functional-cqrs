@@ -5,13 +5,11 @@
   "command": {
     "version": {
       "conventionalCommits": true,
-      "changelogPreset": "emojis",
       "exact": true,
       "message": "🔖 Publish"
     },
     "publish": {
       "conventionalCommits": true,
-      "changelogPreset": "emojis",
       "exact": true,
       "message": "🔖 Publish"
     }

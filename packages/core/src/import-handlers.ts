@@ -13,7 +13,7 @@ const importHandlers = async (
 ): Promise<number> => {
   const importsResults = await Promise.all(
     pipe(
-      map<string, string[]>(path => globHandler!(path)),
+      map<string, string[]>((path) => globHandler!(path)),
       flatten,
       map(
         async (path): Promise<ModuleTumple> => {
@@ -40,7 +40,7 @@ const importHandlers = async (
           return [loadedModule, path];
         }
       ),
-      map(async modulePromise => {
+      map(async (modulePromise) => {
         const [loadedModule, path] = await modulePromise;
 
         if (loadedModule.handler) {
