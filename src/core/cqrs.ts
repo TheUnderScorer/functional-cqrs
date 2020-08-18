@@ -11,13 +11,14 @@ import {
 import importHandlers from './importHandlers';
 import createBuses from './createBuses';
 import loadHandlers, { HandlerToRegister } from './loadHandlers';
+import { Buses } from '../typings/buses';
 
 export interface CqrsConfig<Context = any> {
   commandHandlersPath?: string[];
   eventHandlersPath?: string[];
   queryHandlersPath?: string[];
   importer?: (path: string) => Promise<Module>;
-  context?: Context;
+  context?: Context | ((buses: Buses) => Context);
   globHandler?: (path: string) => string[];
   commandHandlers?: HandlerToRegister[];
   eventHandlers?: HandlerToRegister[];
