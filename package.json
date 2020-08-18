@@ -5,7 +5,7 @@
   "typings": "build/index.d.ts",
   "main": "build/index.js",
   "scripts": {
-    "build": "tsc",
+    "build": "tsc -p tsconfig.build.json",
     "test": "jest --config jest.config.js --runInBand",
     "test:ci": "jest --config jest.config.js --ci --runInBand --coverage",
     "lint": "eslint . --ext .ts",
@@ -46,5 +46,29 @@
   "dependencies": {
     "glob": "^7.1.6",
     "ramda": "^0.27.0"
+  },
+  "release": {
+    "plugins": [
+      "@semantic-release/commit-analyzer",
+      "@semantic-release/release-notes-generator",
+      [
+        "@semantic-release/changelog",
+        {
+          "changelogFile": "CHANGELOG.md"
+        }
+      ],
+      "@semantic-release/npm",
+      [
+        "@semantic-release/git",
+        {
+          "assets": [
+            "CHANGELOG.md",
+            "package.json",
+            "package-lock.json"
+          ]
+        }
+      ],
+      "@semantic-release/github"
+    ]
   }
 }
