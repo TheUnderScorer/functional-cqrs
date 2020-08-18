@@ -9,3 +9,4 @@ shared/service-template/**
 **/plopfile.js
 services/app/src/graphql/types/index.ts
 services/security/**
+src/index.ts

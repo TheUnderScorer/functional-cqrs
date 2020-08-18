@@ -1,5 +1,5 @@
-import { TestContext } from '../handlers/test.handler';
-import { eventHandler } from '../../../../stores';
+import { TestContext } from '../handlers/testHandler';
+import { eventHandler } from '../../../../decorators';
 import { Event, EventHandlerFunction } from '../../../../typings';
 
 export type TestEvent = Event<'TestEvent', boolean>;
@@ -9,6 +9,7 @@ export interface EventHandlerCall {
   event: TestEvent;
 }
 
+// eslint-disable-next-line import/no-mutable-exports
 export let eventHandlerCalls: EventHandlerCall[] = [];
 
 export const resetEventCalls = () => {

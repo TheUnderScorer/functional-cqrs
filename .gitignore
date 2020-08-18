@@ -1,8 +1,6 @@
 # Module related files
 node_modules
-packages/*/node_modules
-packages/*/tmp/*
-packages/*/yarn-error.log
+build
 
 # Lerna files
 lerna.debug.log

@@ -4,7 +4,7 @@ import {
   EventHandlerFunction,
   EventHandlersStore,
   EventsBus,
-  EventSubscriber,
+  EventSubscriberInterface,
   isEventSubscriber,
   QueriesBus,
 } from '../typings';
@@ -12,20 +12,22 @@ import {
 export interface PrivateEventsBus<Context> extends EventsBus<Context> {
   setCommandsBus: (bus: CommandsBus) => void;
   setQueriesBus: (bus: QueriesBus) => void;
+  setContext: (context: Context) => void;
   invokeSubscribers: () => void;
 }
 
 export type InvokedSubscriber =
   | ReturnType<EventHandlerFunction>
-  | EventSubscriber<any>;
+  | EventSubscriberInterface;
 
 export interface InvokedSubscribers {
   [key: string]: InvokedSubscriber[];
 }
 
 export const createEventsBus = <Context = any>(store: EventHandlersStore) => (
-  context: Context
+  initialContext?: Context
 ): PrivateEventsBus<Context> => {
+  let context: Context | undefined = initialContext;
   let commandsBus: CommandsBus;
   let queriesBus: QueriesBus;
 
@@ -50,7 +52,9 @@ export const createEventsBus = <Context = any>(store: EventHandlersStore) => (
         console.warn(`No handlers found for event "${event.event}"`);
       }
     },
-
+    setContext: (newContext: Context) => {
+      context = newContext;
+    },
     setCommandsBus: (bus) => {
       commandsBus = bus;
     },
@@ -61,15 +65,16 @@ export const createEventsBus = <Context = any>(store: EventHandlersStore) => (
       invokedSubscribers = Array.from(store.entries()).reduce<
         InvokedSubscribers
       >((subscribers, [event, handlers]) => {
-        subscribers[event] = handlers.map((handler) =>
-          handler({
-            ...context,
-            commandsBus,
-            queriesBus,
-          })
-        );
-
-        return subscribers;
+        return {
+          ...subscribers,
+          [event]: handlers.map((handler) => {
+            return (handler as EventHandlerFunction)({
+              ...context!,
+              commandsBus,
+              queriesBus,
+            });
+          }),
+        };
       }, {});
     },
   };

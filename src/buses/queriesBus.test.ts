@@ -1,6 +1,6 @@
-import { queryHandler } from '../stores';
+import { queryHandler } from '../decorators';
 import { createQueriesBus } from './queriesBus';
-import { Query, QueryHandler, QueryHandlersStore } from '../typings';
+import { Query, QueryHandler, QueryHandlersStore } from 'typings';
 
 describe('Queries Bus', () => {
   describe('query', () => {

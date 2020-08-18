@@ -22,4 +22,5 @@ export type CommandHandler<
   Context = any,
   ReturnValue = any
 > = (context: CommandContext<Context>) => (command: CommandType) => ReturnValue;
+
 export type CommandHandlersStore = Map<string, CommandHandler<any>>;

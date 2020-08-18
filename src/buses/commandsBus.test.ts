@@ -1,4 +1,4 @@
-import { commandHandler } from '../stores';
+import { commandHandler } from '../decorators';
 import { createCommandBus } from './commandsBus';
 import { Command, CommandHandler, CommandHandlersStore } from '../typings';
 

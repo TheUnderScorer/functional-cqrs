@@ -1,12 +1,12 @@
 import { createEventsBus } from './eventsBus';
-import { eventHandler } from '../stores';
+import { eventHandler, EventsSubscriber, EventSubscriber } from '../decorators';
 import {
   Event,
   EventHandler,
   EventHandlerFunction,
   EventHandlersStore,
-  EventSubscriberCreator,
 } from '../typings';
+import { loadFromMetadata } from '../core/loadFromMetadata';
 
 type TestEvent = Event<'TestEvent', boolean>;
 
@@ -51,22 +51,31 @@ describe('Events Bus', () => {
     });
 
     it('should handle event subscribers', async () => {
-      const handler = jest.fn((event: TestEvent) => {
-        expect(event.payload).toEqual(true);
-      });
+      let called: Event<any> | undefined;
 
-      const createSubscriber: EventSubscriberCreator<
-        TestContext,
-        ['TestEvent']
-      > = (ctx) => ({
-        eventSubscribers: ['TestEvent'],
-        TestEvent: (event) => {
-          expect(ctx.isTest).toEqual(true);
-          handler(event);
+      @EventsSubscriber()
+
+      // @ts-ignore
+      // eslint-disable-next-line no-unused-vars,@typescript-eslint/no-unused-vars
+      class Subscribers {
+        constructor(readonly subContext: any) {}
+
+        @EventSubscriber({
+          eventName: 'TestEvent',
+        })
+        handleTestEvent(event: Event<'TestEvent'>) {
+          expect(this.subContext.test).toEqual(true);
+
+          called = event;
+        }
+      }
+
+      loadFromMetadata({
+        stores: { eventHandlersStore: store } as any,
+        context: {
+          test: true,
         },
       });
-
-      eventHandler<TestEvent>('TestEvent', createSubscriber)(store);
 
       const bus = createEventsBus(store)(context);
       bus.invokeSubscribers();
@@ -76,7 +85,7 @@ describe('Events Bus', () => {
         payload: true,
       });
 
-      expect(handler).toHaveBeenCalledTimes(1);
+      expect(called?.event).toEqual('TestEvent');
     });
   });
 });

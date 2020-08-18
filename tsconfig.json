@@ -1,22 +1,28 @@
 {
-  "extends": "./tsconfig.base",
   "compilerOptions": {
     "module": "commonjs",
+    "moduleResolution": "node",
+    "lib": ["esnext", "dom"],
+    "downlevelIteration": true,
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "noUnusedLocals": true,
+    "skipLibCheck": true,
+    "jsx": "react",
+    "declaration": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "baseUrl": "./src",
+    "rootDir": ".",
     "sourceMap": true,
     "outDir": "build",
     "target": "es2019",
-    "esModuleInterop": true,
-    "baseUrl": ".",
-    "types": ["node", "jest"],
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true
+    "types": ["node", "jest"]
   },
   "exclude": ["node_modules"],
   "include": [
-    "src/typings",
-    "packages/cli",
-    "src/buses",
-    "src/stores",
-    "src/core"
+    "src"
   ]
 }

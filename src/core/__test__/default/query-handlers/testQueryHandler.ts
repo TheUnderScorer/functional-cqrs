@@ -1,6 +1,6 @@
-import { TestContext } from '../handlers/test.handler';
-import { queryHandler } from '../../../../stores';
-import { TestEvent } from '../event-handlers/test-event.handler';
+import { TestContext } from '../handlers/testHandler';
+import { queryHandler } from '../../../../decorators';
+import { TestEvent } from '../event-handlers/testEventHandler';
 import { Query, QueryHandler } from '../../../../typings';
 
 export type TestQuery = Query<

@@ -2,15 +2,15 @@ import { createCqrs } from './cqrs';
 import commandHandler, {
   TestCommand,
   TestContext,
-} from './__test__/default/handlers/test.handler';
+} from './__test__/default/handlers/testHandler';
 import eventHandler, {
   eventHandlerCalls,
   resetEventCalls,
-} from './__test__/default/event-handlers/test-event.handler';
+} from './__test__/default/event-handlers/testEventHandler';
 import queryHandler, {
   items,
   TestQuery,
-} from './__test__/default/query-handlers/test-query.handler';
+} from './__test__/default/query-handlers/testQueryHandler';
 
 describe('createCqrs', () => {
   beforeEach(() => {
@@ -26,6 +26,7 @@ describe('createCqrs', () => {
           "commandsBus": Object {
             "execute": [Function],
             "invokeHandlers": [Function],
+            "setContext": [Function],
             "setEventsBus": [Function],
             "setQueriesBus": [Function],
           },
@@ -33,11 +34,13 @@ describe('createCqrs', () => {
             "dispatch": [Function],
             "invokeSubscribers": [Function],
             "setCommandsBus": [Function],
+            "setContext": [Function],
             "setQueriesBus": [Function],
           },
           "queriesBus": Object {
             "invokeHandlers": [Function],
             "query": [Function],
+            "setContext": [Function],
             "setEventsBus": [Function],
           },
         },
@@ -48,9 +51,9 @@ describe('createCqrs', () => {
 
   it('should import handlers using glob pattern', async () => {
     const { loadedHandlers } = await createCqrs({
-      commandHandlersPath: ['**/__test__/default/handlers/*.handler.ts'],
-      eventHandlersPath: ['**/__test__/default/event-handlers/*.handler.ts'],
-      queryHandlersPath: ['**/__test__/default/query-handlers/*.handler.ts'],
+      commandHandlersPath: ['**/__test__/default/handlers/*Handler.ts'],
+      eventHandlersPath: ['**/__test__/default/event-handlers/*Handler.ts'],
+      queryHandlersPath: ['**/__test__/default/query-handlers/*Handler.ts'],
     });
 
     expect(loadedHandlers).toEqual(3);
@@ -62,9 +65,9 @@ describe('createCqrs', () => {
     };
 
     const { buses, loadedHandlers } = await createCqrs({
-      commandHandlersPath: ['**/__test__/default/handlers/*.handler.ts'],
-      eventHandlersPath: ['**/__test__/default/event-handlers/*.handler.ts'],
-      queryHandlersPath: ['**/__test__/default/query-handlers/*.handler.ts'],
+      commandHandlersPath: ['**/__test__/default/handlers/*Handler.ts'],
+      eventHandlersPath: ['**/__test__/default/event-handlers/*Handler.ts'],
+      queryHandlersPath: ['**/__test__/default/query-handlers/*Handler.ts'],
       context,
     });
     expect(loadedHandlers).toEqual(3);

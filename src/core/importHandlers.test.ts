@@ -1,8 +1,8 @@
 import importHandlers from './importHandlers';
 import { sync } from 'glob';
-import { testHandler } from './__test__/default/handlers/test.handler';
-import { testEventHandler } from './__test__/default/event-handlers/test-event.handler';
-import { testQueryHandler } from './__test__/default/query-handlers/test-query.handler';
+import { testHandler } from './__test__/default/handlers/testHandler';
+import { testEventHandler } from './__test__/default/event-handlers/testEventHandler';
+import { testQueryHandler } from './__test__/default/query-handlers/testQueryHandler';
 import {
   CommandHandler,
   CommandHandlersStore,
@@ -24,7 +24,7 @@ describe('Import command handlers', () => {
   describe('Using ES export', () => {
     it('should import handlers and load them into store', async () => {
       const result = await importHandlers(
-        ['**/__test__/default/handlers/*.handler.ts'],
+        ['**/__test__/default/handlers/*Handler.ts'],
         importer,
         sync,
         store
@@ -39,7 +39,7 @@ describe('Import command handlers', () => {
   describe('Using module.exports', () => {
     it('should import handlers and load them into store', async () => {
       const result = await importHandlers(
-        ['**/__test__/module/handlers/*.handler.ts'],
+        ['**/__test__/module/handlers/*Handler.ts'],
         importer,
         sync,
         store
@@ -61,7 +61,7 @@ describe('Import event handlers', () => {
   describe('Using ES export', () => {
     it('should import handlers and load them into store', async () => {
       const result = await importHandlers(
-        ['**/__test__/default/event-handlers/*.handler.ts'],
+        ['**/__test__/default/event-handlers/*Handler.ts'],
         importer,
         sync,
         store
@@ -84,7 +84,7 @@ describe('Import query handlers', () => {
   describe('Using ES export', () => {
     it('should import handlers and load them into store', async () => {
       const result = await importHandlers(
-        ['**/__test__/default/query-handlers/*.handler.ts'],
+        ['**/__test__/default/query-handlers/*Handler.ts'],
         importer,
         sync,
         store
