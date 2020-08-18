@@ -1,9 +1,10 @@
 # Functional Cqrs
-[![lerna](https://img.shields.io/badge/maintained%20with-lerna-cc00ff.svg)](https://lerna.js.org/) 
 ![CI](https://github.com/TheUnderScorer/functional-cqrs/workflows/CI/badge.svg)
 [![Coverage Status](https://coveralls.io/repos/github/TheUnderScorer/functional-cqrs/badge.svg?branch=master)](https://coveralls.io/github/TheUnderScorer/functional-cqrs?branch=master)
 
 This library provides functional approach to CQRS (Command Query Responsibility Segregation).
+
+NOTE: Readme is in progress
 
 ## Content list
 
@@ -23,7 +24,7 @@ You will need:
 
 ### Installation
 
-`npm install @functional-cqrs/core` or `yarn add @functional-cqrs/core`
+`npm install functional-cqrs` or `yarn add functional-cqrs`
 
 ## 🚀 Usage
 
@@ -76,8 +77,7 @@ Handlers are always bound to single command, and they can return value. They can
 >Typescript
 
 ```typescript
-import { CommandHandler } from '@functional-cqrs/typings';
-import { commandHandler } from '@functional-cqrs/stores';
+import { commandHandler, CommandHandler } from 'functional-cqrs';
 
 export interface Context {
   connection: Connection;
@@ -107,7 +107,7 @@ export default commandHandler<SaveTodo, Context>('SaveTodo', saveTodoHandler);
 >Javascript
 
 ```javascript
-import { commandHandler } from '@functional-cqrs/stores';
+import { commandHandler } from 'functional-cqrs';
 
 const saveTodoHandler= ({
   eventsBus,
