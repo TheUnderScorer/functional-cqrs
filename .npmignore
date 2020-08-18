@@ -1,10 +1,9 @@
-# source
 src
-node_modules
-.cache
-tsconfig.build.json
-
-# configuration
-package-lock.json
-yarn.lock
+.github
+.eslintignore
+.gitingore
+.prettierignore
+.prettierrc
+eslint.json
 tsconfig.json
+node_modules
