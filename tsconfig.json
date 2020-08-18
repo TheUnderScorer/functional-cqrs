@@ -7,23 +7,16 @@
     "target": "es2019",
     "esModuleInterop": true,
     "baseUrl": ".",
-    "paths": {
-      "@functional-cqrs/cli": ["./packages/cli/src"],
-      "@functional-cqrs/typings": ["./packages/typings/src"],
-      "@functional-cqrs/buses": ["./packages/buses/src"],
-      "@functional-cqrs/stores": ["./packages/stores/src"],
-      "@functional-cqrs/core": ["./packages/core/src"]
-    },
     "types": ["node", "jest"],
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true
   },
   "exclude": ["node_modules"],
   "include": [
-    "packages/typings",
+    "src/typings",
     "packages/cli",
-    "packages/buses",
-    "packages/stores",
-    "packages/core"
+    "src/buses",
+    "src/stores",
+    "src/core"
   ]
 }

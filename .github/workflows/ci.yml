@@ -5,68 +5,41 @@ jobs:
     name: Test
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@master
-
-      - name: Set Node.js 12.x
-        uses: actions/setup-node@v1.1.0
-        with:
-          version: 12.x
-
-      - name: Install dependencies
-        run: yarn install --pure-lockfile
-
+      - uses: actions/checkout@v2
+      - name: Install npm dependencies
+        run: |
+          npm ci
       - name: Lint
-        run: yarn run lint
-
-      - name: Tests
-        run: yarn run coverage --ci
-
-      - name: Coveralls
-        uses: coverallsapp/github-action@master
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          npm run lint
+      - name: Run tests
+        run: |
+          npm run test:ci
 
   release:
-    needs: test
-    name: Publish
+    needs:
+      - test
+    name: Build & Release
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/master'
     steps:
-      - name: Checkout Repo
-        uses: actions/checkout@v1
-
-      - name: Set Node.js 12.x
-        uses: actions/setup-node@v1.1.0
-        with:
-          version: 12.x
-
+      - uses: actions/checkout@v2
       - name: Configure CI Git User
         run: |
           git config --global user.name 'TheUnderScorer'
           git config --global user.email 'przemyslawzydek@gmail.com'
-          git remote set-url origin https://TheUnderScorer:$GITHUB_TOKEN@github.com/TheUnderScorer/functional-cqrs
+          git remote set-url origin https://TheUnderScorer:$GITHUB_TOKEN@github.com/TheUnderScorer/typed-elastic
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Checkout and pull branch
-        run: git checkout "${GITHUB_REF:11}" && git pull
-
-      - name: Install Dependencies
-        run: yarn install --pure-lockfile
-
-      - name: Build Packages
-        run: yarn run build
-
-      - name: Authenticate with Registry
+      - name: Install npm dependencies
         run: |
-          echo "@functional-cqrs:registry=http://registry.npmjs.org/" > .npmrc
-          echo "registry=http://registry.npmjs.org/" >> .npmrc
-          echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> .npmrc
-          npm whoami
+          npm ci
+      - name: Build
+        run: |
+          npm run build
+      - name: Semantic Release
+        run: |
+          npm run semantic-release
         env:
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-
-      - name: Publish package
-        run: yarn run publish-ci
-        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}

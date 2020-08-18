@@ -1,4 +1,11 @@
+plop-templates
 node_modules
-coverage
-**/build
+services/**/bootstrap.ts
+shared/service-template/**
 **/*.d.ts
+*.json
+**/migrations/*
+**/plop-templates/*
+**/plopfile.js
+services/app/src/graphql/types/index.ts
+services/security/**

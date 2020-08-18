@@ -1,22 +1,46 @@
 {
-  "root": true,
-  "env": {
-    "jest": true
-  },
-  "plugins": ["jest"],
   "extends": [
-    "plugin:jest/recommended",
-    "plugin:monorepo/recommended",
-    "xo",
-    "xo-typescript",
+    "airbnb-typescript/base",
     "plugin:prettier/recommended",
     "prettier/@typescript-eslint"
   ],
+  "env": {
+    "mocha": true
+  },
+  "plugins": ["prettier", "unicorn", "no-only-tests"],
+  "parserOptions": {
+    "project": "./tsconfig.json"
+  },
   "rules": {
-    // Enabled by `xo`
-    "valid-jsdoc": "off",
-    "@typescript-eslint/explicit-function-return-type": "off",
-    "capitalized-comments": "off",
-    "@typescript-eslint/member-naming": "off"
+    "no-console": "error",
+    "import/prefer-default-export": "off",
+    "no-empty-pattern": "off",
+    "import/no-cycle": "off",
+    "import/no-duplicates": "off",
+    "import/order": "off",
+    "no-empty-function": "off",
+    "no-underscore-dangle": "off",
+    "no-useless-constructor": "off",
+    "class-methods-use-this": "off",
+    "@typescript-eslint/quotes": ["error", "single", { "avoidEscape": true }],
+    "no-empty-interface": "off",
+    "ordered-imports": "off",
+    "object-literal-sort-keys": "off",
+    "unicorn/filename-case": [
+      "error",
+      {
+        "cases": {
+          "camelCase": true,
+          "pascalCase": true
+        }
+      }
+    ],
+    "no-unused-vars": ["error", { "argsIgnorePattern": "^_", "ignoreRestSiblings": true }],
+    "no-only-tests/no-only-tests": "error",
+    "@typescript-eslint/no-unused-vars": ["error", { "argsIgnorePattern": "^_", "ignoreRestSiblings": true }],
+    "no-param-reassign": ["error", { "props": true, "ignorePropertyModificationsFor": ["propertyDesciptor", "handlers", "req", "res"]}],
+    "curly": "error",
+    "@typescript-eslint/dot-notation": "off",
+    "@typescript-eslint/lines-between-class-members": "off"
   }
 }
