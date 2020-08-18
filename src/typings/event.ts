@@ -6,19 +6,15 @@ export interface Event<Name extends string = string, Payload = any> {
   payload: Payload;
 }
 
-export type EventSubscriberCreator<
-  Context extends EventContext,
-  Keys extends string[]
-> = (context: Context) => EventSubscriber<Context, Keys>;
+export type EventSubscriberMethod = (event: Event) => Promise<void>;
 
-export type EventSubscriber<
-  Context extends EventContext,
-  Keys extends string[] = string[]
-> = {
-  [Key in Keys[number]]: ReturnType<EventHandlerFunction<Event<Key>, Context>>;
-} & {
-  readonly eventSubscribers: Keys;
-};
+export interface EventSubscriberInterface {
+  [key: string]: EventSubscriberMethod;
+}
+
+export interface EventSubscriberConstructor<Context> {
+  new (context: Context): EventSubscriberInterface;
+}
 
 export type EventContext<Context = any> = Context & {
   commandsBus: CommandsBus;
@@ -42,4 +38,4 @@ export type EventHandlerFunction<
 
 export type EventHandler<EventType extends Event = Event, Context = any> =
   | EventHandlerFunction<EventType, Context>
-  | EventSubscriberCreator<Context, string[]>;
+  | EventSubscriberInterface;

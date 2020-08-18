@@ -1,4 +1,4 @@
-import { commandHandler, queryHandler, eventHandler } from '../stores';
+import { commandHandler, queryHandler, eventHandler } from '../decorators';
 import loadHandlers from './loadHandlers';
 import {
   Command,

@@ -8,6 +8,7 @@ import {
 export interface PrivateQueriesBus<Context> extends QueriesBus<Context> {
   setEventsBus: (bus: EventsBus) => void;
   invokeHandlers: () => void;
+  setContext: (context: Context) => void;
 }
 
 export interface InvokedQueryHandlers {
@@ -15,8 +16,9 @@ export interface InvokedQueryHandlers {
 }
 
 export const createQueriesBus = <Context = any>(store: QueryHandlersStore) => (
-  context: Context
+  initialContext?: Context
 ): PrivateQueriesBus<Context> => {
+  let context: Context | undefined = initialContext;
   let eventsBus: EventsBus;
 
   let invokedQueryHandlers: InvokedQueryHandlers;
@@ -39,12 +41,15 @@ export const createQueriesBus = <Context = any>(store: QueryHandlersStore) => (
         InvokedQueryHandlers
       >((handlers, [query, handler]) => {
         handlers[query] = handler({
-          ...context,
+          ...context!,
           eventsBus,
         });
 
         return handlers;
       }, {});
+    },
+    setContext: (newContext) => {
+      context = newContext;
     },
   };
 };

@@ -10,6 +10,7 @@ import {
 export interface PrivateCommandBus<Context> extends CommandsBus<Context> {
   setEventsBus: (bus: EventsBus) => void;
   setQueriesBus: (bus: QueriesBus) => void;
+  setContext: (context: Context) => void;
   invokeHandlers: () => void;
 }
 
@@ -19,7 +20,9 @@ export interface InvokedCommandHandlers {
 
 export const createCommandBus = <Context = any>(
   store: CommandHandlersStore
-) => (context: Context): PrivateCommandBus<Context> => {
+) => (initialContext?: Context): PrivateCommandBus<Context> => {
+  let context: Context | undefined = initialContext;
+
   let eventsBus: EventsBus;
   let queriesBus: QueriesBus;
 
@@ -47,14 +50,18 @@ export const createCommandBus = <Context = any>(
       invokedCommands = Array.from(store.entries()).reduce<
         InvokedCommandHandlers
       >((previousValue, [command, handler]) => {
-        previousValue[command] = handler({
-          ...context,
-          eventsBus,
-          queriesBus,
-        });
-
-        return previousValue;
+        return {
+          ...previousValue,
+          [command]: handler({
+            ...context,
+            eventsBus,
+            queriesBus,
+          }),
+        };
       }, {});
+    },
+    setContext: (newContext) => {
+      context = newContext;
     },
   };
 };

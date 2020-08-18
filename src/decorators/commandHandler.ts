@@ -1,4 +1,4 @@
-import { Command, CommandHandler, CommandHandlersStore } from '../../typings';
+import { Command, CommandHandler, CommandHandlersStore } from '../typings';
 
 /**
  * Registers new command handler into store

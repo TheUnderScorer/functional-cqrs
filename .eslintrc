@@ -12,7 +12,7 @@
     "project": "./tsconfig.json"
   },
   "rules": {
-    "no-console": "error",
+    "no-console": "off",
     "import/prefer-default-export": "off",
     "no-empty-pattern": "off",
     "import/no-cycle": "off",
@@ -41,6 +41,6 @@
     "no-param-reassign": ["error", { "props": true, "ignorePropertyModificationsFor": ["propertyDesciptor", "handlers", "req", "res"]}],
     "curly": "error",
     "@typescript-eslint/dot-notation": "off",
-    "@typescript-eslint/lines-between-class-members": "off"
+    "@typescript-eslint/lines-between-class-members": "off",
   }
 }

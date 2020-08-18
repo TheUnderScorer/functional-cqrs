@@ -1,8 +1,10 @@
+/* eslint-disable no-shadow */
 import { Event, EventHandler, EventHandlersStore } from '../../typings';
 import { pipe } from 'ramda';
 
 type EventHandlerTuple = [EventHandlersStore, EventHandler[]];
 
+// TODO Refactor to not use pipe from ramda
 export const eventHandler = <EventType extends Event = Event, Context = any>(
   type: EventType['event'],
   handler: EventHandler<EventType, Context>

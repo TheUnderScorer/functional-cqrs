@@ -1,5 +1,5 @@
-import { commandHandler } from '../../../../stores';
-import { TestEvent } from '../event-handlers/test-event.handler';
+import { commandHandler } from '../../../../decorators';
+import { TestEvent } from '../event-handlers/testEventHandler';
 import { Command, CommandHandler } from '../../../../typings';
 
 export type TestCommand = Command<'TestCommand', boolean>;

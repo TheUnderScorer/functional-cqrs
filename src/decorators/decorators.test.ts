@@ -9,8 +9,8 @@ import {
   QueryHandlersStore,
   Event,
   EventHandlerFunction,
-} from '../../typings';
-import { eventHandler } from './eventHandler';
+} from '../typings';
+import { eventHandler } from './events/eventHandler';
 import { queryHandler } from './queryHandler';
 import { commandHandler } from './commandHandler';
 

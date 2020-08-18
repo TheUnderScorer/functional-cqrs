@@ -1,4 +1,4 @@
-import { Query, QueryHandler, QueryHandlersStore } from '../../typings';
+import { Query, QueryHandler, QueryHandlersStore } from '../typings';
 
 export const queryHandler = <
   QueryType extends Query = Query,

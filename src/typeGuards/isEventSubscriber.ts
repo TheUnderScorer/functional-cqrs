@@ -1,9 +1,13 @@
-import { EventSubscriber } from '../typings/event';
+import { EventSubscriberInterface } from '../typings';
+import {
+  ClassMetadataKinds,
+  getByKind,
+} from '../stores/metadata/classMetadataStore';
 
 export const isEventSubscriber = (
   item: any
-): item is EventSubscriber<any, any> => {
-  return (
-    item && typeof item === 'object' && Array.isArray(item.eventSubscribers)
-  );
+): item is EventSubscriberInterface => {
+  return getByKind(ClassMetadataKinds.EventSubscriber)
+    .map((metadata) => metadata.constructor)
+    .includes(item);
 };
