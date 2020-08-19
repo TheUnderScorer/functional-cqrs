@@ -8,9 +8,9 @@ export const queryHandler = {
    *
    * TODO Example
    * */
-  asFunction: <QueryType extends Query, Context = any>(
+  asFunction: <QueryType extends Query, Context = any, ReturnValue = any>(
     query: QueryType['name'],
-    fn: QueryHandlerFn<QueryType>
+    fn: QueryHandlerFn<QueryType, Context, ReturnValue>
   ) => {
     queryHandlerMetadataStore.set(query, {
       handler: fn,
