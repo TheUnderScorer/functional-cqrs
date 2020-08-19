@@ -1,3 +1,10 @@
+## [1.1.1](https://github.com/TheUnderScorer/functional-cqrs/compare/v1.1.0...v1.1.1) (2020-08-19)
+
+
+### Bug Fixes
+
+* add missing generic types for query handler ([565e6d7](https://github.com/TheUnderScorer/functional-cqrs/commit/565e6d75fc66b19f7e3f1bc386a6de3971533128))
+
 # [1.1.0](https://github.com/TheUnderScorer/functional-cqrs/compare/v1.0.0...v1.1.0) (2020-08-19)
 
 
