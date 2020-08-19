@@ -1,55 +1,58 @@
-import {
-  EventsBus,
-  QueriesBus,
-  QueryHandler,
-  QueryHandlersStore,
-} from '../typings';
+import { EventsBus, QueriesBus, QueryContext, QueryHandler } from '../typings';
+import { makeLoadClassInstances } from './helpers/singular/loadClassInstances';
+import { QueryHandlerMetadataStore } from '../stores/metadata/queryHandlerMetadataStore';
+import { makeCallHandler } from './helpers/singular/callSingularHandler';
 
 export interface PrivateQueriesBus<Context> extends QueriesBus<Context> {
   setEventsBus: (bus: EventsBus) => void;
-  invokeHandlers: () => void;
   setContext: (context: Context) => void;
+  loadClasses: () => void;
 }
 
-export interface InvokedQueryHandlers {
-  [key: string]: ReturnType<QueryHandler>;
-}
-
-export const createQueriesBus = <Context = any>(store: QueryHandlersStore) => (
+export const createQueriesBus = <Context = any>(
+  store: QueryHandlerMetadataStore,
   initialContext?: Context
 ): PrivateQueriesBus<Context> => {
   let context: Context | undefined = initialContext;
   let eventsBus: EventsBus;
 
-  let invokedQueryHandlers: InvokedQueryHandlers;
+  const getFullContext = (): QueryContext<Context> => ({
+    ...context!,
+    eventsBus,
+  });
+
+  const loadClassInstances = makeLoadClassInstances<
+    QueryHandler<any>,
+    QueryContext<Context>
+  >({ store, contextProvider: getFullContext });
+  let classInstances = loadClassInstances();
+
+  const callHandler = makeCallHandler<QueryContext<Context>>({
+    classInstancesProvider: () => classInstances,
+    contextProvider: getFullContext,
+    key: 'query',
+  });
 
   return {
     query: (query) => {
-      const handler = invokedQueryHandlers[query.query];
+      const handler = store.get(query.name);
 
       if (!handler) {
-        throw new Error(`No handler for query ${query.query} found.`);
+        throw new Error(`No handler for query ${query.name} found.`);
       }
 
-      return handler(query);
+      return callHandler(handler, query);
     },
-    setEventsBus: (bus) => {
-      eventsBus = bus;
-    },
-    invokeHandlers: () => {
-      invokedQueryHandlers = Array.from(store.entries()).reduce<
-        InvokedQueryHandlers
-      >((handlers, [query, handler]) => {
-        handlers[query] = handler({
-          ...context!,
-          eventsBus,
-        });
-
-        return handlers;
-      }, {});
+    setEventsBus: (newEventsBus) => {
+      eventsBus = newEventsBus;
     },
     setContext: (newContext) => {
       context = newContext;
+
+      classInstances = loadClassInstances();
+    },
+    loadClasses: () => {
+      classInstances = loadClassInstances();
     },
   };
 };

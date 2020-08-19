@@ -1,9 +1,10 @@
 import { EventsBus } from './event';
+import { SingularHandler, SingularInstruction } from './singular';
 
-export interface Query<Name extends string = string, Payload = any> {
-  query: Name;
-  payload: Payload;
-}
+export type Query<
+  Name extends string = string,
+  Payload = any
+> = SingularInstruction<Name, Payload>;
 
 export type QueryContext<Context = any> = Context & {
   eventsBus: EventsBus;
@@ -15,11 +16,20 @@ export interface QueriesBus<Context = any> {
   ) => ReturnValue | Promise<ReturnValue>;
 }
 
-export type QueryHandlersStore = Map<string, QueryHandler<any>>;
-export type QueryHandler<
+export type QueryHandler<QueryType extends Query> = SingularHandler<QueryType>;
+
+export interface QueryHandlerFnParams<
+  QueryType extends Query = Query,
+  Context = any
+> {
+  context: QueryContext<Context>;
+  query: QueryType;
+}
+
+export type QueryHandlerFn<
   QueryType extends Query = Query,
   Context = any,
   ReturnValue = any
 > = (
-  context: QueryContext<Context>
-) => (query: QueryType) => ReturnValue | Promise<ReturnValue>;
+  params: QueryHandlerFnParams<QueryType, Context>
+) => ReturnValue | Promise<ReturnValue>;

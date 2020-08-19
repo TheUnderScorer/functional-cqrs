@@ -7,7 +7,7 @@ module.exports = {
   testMatch: ['**/*.test.ts?(x)'],
 
   collectCoverageFrom: [
-    `*/src/*.ts`,
+    'src/**/*.ts?(x)',
     '!**/{*.d.ts,index.ts}',
     '!**/node_modules/**',
     '!/build/**',

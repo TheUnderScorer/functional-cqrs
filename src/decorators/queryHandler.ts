@@ -1,20 +1,44 @@
-import { Query, QueryHandler, QueryHandlersStore } from '../typings';
+import { Query, QueryHandler, QueryHandlerFn } from '../typings';
+import { queryHandlerMetadataStore } from '../stores/metadata/queryHandlerMetadataStore';
+import { Constructor } from '../typings/common';
 
-export const queryHandler = <
-  QueryType extends Query = Query,
-  Context = any,
-  ReturnValueType = any
->(
-  type: QueryType['query'],
-  handler: QueryHandler<QueryType, Context, ReturnValueType>
-) => (store: QueryHandlersStore) => {
-  if (store.has(type)) {
-    console.warn(`Handler for query "${type}" already exists.`);
+export const queryHandler = {
+  /**
+   * Registers new query handler as function.
+   *
+   * TODO Example
+   * */
+  asFunction: <QueryType extends Query, Context = any>(
+    query: QueryType['name'],
+    fn: QueryHandlerFn<QueryType>
+  ) => {
+    queryHandlerMetadataStore.set(query, {
+      handler: fn,
+      name: fn.name ?? Date.now().toString(),
+      type: 'function',
+      targetName: query,
+    });
 
-    return handler;
-  }
+    return fn;
+  },
 
-  store.set(type, handler);
+  /**
+   * Registers new query handler as class.
+   *
+   * TODO Example
+   * */
+  asClass: <QueryType extends Query>(
+    query: Pick<QueryType, 'name'> | QueryType['name']
+  ) => <T extends Constructor<QueryHandler<QueryType>>>(target: T) => {
+    const queryName = typeof query === 'object' ? query.name : query;
 
-  return handler;
+    queryHandlerMetadataStore.set(queryName, {
+      handler: target,
+      type: 'class',
+      name: target.name,
+      targetName: queryName,
+    });
+
+    return target;
+  },
 };

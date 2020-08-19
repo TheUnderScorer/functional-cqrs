@@ -2,19 +2,11 @@ import { CommandsBus } from './command';
 import { QueriesBus } from './query';
 
 export interface Event<Name extends string = string, Payload = any> {
-  event: Name;
+  name: Name;
   payload: Payload;
 }
 
 export type EventSubscriberMethod = (event: Event) => Promise<void>;
-
-export interface EventSubscriberInterface {
-  [key: string]: EventSubscriberMethod;
-}
-
-export interface EventSubscriberConstructor<Context> {
-  new (context: Context): EventSubscriberInterface;
-}
 
 export type EventContext<Context = any> = Context & {
   commandsBus: CommandsBus;
@@ -27,15 +19,11 @@ export interface EventsBus<Context = any> {
   ) => void | Promise<void>;
 }
 
-export type EventHandlersStore = Map<string, Array<EventHandler<any>>>;
+export interface EventHandlerParams<EventType extends Event, Context = any> {
+  event: EventType;
+  context: Context;
+}
 
-export type EventHandlerFunction<
-  EventType extends Event = Event,
-  Context = any
-> = (
-  context: EventContext<Context>
-) => (event: EventType) => void | Promise<void>;
-
-export type EventHandler<EventType extends Event = Event, Context = any> =
-  | EventHandlerFunction<EventType, Context>
-  | EventSubscriberInterface;
+export type EventHandlerFn<EventType extends Event = Event, Context = any> = (
+  params: EventHandlerParams<EventType, Context>
+) => void | Promise<void>;

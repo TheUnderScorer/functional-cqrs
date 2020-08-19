@@ -1,4 +1,5 @@
 import { Constructor } from '../../typings/common';
+import { storeToArray } from '../../utils';
 
 export interface MethodMetadataStoreItem<T> {
   constructor: Constructor<T>;
@@ -17,7 +18,7 @@ export const getByConstructorAndKind = (
   constructor: Constructor<any>,
   kind: MethodMetadataKind
 ) => {
-  return Array.from(methodMetadataStore.values()).filter(
+  return storeToArray(methodMetadataStore).filter(
     (item) => item.constructor === constructor && item.kind === kind
   );
 };

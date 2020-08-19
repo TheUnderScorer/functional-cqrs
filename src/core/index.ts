@@ -1,6 +1,6 @@
 import { createCqrs } from './cqrs';
 
-export { default as createBuses } from './createBuses';
+export { createBuses } from './createBuses';
 
 export { createCqrs };
 
