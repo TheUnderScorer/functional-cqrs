@@ -1,3 +1,10 @@
+# [1.1.0](https://github.com/TheUnderScorer/functional-cqrs/compare/v1.0.0...v1.1.0) (2020-08-19)
+
+
+### Features
+
+* Trigger release ([309acfa](https://github.com/TheUnderScorer/functional-cqrs/commit/309acfa28fc11d5cfe97e1facca59f34af27e5be))
+
 # 1.0.0 (2020-08-19)
 
 
