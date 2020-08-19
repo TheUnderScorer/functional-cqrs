@@ -63,7 +63,7 @@ Every command should have only one handle
 Bonus for Typescript users, you can define commands types in following way:
 
 ```typescript
-import { Command } from '@functional-cqrs/typings';
+import { Command } from 'functional-cqrs';
 
 export name SaveTodo = Command<'SaveTodo', Todo>;
 ```
@@ -71,6 +71,8 @@ export name SaveTodo = Command<'SaveTodo', Todo>;
 First generic argument defines command `name` property, and second defines `payload`. 
 
 #### Command Handlers
+
+#### As function
 
 Handlers are always bound to single command, and they can return value. They can also execute [queries](#queries) and dispatch [events](#events.)
 
@@ -83,10 +85,13 @@ export interface Context {
   connection: Connection;
 }
 
-const saveTodoHandler: CommandHandlerFn<SaveTodo, Context> = ({
-  eventsBus,
-  connection,
-}) => async ({ payload }) => {
+const saveTodoHandler: CommandHandlerFn<SaveTodo, Context> = async ({
+  context: {
+    eventsBus,
+    connection,  
+  },
+  command: {payload}
+}) => {
   if (!payload.title) {
     throw new Error('Title is required.');
   }
@@ -101,7 +106,7 @@ const saveTodoHandler: CommandHandlerFn<SaveTodo, Context> = ({
   return todo;
 };
 
-export default commandHandler<SaveTodo, Context>('SaveTodo', saveTodoHandler);
+export default commandHandler.asFunction<SaveTodo, Context>('SaveTodo', saveTodoHandler);
 ```
 
 >Javascript
@@ -109,10 +114,13 @@ export default commandHandler<SaveTodo, Context>('SaveTodo', saveTodoHandler);
 ```javascript
 import { commandHandler } from 'functional-cqrs';
 
-const saveTodoHandler= ({
-  eventsBus,
-  connection,
-}) => async ({ payload }) => {
+const saveTodoHandler = async ({
+  context: {
+    eventsBus,
+    connection,  
+  },
+  command: {payload}
+}) => {
   if (!payload.title) {
     throw new Error('Title is required.');
   }
@@ -127,34 +135,14 @@ const saveTodoHandler= ({
   return todo;
 };
 
-module.exports = commandHandler('SaveTodo', saveTodoHandler);
+module.exports = commandHandler.asFunction('SaveTodo', saveTodoHandler);
 ```
 
-Handler is a function that takes one parameter called `Context` 
-which basically contains all dependencies from your application, such as database connection and also buses related to it's name.
+Handler is a function that takes one parameter which contains "Context" (which basically contains all dependencies from your application, such as database connection and also buses related to it's name.) and query, event or command.
+
 <br>
 Command handlers get's injected with two buses - [Queries Bus](#queries-bus) and [Events Bus](#events-bus) in addition to the context.
 <br>
 This function returns another function that takes in this case command as a parameter that then get's resolved.
 
-> Hint: You always need to export the handle by "decorating" it with `commandHandler` decorator that comes from `@functional-cqrs/stores` package.
-
-#### Exporting handle
-
-The decorated handle can be exported in following ways:
-
-```javascript
-// Export as node module
-module.exports = commandHandler('SaveTodo', saveTodoHandler);
-
-// Export as node modules as object
-module.exports = {
-  handle: commandHandler('SaveTodo', saveTodoHandler)
-};
-
-// Default ES6 export
-export default commandHandler<SaveTodo, Context>('SaveTodo', saveTodoHandler);
-
-// Export as "handle" variable
-export const handle = commandHandler<SaveTodo, Context>('SaveTodo', saveTodoHandler);
-```
+> Hint: Remember that you always have to "decorate" your handler using "commandHandler.asFunction" or "commandHandler.asClass"
