@@ -1,10 +1,11 @@
 # Functional Cqrs
-![CI](https://github.com/TheUnderScorer/functional-cqrs/workflows/CI/badge.svg)
-[![Coverage Status](https://coveralls.io/repos/github/TheUnderScorer/functional-cqrs/badge.svg?branch=master)](https://coveralls.io/github/TheUnderScorer/functional-cqrs?branch=master)
 
 This library provides functional approach to CQRS (Command Query Responsibility Segregation).
 
 NOTE: Readme is in progress
+
+![CI](https://github.com/TheUnderScorer/functional-cqrs/workflows/CI/badge.svg)
+[![Coverage Status](https://coveralls.io/repos/github/TheUnderScorer/functional-cqrs/badge.svg?branch=master)](https://coveralls.io/github/TheUnderScorer/functional-cqrs?branch=master)
 
 ## Content list
 
