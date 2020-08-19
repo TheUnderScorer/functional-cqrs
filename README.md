@@ -38,7 +38,7 @@ Commands are parts of applications that change it's state (for example by creati
 
 ```typescript
 commandsBus.execute<SaveTodo>({
-    type: 'SaveTodo',
+    name: 'SaveTodo',
     payload: todo,
   });
 ```
@@ -47,16 +47,16 @@ commandsBus.execute<SaveTodo>({
 
 ```javascript
 commandsBus.execute({
-    type: 'SaveTodo',
+    name: 'SaveTodo',
     payload: todo,
   });
 ```
 
 Commands always come with two properties: 
-- `type` definies type of the command (usually named after certain domain action, ex. "SaveTodo"),
+- `name` definies name of the command (usually named after certain domain action, ex. "SaveTodo"),
 - `payload` Data attached to command (ex. input of entity that should be validated and saved in database)
 
-Every command should have only one handler
+Every command should have only one handle
 
 >Hint: Commands are usualy named in present tense
 
@@ -65,10 +65,10 @@ Bonus for Typescript users, you can define commands types in following way:
 ```typescript
 import { Command } from '@functional-cqrs/typings';
 
-export type SaveTodo = Command<'SaveTodo', Todo>;
+export name SaveTodo = Command<'SaveTodo', Todo>;
 ```
 
-First generic argument defines command `type` property, and second defines `payload`. 
+First generic argument defines command `name` property, and second defines `payload`. 
 
 #### Command Handlers
 
@@ -77,13 +77,13 @@ Handlers are always bound to single command, and they can return value. They can
 >Typescript
 
 ```typescript
-import { commandHandler, CommandHandler } from 'functional-cqrs';
+import { commandHandler, CommandHandlerFn } from 'functional-cqrs';
 
 export interface Context {
   connection: Connection;
 }
 
-const saveTodoHandler: CommandHandler<SaveTodo, Context> = ({
+const saveTodoHandler: CommandHandlerFn<SaveTodo, Context> = ({
   eventsBus,
   connection,
 }) => async ({ payload }) => {
@@ -94,7 +94,7 @@ const saveTodoHandler: CommandHandler<SaveTodo, Context> = ({
   const todo = connection.save(payload);
 
   await eventsBus.dispatch<TodoSaved>({
-    event: 'TodoSaved',
+    name: 'TodoSaved',
     payload: todo,
   });
 
@@ -120,7 +120,7 @@ const saveTodoHandler= ({
   const todo = connection.save(payload);
 
   await eventsBus.dispatch({
-    event: 'TodoSaved',
+    name: 'TodoSaved',
     payload: todo,
   });
 
@@ -131,17 +131,17 @@ module.exports = commandHandler('SaveTodo', saveTodoHandler);
 ```
 
 Handler is a function that takes one parameter called `Context` 
-which basically contains all dependencies from your application, such as database connection and also buses related to it's type.
+which basically contains all dependencies from your application, such as database connection and also buses related to it's name.
 <br>
 Command handlers get's injected with two buses - [Queries Bus](#queries-bus) and [Events Bus](#events-bus) in addition to the context.
 <br>
 This function returns another function that takes in this case command as a parameter that then get's resolved.
 
-> Hint: You always need to export the handler by "decorating" it with `commandHandler` decorator that comes from `@functional-cqrs/stores` package.
+> Hint: You always need to export the handle by "decorating" it with `commandHandler` decorator that comes from `@functional-cqrs/stores` package.
 
-#### Exporting handler
+#### Exporting handle
 
-The decorated handler can be exported in following ways:
+The decorated handle can be exported in following ways:
 
 ```javascript
 // Export as node module
@@ -149,12 +149,12 @@ module.exports = commandHandler('SaveTodo', saveTodoHandler);
 
 // Export as node modules as object
 module.exports = {
-  handler: commandHandler('SaveTodo', saveTodoHandler)
+  handle: commandHandler('SaveTodo', saveTodoHandler)
 };
 
 // Default ES6 export
 export default commandHandler<SaveTodo, Context>('SaveTodo', saveTodoHandler);
 
-// Export as "handler" variable
-export const handler = commandHandler<SaveTodo, Context>('SaveTodo', saveTodoHandler);
+// Export as "handle" variable
+export const handle = commandHandler<SaveTodo, Context>('SaveTodo', saveTodoHandler);
 ```

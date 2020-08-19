@@ -2,17 +2,28 @@ import { createCqrs } from './cqrs';
 import commandHandler, {
   TestCommand,
   TestContext,
-} from './__test__/default/handlers/testHandler';
+} from './__test__/handlers/testHandler';
 import eventHandler, {
   eventHandlerCalls,
   resetEventCalls,
-} from './__test__/default/event-handlers/testEventHandler';
-import queryHandler, {
-  items,
-  TestQuery,
-} from './__test__/default/query-handlers/testQueryHandler';
+} from './__test__/eventHandlers/testEventHandler';
+import { items, TestQuery } from './__test__/queryHandlers/testQueryHandler';
+import { TestClassEventHandler } from './__test__/eventHandlers/TestClassEventHandler';
+import {
+  TestClassQuery,
+  TestClassQueryHandler,
+} from './__test__/queryHandlers/TestClassQueryHandler';
+import { testQueryHandler } from './__test__/queryHandlers/testQueryHandler';
+import {
+  TestClassCommand,
+  TestClassHandler,
+} from './__test__/handlers/TestClassHandler';
 
 describe('createCqrs', () => {
+  const context: TestContext = {
+    version: '0.1',
+  };
+
   beforeEach(() => {
     resetEventCalls();
   });
@@ -25,91 +36,39 @@ describe('createCqrs', () => {
         "buses": Object {
           "commandsBus": Object {
             "execute": [Function],
-            "invokeHandlers": [Function],
+            "loadClasses": [Function],
             "setContext": [Function],
             "setEventsBus": [Function],
             "setQueriesBus": [Function],
           },
           "eventsBus": Object {
             "dispatch": [Function],
-            "invokeSubscribers": [Function],
+            "loadClasses": [Function],
             "setCommandsBus": [Function],
             "setContext": [Function],
             "setQueriesBus": [Function],
           },
           "queriesBus": Object {
-            "invokeHandlers": [Function],
+            "loadClasses": [Function],
             "query": [Function],
             "setContext": [Function],
             "setEventsBus": [Function],
           },
         },
-        "loadedHandlers": 0,
       }
     `);
   });
 
-  it('should import handlers using glob pattern', async () => {
-    const { loadedHandlers } = await createCqrs({
-      commandHandlersPath: ['**/__test__/default/handlers/*Handler.ts'],
-      eventHandlersPath: ['**/__test__/default/event-handlers/*Handler.ts'],
-      queryHandlersPath: ['**/__test__/default/query-handlers/*Handler.ts'],
-    });
-
-    expect(loadedHandlers).toEqual(3);
-  });
-
-  it('execute command and dispatch event on created cqrs', async () => {
-    const context: TestContext = {
-      version: '0.1',
-    };
-
-    const { buses, loadedHandlers } = await createCqrs({
-      commandHandlersPath: ['**/__test__/default/handlers/*Handler.ts'],
-      eventHandlersPath: ['**/__test__/default/event-handlers/*Handler.ts'],
-      queryHandlersPath: ['**/__test__/default/query-handlers/*Handler.ts'],
-      context,
-    });
-    expect(loadedHandlers).toEqual(3);
-
-    const dispatchSpy = jest.spyOn(buses.eventsBus, 'dispatch');
-
-    const command: TestCommand = {
-      type: 'TestCommand',
-      payload: false,
-    };
-
-    const { payload, version } = await buses.commandsBus.execute(command);
-    expect(payload).toEqual(command.payload);
-    expect(version).toEqual(context.version);
-
-    expect(dispatchSpy).toHaveBeenCalledTimes(1);
-    expect(eventHandlerCalls).toEqual([
-      {
-        version,
-        event: {
-          event: 'TestEvent',
-          payload: false,
-        },
-      },
-    ]);
-  });
-
-  it('execute query on created cqrs', async () => {
-    const context: TestContext = {
-      version: '0.1',
-    };
-
-    const { buses, loadedHandlers } = await createCqrs({
+  it('should handle query', async () => {
+    const { buses } = await createCqrs({
       context,
       commandHandlers: [commandHandler],
       eventHandlers: [eventHandler],
-      queryHandlers: [queryHandler],
+      queryHandlers: [testQueryHandler],
     });
-    expect(loadedHandlers).toEqual(3);
 
     const item = await buses.queriesBus.query<TestQuery>({
-      query: 'TestQuery',
+      name: 'TestQuery',
       payload: {
         index: 2,
       },
@@ -120,8 +79,93 @@ describe('createCqrs', () => {
       {
         version: context.version,
         event: {
-          event: 'TestEvent',
+          name: 'TestEvent',
           payload: true,
+        },
+      },
+    ]);
+  });
+
+  it('should handle query as class', async () => {
+    const { buses } = await createCqrs({
+      context,
+      commandHandlers: [commandHandler],
+      eventHandlers: [TestClassEventHandler],
+      queryHandlers: [TestClassQueryHandler],
+    });
+
+    const item = await buses.queriesBus.query<TestClassQuery>({
+      name: 'TestClassQuery',
+      payload: {
+        index: 2,
+      },
+    });
+
+    expect(item).toEqual(items[2]);
+    expect(eventHandlerCalls).toEqual([
+      {
+        version: context.version,
+        event: {
+          name: 'TestEvent',
+          payload: true,
+        },
+      },
+    ]);
+  });
+
+  it('should handle commands', async () => {
+    const { buses } = await createCqrs({
+      context,
+      commandHandlers: [commandHandler],
+      eventHandlers: [TestClassEventHandler],
+      queryHandlers: [testQueryHandler],
+    });
+
+    const result = await buses.commandsBus.execute<TestCommand>({
+      name: 'TestCommand',
+      payload: true,
+    });
+
+    expect(result).toEqual({
+      version: context.version,
+      payload: true,
+    });
+
+    expect(eventHandlerCalls).toEqual([
+      {
+        version: context.version,
+        event: {
+          name: 'TestEvent',
+          payload: false,
+        },
+      },
+    ]);
+  });
+
+  it('should handle class command handler', async () => {
+    const { buses } = await createCqrs({
+      context,
+      commandHandlers: [TestClassHandler],
+      eventHandlers: [TestClassEventHandler],
+      queryHandlers: [testQueryHandler],
+    });
+
+    const result = await buses.commandsBus.execute<TestClassCommand>({
+      name: 'TestClassCommand',
+      payload: true,
+    });
+
+    expect(result).toEqual({
+      version: context.version,
+      payload: true,
+    });
+
+    expect(eventHandlerCalls).toEqual([
+      {
+        version: context.version,
+        event: {
+          name: 'TestEvent',
+          payload: false,
         },
       },
     ]);

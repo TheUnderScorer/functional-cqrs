@@ -1,6 +1,6 @@
 import { TestContext } from '../handlers/testHandler';
-import { eventHandler } from '../../../../decorators';
-import { Event, EventHandlerFunction } from '../../../../typings';
+import { eventHandler } from '../../../decorators';
+import { Event, EventHandlerFn } from '../../../typings';
 
 export type TestEvent = Event<'TestEvent', boolean>;
 
@@ -16,16 +16,17 @@ export const resetEventCalls = () => {
   eventHandlerCalls = [];
 };
 
-export const testEventHandler: EventHandlerFunction<TestEvent, TestContext> = ({
-  version,
-}) => (event) => {
+export const testEventHandler: EventHandlerFn<TestEvent, TestContext> = ({
+  event,
+  context,
+}) => {
   eventHandlerCalls.push({
-    version,
+    version: context.version,
     event,
   });
 };
 
-export default eventHandler<TestEvent, TestContext>(
+export default eventHandler.asFunction<TestEvent, TestContext>(
   'TestEvent',
   testEventHandler
 );

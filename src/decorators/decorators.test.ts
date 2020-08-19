@@ -1,88 +1,119 @@
+/* eslint-disable no-unused-vars,@typescript-eslint/no-unused-vars */
+// eslint-disable-next-line max-classes-per-file
 import {
   Command,
   CommandHandler,
-  CommandHandlersStore,
-  EventHandler,
-  EventHandlersStore,
-  Query,
-  QueryHandler,
-  QueryHandlersStore,
+  CommandHandlerFn,
   Event,
-  EventHandlerFunction,
+  EventHandlerFn,
 } from '../typings';
-import { eventHandler } from './events/eventHandler';
-import { queryHandler } from './queryHandler';
+import { eventHandler } from './eventHandler';
 import { commandHandler } from './commandHandler';
+import { commandHandlerMetadataStore } from '../stores/metadata/commandHandlerMetadataStore';
+import { eventHandlerMetadataStore } from '../stores/metadata/eventHandlerMetadataStore';
 
 describe('commandHandler', () => {
-  const store: CommandHandlersStore = new Map<string, CommandHandler<any>>();
+  type TestCommand = Command<'TestCommand', boolean>;
 
   beforeEach(() => {
-    store.clear();
+    commandHandlerMetadataStore.clear();
   });
 
-  it('registers command handler into container', () => {
-    type TestCommand = Command<'TestCommand', boolean>;
-
-    const handler: CommandHandler<TestCommand> = () => ({ payload }) => {
+  it('registers command handler as function', () => {
+    const handler: CommandHandlerFn<TestCommand> = ({
+      command: { payload },
+    }) => {
       return payload;
     };
 
-    commandHandler<TestCommand>('TestCommand', handler)(store);
+    commandHandler.asFunction<TestCommand>('TestCommand', handler);
 
-    expect(store.get('TestCommand')).toEqual(handler);
+    const savedHandler = commandHandlerMetadataStore.get('TestCommand')!;
+    expect(savedHandler.handler).toEqual(handler);
+    expect(savedHandler.name).toEqual(handler.name);
+    expect(savedHandler.type).toEqual('function');
+  });
+
+  it('should register command handler as class', () => {
+    @commandHandler.asClass<TestCommand>('TestCommand')
+    // @ts-ignore
+    class CommandHandlerClass implements CommandHandler<TestCommand> {
+      handle(command: TestCommand) {
+        return command.payload;
+      }
+    }
+
+    const savedHandler = commandHandlerMetadataStore.get('TestCommand')!;
+    expect(savedHandler.handler).toEqual(CommandHandlerClass);
+    expect(savedHandler.name).toEqual(CommandHandlerClass.name);
+    expect(savedHandler.type).toEqual('class');
   });
 });
 
 describe('eventHandler', () => {
-  const store: EventHandlersStore = new Map<string, Array<EventHandler<any>>>();
-
   beforeEach(() => {
-    store.clear();
+    eventHandlerMetadataStore.clear();
   });
 
   type TestEvent = Event<'TestEvent', boolean>;
 
-  const handler: EventHandlerFunction<TestEvent> = () => ({ payload }) => {
-    console.log({ payload });
-  };
-
-  it('registers event handler into container', () => {
-    eventHandler<TestEvent>('TestEvent', handler)(store);
-
-    const handlers = store.get('TestEvent')!;
-
-    expect(handlers).toHaveLength(1);
-    expect(handlers[0]).toEqual(handler);
-  });
-
-  it('does not duplicate handlers', () => {
-    eventHandler<TestEvent>('TestEvent', handler)(store);
-    eventHandler<TestEvent>('TestEvent', handler)(store);
-
-    const handlers = store.get('TestEvent')!;
-
-    expect(handlers).toHaveLength(1);
-    expect(handlers[0]).toEqual(handler);
-  });
-});
-
-describe('queryHandler', () => {
-  const store: QueryHandlersStore = new Map<string, QueryHandler<any>>();
-
-  beforeEach(() => {
-    store.clear();
-  });
-
-  type TestQuery = Query<string, 'TestQuery'>;
-
-  it('registers query handler into containers', () => {
-    const handler: QueryHandler<TestQuery> = () => ({ payload }) => {
-      return payload;
+  it('should register event handler as function', () => {
+    const handler: EventHandlerFn<TestEvent> = ({ event: { payload } }) => {
+      console.log({ payload });
     };
 
-    queryHandler<TestQuery>('TestQuery', handler)(store);
+    eventHandler.asFunction<TestEvent>('TestEvent', handler);
 
-    expect(store.get('TestQuery')).toEqual(handler);
+    const handlers = Array.from(eventHandlerMetadataStore.values());
+    const [handlerMeta] = handlers;
+
+    expect(handlers).toHaveLength(1);
+    expect(handlerMeta.name).toEqual(handler.name);
+    expect(handlerMeta.handler).toEqual(handler);
+    expect(handlerMeta.eventName).toEqual('TestEvent');
+    expect(handlerMeta.type).toEqual('function');
+  });
+
+  it('should register event handler as class', () => {
+    @eventHandler.asClass({
+      handlers: [
+        {
+          eventName: 'TestEvent',
+          method: 'firstMethod',
+        },
+        {
+          eventName: 'TestEvent',
+          method: 'secondMethod',
+        },
+      ],
+    })
+    // @ts-ignore
+    class EventHandlerClass {
+      firstMethod(event: TestEvent) {
+        console.log({ event });
+      }
+
+      secondMethod(event: TestEvent) {
+        console.log({ event });
+      }
+    }
+
+    const handlers = Array.from(eventHandlerMetadataStore.values());
+    const [handlerMeta] = handlers;
+
+    expect(handlers).toHaveLength(1);
+    expect(handlerMeta.name).toEqual(EventHandlerClass.name);
+    expect(handlerMeta.handler).toEqual(EventHandlerClass);
+    expect(handlerMeta.type).toEqual('class');
+    expect(handlerMeta.handlers).toEqual([
+      {
+        eventName: 'TestEvent',
+        method: 'firstMethod',
+      },
+      {
+        eventName: 'TestEvent',
+        method: 'secondMethod',
+      },
+    ]);
   });
 });
