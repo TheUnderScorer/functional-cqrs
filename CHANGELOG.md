@@ -1,3 +1,11 @@
+# [1.2.0](https://github.com/TheUnderScorer/functional-cqrs/compare/v1.1.1...v1.2.0) (2020-12-09)
+
+
+### Features
+
+* Change buses from factory functions to classes ([2742f3f](https://github.com/TheUnderScorer/functional-cqrs/commit/2742f3ffe5101271dbe0a63a7385aba437a0f0a4))
+* Don't require "name" if instruction is an class ([8ca5a27](https://github.com/TheUnderScorer/functional-cqrs/commit/8ca5a277a2b5e69e7cbe865a5d981cd62f68a493))
+
 ## [1.1.1](https://github.com/TheUnderScorer/functional-cqrs/compare/v1.1.0...v1.1.1) (2020-08-19)
 
 
