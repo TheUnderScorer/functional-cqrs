@@ -64,4 +64,3 @@ jobs:
           BRANCH: master
           FOLDER: docs
           CLEAN: false
-
