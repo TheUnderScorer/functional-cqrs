@@ -1,0 +1,13 @@
+src
+.github
+.eslintignore
+.gitingore
+.prettierignore
+.prettierrc
+.vscode
+.eslintrc
+jest.config.js
+eslint.json
+tsconfig.json
+tsconfig.build.json
+node_modules
