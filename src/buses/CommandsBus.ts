@@ -2,7 +2,7 @@ import { Command, CommandsBusInterface } from '../typings';
 import { CommandHandlerMetadataStore } from '../stores/metadata/commandHandlerMetadataStore';
 import { Caller } from '../callers/Caller';
 import { ContextManager } from '../context/ContextManager';
-import { getObjName } from '../utils/getObjName';
+import { getName } from '../utils/getName';
 
 export class CommandsBus<Context> implements CommandsBusInterface<Context> {
   private readonly caller: Caller<Context>;
@@ -17,7 +17,7 @@ export class CommandsBus<Context> implements CommandsBusInterface<Context> {
   execute<CommandType extends Command = Command, ReturnValue = any>(
     command: CommandType
   ): ReturnValue | Promise<ReturnValue> {
-    const name = getObjName(command);
+    const name = getName(command);
     const handler = this.store.get(name);
 
     if (!handler) {

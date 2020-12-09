@@ -2,7 +2,7 @@ import { QueriesBusInterface, Query } from '../typings';
 import { QueryHandlerMetadataStore } from '../stores/metadata/queryHandlerMetadataStore';
 import { Caller } from '../callers/Caller';
 import { ContextManager } from '../context/ContextManager';
-import { getObjName } from '../utils/getObjName';
+import { getName } from '../utils/getName';
 
 export class QueriesBus<Context> implements QueriesBusInterface<Context> {
   private readonly caller: Caller<Context>;
@@ -17,7 +17,7 @@ export class QueriesBus<Context> implements QueriesBusInterface<Context> {
   query<QueryType extends Query = Query, ReturnValue = any>(
     query: QueryType
   ): ReturnValue | Promise<ReturnValue> {
-    const name = getObjName(query);
+    const name = getName(query);
     const handler = this.store.get(name);
 
     if (!handler) {

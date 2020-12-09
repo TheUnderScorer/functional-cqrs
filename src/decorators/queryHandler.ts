@@ -2,6 +2,7 @@ import { Query, QueryHandler, QueryHandlerFn } from '../typings';
 import { queryHandlerMetadataStore } from '../stores/metadata/queryHandlerMetadataStore';
 import { Constructor } from '../typings/common';
 import { HandlerType } from '../stores/metadata/types';
+import { getName } from '../utils/getName';
 
 export const queryHandler = {
   /**
@@ -11,11 +12,13 @@ export const queryHandler = {
     query: QueryType['name'],
     fn: QueryHandlerFn<QueryType, Context, ReturnValue>
   ) => {
-    queryHandlerMetadataStore.set(query, {
+    const targetName = getName(query);
+
+    queryHandlerMetadataStore.set(targetName, {
       handler: fn,
       name: fn.name ?? Date.now().toString(),
       type: HandlerType.Function,
-      targetName: query,
+      targetName,
     });
 
     return fn;
@@ -27,7 +30,7 @@ export const queryHandler = {
   asClass: <QueryType extends Query>(
     query: Pick<QueryType, 'name'> | QueryType['name']
   ) => <T extends Constructor<QueryHandler<QueryType>>>(target: T) => {
-    const queryName = typeof query === 'object' ? query.name : query;
+    const queryName = getName(query);
 
     queryHandlerMetadataStore.set(queryName, {
       handler: target,

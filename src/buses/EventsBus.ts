@@ -11,7 +11,7 @@ import {
 import { storeToArray } from '../utils';
 import { ContextManager } from '../context/ContextManager';
 import { EventHandlerCaller } from '../callers/EventHandlerCaller';
-import { getObjName } from '../utils/getObjName';
+import { getName } from '../utils/getName';
 
 export interface PrivateEventsBus<Context> extends EventsBusInterface<Context> {
   setCommandsBus: (bus: CommandsBusInterface) => void;
@@ -33,7 +33,7 @@ export class EventsBus<Context> implements EventsBusInterface<Context> {
   async dispatch<EventType extends Event = Event>(
     event: EventType
   ): Promise<void> {
-    const name = getObjName(event);
+    const name = getName(event);
     const handlers = this.getHandlersForEvent(name);
 
     await Promise.all(

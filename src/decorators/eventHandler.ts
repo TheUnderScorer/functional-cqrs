@@ -2,6 +2,7 @@ import { Event, EventHandlerFn } from '../typings';
 import { eventHandlerMetadataStore } from '../stores/metadata/eventHandlerMetadataStore';
 import { Constructor } from '../typings/common';
 import { HandlerType } from '../stores/metadata/types';
+import { getName } from '../utils/getName';
 
 export interface EventHandlerAsClassParams {
   handlers: Array<{
@@ -56,7 +57,7 @@ export const eventHandler = {
   ) => {
     eventHandlerMetadataStore.add({
       handler: target,
-      name: target.name,
+      name: getName(target),
       type: HandlerType.Class,
       handlers,
     });
