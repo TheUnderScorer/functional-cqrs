@@ -59,10 +59,11 @@ jobs:
           npm install
           npm run generate-docs
 
-  - uses: EndBug/add-and-commit@v5
-    with:
-      add: 'docs'
-      message: 'docs: Generate docs'
-      pull_strategy: '--no-rebase'
-    env:
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Generate docs
+        uses: EndBug/add-and-commit@v5
+        with:
+          add: 'docs'
+          message: 'docs: Generate docs'
+          pull_strategy: '--no-rebase'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
