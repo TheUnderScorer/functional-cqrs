@@ -1,12 +1,13 @@
 import { Command, CommandHandler, CommandHandlerFn } from '../typings';
 import { commandHandlerMetadataStore } from '../stores/metadata/commandHandlerMetadataStore';
 import { Constructor } from '../typings/common';
+import { HandlerType } from '../stores/metadata/types';
 
 export const commandHandler = {
   /**
    * Registers new command handler as function
    *
-   * TODO Add example
+   * @see CommandHandlerFn
    * */
   asFunction: <CommandType extends Command, Context = any>(
     command: CommandType['name'],
@@ -15,7 +16,7 @@ export const commandHandler = {
     commandHandlerMetadataStore.set(command, {
       handler: fn,
       name: fn.name ?? Date.now().toString(),
-      type: 'function',
+      type: HandlerType.Function,
       targetName: command,
     });
 
@@ -25,7 +26,7 @@ export const commandHandler = {
   /**
    * Registers new command handler as class
    *
-   * TODO Add example
+   * @see CommandHandler
    * */
   asClass: <CommandType extends Command>(
     command: Pick<CommandType, 'name'> | CommandType['name']
@@ -33,7 +34,7 @@ export const commandHandler = {
     const commandName = typeof command === 'object' ? command.name : command;
 
     commandHandlerMetadataStore.set(commandName, {
-      type: 'class',
+      type: HandlerType.Class,
       name: target.name,
       handler: target,
       targetName: commandName,

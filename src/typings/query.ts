@@ -1,22 +1,22 @@
-import { EventsBus } from './event';
-import { SingularHandler, SingularInstruction } from './singular';
+import { EventsBusInterface } from './event';
+import { Handler, HandlerInstruction } from './handler';
 
 export type Query<
   Name extends string = string,
   Payload = any
-> = SingularInstruction<Name, Payload>;
+> = HandlerInstruction<Name, Payload>;
 
 export type QueryContext<Context = any> = Context & {
-  eventsBus: EventsBus;
+  eventsBus: EventsBusInterface;
 };
 
-export interface QueriesBus<Context = any> {
+export interface QueriesBusInterface<Context = any> {
   query: <QueryType extends Query = Query, ReturnValue = any>(
     query: QueryType
   ) => ReturnValue | Promise<ReturnValue>;
 }
 
-export type QueryHandler<QueryType extends Query> = SingularHandler<QueryType>;
+export type QueryHandler<QueryType extends Query> = Handler<QueryType>;
 
 export interface QueryHandlerFnParams<
   QueryType extends Query = Query,

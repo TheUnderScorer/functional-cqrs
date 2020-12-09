@@ -1,4 +1,4 @@
-export interface SingularInstruction<
+export interface HandlerInstruction<
   Type extends string = string,
   Payload = any
 > {
@@ -6,8 +6,8 @@ export interface SingularInstruction<
   payload: Payload;
 }
 
-export interface SingularHandler<
-  Instruction extends SingularInstruction = SingularInstruction
+export interface Handler<
+  Instruction extends HandlerInstruction = HandlerInstruction
 > {
   handle(instruction: Instruction): any | Promise<any>;
 }

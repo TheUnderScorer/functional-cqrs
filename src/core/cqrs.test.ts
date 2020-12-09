@@ -34,25 +34,138 @@ describe('createCqrs', () => {
     expect(cqrs).toMatchInlineSnapshot(`
       Object {
         "buses": Object {
-          "commandsBus": Object {
-            "execute": [Function],
-            "loadClasses": [Function],
-            "setContext": [Function],
-            "setEventsBus": [Function],
-            "setQueriesBus": [Function],
+          "commandsBus": CommandsBus {
+            "caller": Caller {
+              "contextManager": ContextManager {
+                "commandsBus": [Circular],
+                "context": undefined,
+                "eventsBus": EventsBus {
+                  "caller": EventHandlerCaller {
+                    "contextManager": [Circular],
+                  },
+                  "contextManager": [Circular],
+                  "store": Set {},
+                },
+                "queriesBus": QueriesBus {
+                  "caller": Caller {
+                    "contextManager": [Circular],
+                    "type": "query",
+                  },
+                  "contextManager": [Circular],
+                  "store": Map {},
+                },
+              },
+              "type": "command",
+            },
+            "contextManager": ContextManager {
+              "commandsBus": [Circular],
+              "context": undefined,
+              "eventsBus": EventsBus {
+                "caller": EventHandlerCaller {
+                  "contextManager": [Circular],
+                },
+                "contextManager": [Circular],
+                "store": Set {},
+              },
+              "queriesBus": QueriesBus {
+                "caller": Caller {
+                  "contextManager": [Circular],
+                  "type": "query",
+                },
+                "contextManager": [Circular],
+                "store": Map {},
+              },
+            },
+            "store": Map {},
           },
-          "eventsBus": Object {
-            "dispatch": [Function],
-            "loadClasses": [Function],
-            "setCommandsBus": [Function],
-            "setContext": [Function],
-            "setQueriesBus": [Function],
+          "eventsBus": EventsBus {
+            "caller": EventHandlerCaller {
+              "contextManager": ContextManager {
+                "commandsBus": CommandsBus {
+                  "caller": Caller {
+                    "contextManager": [Circular],
+                    "type": "command",
+                  },
+                  "contextManager": [Circular],
+                  "store": Map {},
+                },
+                "context": undefined,
+                "eventsBus": [Circular],
+                "queriesBus": QueriesBus {
+                  "caller": Caller {
+                    "contextManager": [Circular],
+                    "type": "query",
+                  },
+                  "contextManager": [Circular],
+                  "store": Map {},
+                },
+              },
+            },
+            "contextManager": ContextManager {
+              "commandsBus": CommandsBus {
+                "caller": Caller {
+                  "contextManager": [Circular],
+                  "type": "command",
+                },
+                "contextManager": [Circular],
+                "store": Map {},
+              },
+              "context": undefined,
+              "eventsBus": [Circular],
+              "queriesBus": QueriesBus {
+                "caller": Caller {
+                  "contextManager": [Circular],
+                  "type": "query",
+                },
+                "contextManager": [Circular],
+                "store": Map {},
+              },
+            },
+            "store": Set {},
           },
-          "queriesBus": Object {
-            "loadClasses": [Function],
-            "query": [Function],
-            "setContext": [Function],
-            "setEventsBus": [Function],
+          "queriesBus": QueriesBus {
+            "caller": Caller {
+              "contextManager": ContextManager {
+                "commandsBus": CommandsBus {
+                  "caller": Caller {
+                    "contextManager": [Circular],
+                    "type": "command",
+                  },
+                  "contextManager": [Circular],
+                  "store": Map {},
+                },
+                "context": undefined,
+                "eventsBus": EventsBus {
+                  "caller": EventHandlerCaller {
+                    "contextManager": [Circular],
+                  },
+                  "contextManager": [Circular],
+                  "store": Set {},
+                },
+                "queriesBus": [Circular],
+              },
+              "type": "query",
+            },
+            "contextManager": ContextManager {
+              "commandsBus": CommandsBus {
+                "caller": Caller {
+                  "contextManager": [Circular],
+                  "type": "command",
+                },
+                "contextManager": [Circular],
+                "store": Map {},
+              },
+              "context": undefined,
+              "eventsBus": EventsBus {
+                "caller": EventHandlerCaller {
+                  "contextManager": [Circular],
+                },
+                "contextManager": [Circular],
+                "store": Set {},
+              },
+              "queriesBus": [Circular],
+            },
+            "store": Map {},
           },
         },
       }

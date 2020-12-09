@@ -1,9 +1,9 @@
-import { SingularHandlerMetadata } from './types';
+import { HandlerMetadata } from './types';
 import { QueryHandler, QueryHandlerFn } from '../../typings';
 import { Constructor } from '../../typings/common';
-import { getSingularHandlersByHandlers } from './helpers/getSingularHandlersByHandler';
+import { getHandlerByHandlersArray } from './helpers/getSingularHandlersByHandler';
 
-export type QueryHandlerMetadataItem = SingularHandlerMetadata<
+export type QueryHandlerMetadataItem = HandlerMetadata<
   QueryHandlerFn<any> | Constructor<QueryHandler<any>>
 >;
 
@@ -14,6 +14,6 @@ export const queryHandlerMetadataStore = new Map<
   QueryHandlerMetadataItem
 >();
 
-export const getQueryHandlersByHandlers = getSingularHandlersByHandlers(
+export const getQueryHandlersByHandlers = getHandlerByHandlersArray(
   queryHandlerMetadataStore
 );
