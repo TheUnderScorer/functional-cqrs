@@ -45,6 +45,8 @@ jobs:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
   deploy-gh-page:
+    needs:
+      - release
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -57,10 +59,10 @@ jobs:
           npm install
           npm run generate-docs
 
-      - name: Deploy
-        uses: JamesIves/github-pages-deploy-action@3.7.1
-        with:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          BRANCH: master
-          FOLDER: docs
-          CLEAN: false
+  - uses: EndBug/add-and-commit@v5
+    with:
+      add: 'docs'
+      message: 'docs: Generate docs'
+      pull_strategy: '--no-rebase'
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
