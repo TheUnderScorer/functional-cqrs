@@ -2,7 +2,8 @@ import { CommandsBusInterface } from './command';
 import { QueriesBusInterface } from './query';
 
 export interface Event<Name extends string = string, Payload = any> {
-  name: Name;
+  // Name is only required if event is an "plain" object
+  name?: Name;
   payload: Payload;
 }
 

@@ -2,6 +2,7 @@ import { Command, CommandsBusInterface } from '../typings';
 import { CommandHandlerMetadataStore } from '../stores/metadata/commandHandlerMetadataStore';
 import { Caller } from '../callers/Caller';
 import { ContextManager } from '../context/ContextManager';
+import { getObjName } from '../utils/getObjName';
 
 export class CommandsBus<Context> implements CommandsBusInterface<Context> {
   private readonly caller: Caller<Context>;
@@ -16,10 +17,11 @@ export class CommandsBus<Context> implements CommandsBusInterface<Context> {
   execute<CommandType extends Command = Command, ReturnValue = any>(
     command: CommandType
   ): ReturnValue | Promise<ReturnValue> {
-    const handler = this.store.get(command.name);
+    const name = getObjName(command);
+    const handler = this.store.get(name);
 
     if (!handler) {
-      throw new Error(`No handler for command ${command.name} found.`);
+      throw new Error(`No handler for command ${name} found.`);
     }
 
     return this.caller.call(handler, command);

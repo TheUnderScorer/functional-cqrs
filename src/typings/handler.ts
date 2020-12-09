@@ -2,7 +2,8 @@ export interface HandlerInstruction<
   Type extends string = string,
   Payload = any
 > {
-  name: Type;
+  // Name only is required if it's a "plain" object
+  name?: Type;
   payload: Payload;
 }
 

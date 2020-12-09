@@ -1,9 +1,12 @@
+/* eslint-disable max-classes-per-file */
 import { Command, CommandContext, CommandHandler } from '../../../typings';
 import { TestContext } from './testHandler';
 import { TestEvent } from '../eventHandlers/testEventHandler';
 import { commandHandler } from '../../../decorators';
 
-export type TestClassCommand = Command<'TestClassCommand', boolean>;
+export class TestClassCommand implements Command {
+  constructor(public readonly payload: boolean) {}
+}
 
 @commandHandler.asClass<TestClassCommand>('TestClassCommand')
 export class TestClassHandler implements CommandHandler<TestClassCommand> {

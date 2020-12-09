@@ -263,10 +263,7 @@ describe('createCqrs', () => {
       queryHandlers: [testQueryHandler],
     });
 
-    const result = await buses.commandsBus.execute<TestClassCommand>({
-      name: 'TestClassCommand',
-      payload: true,
-    });
+    const result = await buses.commandsBus.execute(new TestClassCommand(true));
 
     expect(result).toEqual({
       version: context.version,

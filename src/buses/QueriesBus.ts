@@ -2,6 +2,7 @@ import { QueriesBusInterface, Query } from '../typings';
 import { QueryHandlerMetadataStore } from '../stores/metadata/queryHandlerMetadataStore';
 import { Caller } from '../callers/Caller';
 import { ContextManager } from '../context/ContextManager';
+import { getObjName } from '../utils/getObjName';
 
 export class QueriesBus<Context> implements QueriesBusInterface<Context> {
   private readonly caller: Caller<Context>;
@@ -16,10 +17,11 @@ export class QueriesBus<Context> implements QueriesBusInterface<Context> {
   query<QueryType extends Query = Query, ReturnValue = any>(
     query: QueryType
   ): ReturnValue | Promise<ReturnValue> {
-    const handler = this.store.get(query.name);
+    const name = getObjName(query);
+    const handler = this.store.get(name);
 
     if (!handler) {
-      throw new Error(`No handler for query ${query.name} found.`);
+      throw new Error(`No handler for query ${name} found.`);
     }
 
     return this.caller.call(handler, query);
