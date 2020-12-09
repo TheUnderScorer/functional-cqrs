@@ -1,9 +1,9 @@
-import { CommandsBus } from './command';
-import { QueriesBus } from './query';
-import { EventsBus } from './event';
+import { CommandsBusInterface } from './command';
+import { QueriesBusInterface } from './query';
+import { EventsBusInterface } from './event';
 
 export interface Buses {
-  commandsBus: CommandsBus;
-  queriesBus: QueriesBus;
-  eventsBus: EventsBus;
+  commandsBus: CommandsBusInterface;
+  queriesBus: QueriesBusInterface;
+  eventsBus: EventsBusInterface;
 }

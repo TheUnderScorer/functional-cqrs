@@ -1,4 +1,4 @@
-import { createBuses } from './createBuses';
+import { createBuses, CreateBusesParams } from './createBuses';
 
 import { Buses } from '../typings/buses';
 import {
@@ -17,8 +17,11 @@ import { Constructor } from '../typings/common';
 
 type HandlerToRegister = ((...args: any[]) => any) | Constructor<any>;
 
-// TODO Specify which classes to load
-export interface CqrsConfig<Context = any> {
+export interface CqrsConfig<Context = any>
+  extends Pick<
+    CreateBusesParams<Context>,
+    'CommandsBusConstructor' | 'EventsBusConstructor' | 'QueriesBusConstructor'
+  > {
   context?: Context | ((buses: Buses) => Context);
   commandHandlers?: HandlerToRegister[];
   eventHandlers?: HandlerToRegister[];
@@ -36,6 +39,7 @@ export const createCqrs = async <Context = any>({
   eventHandlers = [],
   commandHandlers = [],
   queryHandlers = [],
+  ...rest
 }: CqrsConfig<Context> = {}) => {
   const commandHandlersStore = getCommandHandlersByHandlers(
     commandHandlers ?? []
@@ -52,6 +56,10 @@ export const createCqrs = async <Context = any>({
   };
 
   return {
-    buses: createBuses(stores, context),
+    buses: createBuses({
+      stores,
+      context,
+      ...rest,
+    }),
   };
 };

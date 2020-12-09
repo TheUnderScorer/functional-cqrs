@@ -11,6 +11,7 @@ import { eventHandler } from './eventHandler';
 import { commandHandler } from './commandHandler';
 import { commandHandlerMetadataStore } from '../stores/metadata/commandHandlerMetadataStore';
 import { eventHandlerMetadataStore } from '../stores/metadata/eventHandlerMetadataStore';
+import { HandlerType } from '../stores/metadata/types';
 
 describe('commandHandler', () => {
   type TestCommand = Command<'TestCommand', boolean>;
@@ -31,7 +32,7 @@ describe('commandHandler', () => {
     const savedHandler = commandHandlerMetadataStore.get('TestCommand')!;
     expect(savedHandler.handler).toEqual(handler);
     expect(savedHandler.name).toEqual(handler.name);
-    expect(savedHandler.type).toEqual('function');
+    expect(savedHandler.type).toEqual(HandlerType.Function);
   });
 
   it('should register command handler as class', () => {
@@ -46,7 +47,7 @@ describe('commandHandler', () => {
     const savedHandler = commandHandlerMetadataStore.get('TestCommand')!;
     expect(savedHandler.handler).toEqual(CommandHandlerClass);
     expect(savedHandler.name).toEqual(CommandHandlerClass.name);
-    expect(savedHandler.type).toEqual('class');
+    expect(savedHandler.type).toEqual(HandlerType.Class);
   });
 });
 
@@ -71,7 +72,7 @@ describe('eventHandler', () => {
     expect(handlerMeta.name).toEqual(handler.name);
     expect(handlerMeta.handler).toEqual(handler);
     expect(handlerMeta.eventName).toEqual('TestEvent');
-    expect(handlerMeta.type).toEqual('function');
+    expect(handlerMeta.type).toEqual(HandlerType.Function);
   });
 
   it('should register event handler as class', () => {
@@ -104,7 +105,7 @@ describe('eventHandler', () => {
     expect(handlers).toHaveLength(1);
     expect(handlerMeta.name).toEqual(EventHandlerClass.name);
     expect(handlerMeta.handler).toEqual(EventHandlerClass);
-    expect(handlerMeta.type).toEqual('class');
+    expect(handlerMeta.type).toEqual(HandlerType.Class);
     expect(handlerMeta.handlers).toEqual([
       {
         eventName: 'TestEvent',

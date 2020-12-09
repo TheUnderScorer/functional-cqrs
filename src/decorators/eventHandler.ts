@@ -1,6 +1,7 @@
 import { Event, EventHandlerFn } from '../typings';
 import { eventHandlerMetadataStore } from '../stores/metadata/eventHandlerMetadataStore';
 import { Constructor } from '../typings/common';
+import { HandlerType } from '../stores/metadata/types';
 
 export interface EventHandlerAsClassParams {
   handlers: Array<{
@@ -13,7 +14,7 @@ export const eventHandler = {
   /**
    * Registers new event handler as function
    *
-   * TODO Add example
+   * @see EventHandlerFn
    * */
   asFunction: <EventType extends Event = Event, Context = any>(
     eventName: EventType['name'],
@@ -23,7 +24,7 @@ export const eventHandler = {
       handler: fn,
       eventName,
       name: fn.name ?? Date.now().toString(),
-      type: 'function',
+      type: HandlerType.Function,
     });
 
     return fn;
@@ -32,7 +33,23 @@ export const eventHandler = {
   /**
    * Registers new event handler as class
    *
-   * TODO Add example
+   * @example ```
+   * \@eventHandler.asClass({
+   *   handlers: [
+   *     {
+   *       method: "onBar",
+   *       event: "BarEvent"
+   *     }
+   *   ]
+   * })
+   * export class FooSubscriber {
+   *
+   *    onBar(event: BarEvent) {
+   *      console.log(event);
+   *    }
+   *
+   * }
+   * ```
    * */
   asClass: ({ handlers }: EventHandlerAsClassParams) => <T>(
     target: Constructor<T>
@@ -40,7 +57,7 @@ export const eventHandler = {
     eventHandlerMetadataStore.add({
       handler: target,
       name: target.name,
-      type: 'class',
+      type: HandlerType.Class,
       handlers,
     });
 

@@ -1,5 +1,5 @@
-import { CommandsBus } from './command';
-import { QueriesBus } from './query';
+import { CommandsBusInterface } from './command';
+import { QueriesBusInterface } from './query';
 
 export interface Event<Name extends string = string, Payload = any> {
   name: Name;
@@ -9,11 +9,11 @@ export interface Event<Name extends string = string, Payload = any> {
 export type EventSubscriberMethod = (event: Event) => Promise<void>;
 
 export type EventContext<Context = any> = Context & {
-  commandsBus: CommandsBus;
-  queriesBus: QueriesBus;
+  commandsBus: CommandsBusInterface<Context>;
+  queriesBus: QueriesBusInterface<Context>;
 };
 
-export interface EventsBus<Context = any> {
+export interface EventsBusInterface<Context = any> {
   dispatch: <EventType extends Event = Event>(
     event: EventType
   ) => void | Promise<void>;

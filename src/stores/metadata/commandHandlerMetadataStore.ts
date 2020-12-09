@@ -1,9 +1,9 @@
-import { SingularHandlerMetadata } from './types';
+import { HandlerMetadata } from './types';
 import { CommandHandler, CommandHandlerFn } from '../../typings';
-import { getSingularHandlersByHandlers } from './helpers/getSingularHandlersByHandler';
+import { getHandlerByHandlersArray } from './helpers/getSingularHandlersByHandler';
 import { Constructor } from '../../typings/common';
 
-export type CommandHandlerMetadataItem = SingularHandlerMetadata<
+export type CommandHandlerMetadataItem = HandlerMetadata<
   CommandHandlerFn<any> | Constructor<CommandHandler<any>>
 >;
 
@@ -17,6 +17,6 @@ export const commandHandlerMetadataStore = new Map<
   CommandHandlerMetadataItem
 >();
 
-export const getCommandHandlersByHandlers = getSingularHandlersByHandlers(
+export const getCommandHandlersByHandlers = getHandlerByHandlersArray(
   commandHandlerMetadataStore
 );

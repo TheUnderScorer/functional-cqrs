@@ -1,18 +1,18 @@
-import { EventsBus } from './event';
-import { QueriesBus } from './query';
-import { SingularHandler, SingularInstruction } from './singular';
+import { EventsBusInterface } from './event';
+import { QueriesBusInterface } from './query';
+import { Handler, HandlerInstruction } from './handler';
 
 export type Command<
   Type extends string = string,
   Payload = any
-> = SingularInstruction<Type, Payload>;
+> = HandlerInstruction<Type, Payload>;
 
 export type CommandContext<Context = any> = Context & {
-  eventsBus: EventsBus;
-  queriesBus: QueriesBus;
+  eventsBus: EventsBusInterface<Context>;
+  queriesBus: QueriesBusInterface<Context>;
 };
 
-export interface CommandsBus<Context = any> {
+export interface CommandsBusInterface<Context = any> {
   execute: <CommandType extends Command = Command, ReturnValue = any>(
     command: CommandType
   ) => ReturnValue | Promise<ReturnValue>;
@@ -26,9 +26,9 @@ export interface CommandHandlerFnParams<
   command: CommandType;
 }
 
-export type CommandHandler<
-  CommandType extends Command = Command
-> = SingularHandler<CommandType>;
+export type CommandHandler<CommandType extends Command = Command> = Handler<
+  CommandType
+>;
 
 export type CommandHandlerFn<
   CommandType extends Command = Command,

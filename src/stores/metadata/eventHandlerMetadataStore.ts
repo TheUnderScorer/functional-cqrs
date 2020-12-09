@@ -1,6 +1,6 @@
 import { Constructor } from '../../typings/common';
 import { EventHandlerFn } from '../../typings';
-import { BaseHandlerMetadata } from './types';
+import { BaseHandlerMetadata, HandlerType } from './types';
 import { storeToArray } from '../../utils';
 
 export interface EventHandlerDefinition {
@@ -11,7 +11,7 @@ export interface EventHandlerDefinition {
 export interface EventHandlerMetadataItem<T> extends BaseHandlerMetadata {
   handler: Constructor<T> | EventHandlerFn<any>;
   name: string;
-  type: 'function' | 'class';
+  type: HandlerType;
   eventName?: string;
   handlers?: EventHandlerDefinition[];
 }

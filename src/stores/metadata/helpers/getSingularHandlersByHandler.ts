@@ -1,8 +1,8 @@
-import { SingularHandlerMetadata } from '../types';
+import { HandlerMetadata } from '../types';
 import { storeToArray } from '../../../utils';
 
-export const getSingularHandlersByHandlers = (
-  store: Map<string, SingularHandlerMetadata>
+export const getHandlerByHandlersArray = (
+  store: Map<string, HandlerMetadata>
 ) => (handlers: any[]) => {
   const values = storeToArray(store).filter(({ handler }) =>
     handlers.includes(handler)
@@ -12,5 +12,5 @@ export const getSingularHandlersByHandlers = (
     newStore.set(value.targetName, value);
 
     return newStore;
-  }, new Map<string, SingularHandlerMetadata>());
+  }, new Map<string, HandlerMetadata>());
 };
