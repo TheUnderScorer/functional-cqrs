@@ -1,3 +1,10 @@
+## [1.2.1](https://github.com/TheUnderScorer/functional-cqrs/compare/v1.2.0...v1.2.1) (2020-12-10)
+
+
+### Bug Fixes
+
+* Make "Context" generic argument optional in buses ([56c3e20](https://github.com/TheUnderScorer/functional-cqrs/commit/56c3e2002498a984c089d563e6fd45ce0b757180))
+
 # [1.2.0](https://github.com/TheUnderScorer/functional-cqrs/compare/v1.1.1...v1.2.0) (2020-12-09)
 
 
