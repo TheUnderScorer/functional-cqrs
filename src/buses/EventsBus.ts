@@ -1,9 +1,4 @@
-import {
-  CommandsBusInterface,
-  Event,
-  EventsBusInterface,
-  QueriesBusInterface,
-} from '../typings';
+import { Event, EventsBusInterface } from '../typings';
 import {
   EventHandlerDefinition,
   EventHandlerMetadataStore,
@@ -13,14 +8,7 @@ import { ContextManager } from '../context/ContextManager';
 import { EventHandlerCaller } from '../callers/EventHandlerCaller';
 import { getName } from '../utils/getName';
 
-export interface PrivateEventsBus<Context> extends EventsBusInterface<Context> {
-  setCommandsBus: (bus: CommandsBusInterface) => void;
-  setQueriesBus: (bus: QueriesBusInterface) => void;
-  setContext: (context: Context) => void;
-  loadClasses: () => void;
-}
-
-export class EventsBus<Context> implements EventsBusInterface<Context> {
+export class EventsBus<Context = any> implements EventsBusInterface<Context> {
   private readonly caller: EventHandlerCaller<Context>;
 
   constructor(

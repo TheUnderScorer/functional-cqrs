@@ -4,7 +4,8 @@ import { Caller } from '../callers/Caller';
 import { ContextManager } from '../context/ContextManager';
 import { getName } from '../utils/getName';
 
-export class CommandsBus<Context> implements CommandsBusInterface<Context> {
+export class CommandsBus<Context = any>
+  implements CommandsBusInterface<Context> {
   private readonly caller: Caller<Context>;
 
   constructor(

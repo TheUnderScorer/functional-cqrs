@@ -4,7 +4,7 @@ import { Caller } from '../callers/Caller';
 import { ContextManager } from '../context/ContextManager';
 import { getName } from '../utils/getName';
 
-export class QueriesBus<Context> implements QueriesBusInterface<Context> {
+export class QueriesBus<Context = any> implements QueriesBusInterface<Context> {
   private readonly caller: Caller<Context>;
 
   constructor(
