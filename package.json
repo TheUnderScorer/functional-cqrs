@@ -1,6 +1,6 @@
 {
   "name": "functional-cqrs",
-  "version": "1.2.2",
+  "version": "1.2.3",
   "author": "Przemysław Żydek <przemyslawzydek@gmail.com>",
   "typings": "build/index.d.ts",
   "main": "build/index.js",

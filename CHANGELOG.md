@@ -1,3 +1,10 @@
+## [1.2.3](https://github.com/TheUnderScorer/functional-cqrs/compare/v1.2.2...v1.2.3) (2021-02-01)
+
+
+### Bug Fixes
+
+* Exclude docs from package ([4533103](https://github.com/TheUnderScorer/functional-cqrs/commit/4533103b22774aa3316bf29dc455d62d45f2b2bd))
+
 ## [1.2.2](https://github.com/TheUnderScorer/functional-cqrs/compare/v1.2.1...v1.2.2) (2021-02-01)
 
 
