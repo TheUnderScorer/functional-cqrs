@@ -497,7 +497,7 @@
   dependencies:
     "@octokit/types" "^6.0.0"
 
-"@octokit/core@^3.2.3", "@octokit/core@>=2", "@octokit/core@>=3":
+"@octokit/core@^3.2.3":
   "integrity" "sha512-d9dTsqdePBqOn7aGkyRFe7pQpCXdibSJ5SFnrTr0axevObZrpz3qkWm7t/NjYv5a66z6vhfteriaq4FRz3e0Qg=="
   "resolved" "https://registry.npmjs.org/@octokit/core/-/core-3.2.4.tgz"
   "version" "3.2.4"
@@ -6837,7 +6837,7 @@
   dependencies:
     "xmlchars" "^2.2.0"
 
-"semantic-release@>=16.0.0 <18.0.0", "semantic-release@17.3.0":
+"semantic-release@17.3.0":
   "integrity" "sha512-enhDayMZRP4nWcWAMBFHHB7THRaIcRdUAZv3lxd65pXs2ttzay7IeCvRRrGayRWExtnY0ulwRz5Ycp88Dv/UeQ=="
   "resolved" "https://registry.npmjs.org/semantic-release/-/semantic-release-17.3.0.tgz"
   "version" "17.3.0"
@@ -7847,7 +7847,7 @@
     "shelljs" "^0.8.4"
     "typedoc-default-themes" "^0.11.4"
 
-"typescript@3.9.7", "typescript@3.9.x || 4.0.x":
+"typescript@3.9.7":
   "integrity" "sha512-BLbiRkiBzAwsjut4x/dsibSTB6yWpwT5qWmC2OfuCg3GgVQCSgMs4vEctYPhsaGtd0AeuuHMkjZ2h2WG8MSzRw=="
   "resolved" "https://registry.npmjs.org/typescript/-/typescript-3.9.7.tgz"
   "version" "3.9.7"

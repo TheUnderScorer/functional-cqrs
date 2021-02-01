@@ -1,14 +1,14 @@
 import { Event, EventHandlerFn } from '../typings';
-import { eventHandlerMetadataStore } from '../stores/metadata/eventHandlerMetadataStore';
+import {
+  EventHandlerDefinition,
+  eventHandlerMetadataStore,
+} from '../stores/metadata/eventHandlerMetadataStore';
 import { Constructor } from '../typings/common';
 import { HandlerType } from '../stores/metadata/types';
 import { getName } from '../utils/getName';
 
 export interface EventHandlerAsClassParams {
-  handlers: Array<{
-    method: string;
-    eventName: string;
-  }>;
+  handlers: EventHandlerDefinition[];
 }
 
 export const eventHandler = {

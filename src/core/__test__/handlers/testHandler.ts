@@ -12,10 +12,7 @@ export const testHandler: CommandHandlerFn<TestCommand, TestContext> = async ({
   command: { payload },
   context: { eventsBus, version },
 }) => {
-  await eventsBus.dispatch<TestEvent>({
-    name: 'TestEvent',
-    payload: false,
-  });
+  await eventsBus.dispatch<TestEvent>(new TestEvent(false));
 
   return {
     version,

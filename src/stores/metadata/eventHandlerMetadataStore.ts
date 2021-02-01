@@ -1,11 +1,11 @@
 import { Constructor } from '../../typings/common';
-import { EventHandlerFn } from '../../typings';
+import { Event, EventHandlerFn } from '../../typings';
 import { BaseHandlerMetadata, HandlerType } from './types';
 import { storeToArray } from '../../utils';
 
 export interface EventHandlerDefinition {
   method: string;
-  eventName: string;
+  eventName: string | Constructor<Event>;
 }
 
 export interface EventHandlerMetadataItem<T> extends BaseHandlerMetadata {

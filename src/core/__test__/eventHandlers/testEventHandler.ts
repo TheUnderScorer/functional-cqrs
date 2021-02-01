@@ -2,7 +2,9 @@ import { TestContext } from '../handlers/testHandler';
 import { eventHandler } from '../../../decorators';
 import { Event, EventHandlerFn } from '../../../typings';
 
-export type TestEvent = Event<'TestEvent', boolean>;
+export class TestEvent implements Event {
+  constructor(readonly payload: boolean) {}
+}
 
 export interface EventHandlerCall {
   version: string;

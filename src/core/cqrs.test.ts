@@ -7,13 +7,16 @@ import eventHandler, {
   eventHandlerCalls,
   resetEventCalls,
 } from './__test__/eventHandlers/testEventHandler';
-import { items, TestQuery } from './__test__/queryHandlers/testQueryHandler';
+import {
+  items,
+  TestQuery,
+  testQueryHandler,
+} from './__test__/queryHandlers/testQueryHandler';
 import { TestClassEventHandler } from './__test__/eventHandlers/TestClassEventHandler';
 import {
   TestClassQuery,
   TestClassQueryHandler,
 } from './__test__/queryHandlers/TestClassQueryHandler';
-import { testQueryHandler } from './__test__/queryHandlers/testQueryHandler';
 import {
   TestClassCommand,
   TestClassHandler,
@@ -192,7 +195,6 @@ describe('createCqrs', () => {
       {
         version: context.version,
         event: {
-          name: 'TestEvent',
           payload: true,
         },
       },
@@ -219,7 +221,6 @@ describe('createCqrs', () => {
       {
         version: context.version,
         event: {
-          name: 'TestEvent',
           payload: true,
         },
       },
@@ -248,7 +249,6 @@ describe('createCqrs', () => {
       {
         version: context.version,
         event: {
-          name: 'TestEvent',
           payload: false,
         },
       },
@@ -274,7 +274,6 @@ describe('createCqrs', () => {
       {
         version: context.version,
         event: {
-          name: 'TestEvent',
           payload: false,
         },
       },

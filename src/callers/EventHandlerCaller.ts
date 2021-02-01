@@ -3,6 +3,7 @@ import { Event, EventHandlerFn } from '../typings';
 import { EventHandlerMetadataItem } from '../stores/metadata/eventHandlerMetadataStore';
 import { Constructor } from '../typings/common';
 import { HandlerType } from '../stores/metadata/types';
+import { getName } from '../utils/getName';
 
 export class EventHandlerCaller<Context> {
   constructor(private readonly contextManager: ContextManager<Context>) {}
@@ -11,6 +12,8 @@ export class EventHandlerCaller<Context> {
     event: EventType,
     meta: EventHandlerMetadataItem<any>
   ) {
+    const name = getName(event);
+
     if (meta.type === HandlerType.Function) {
       await (meta.handler as EventHandlerFn<EventType, Context>)({
         event,
@@ -20,12 +23,16 @@ export class EventHandlerCaller<Context> {
       return;
     }
 
+    const filteredDefinitions = meta.handlers!.filter(
+      (definition) => getName(definition.eventName) === name
+    );
+
+    if (!filteredDefinitions.length) {
+      return;
+    }
+
     const Handler = meta.handler as Constructor<any>;
     const classToCall = new Handler(this.contextManager.getEventContext());
-
-    const filteredDefinitions = meta.handlers!.filter(
-      (definition) => definition.eventName === event.name
-    );
 
     await Promise.all(
       filteredDefinitions.map((definition) => {

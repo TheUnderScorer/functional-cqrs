@@ -16,10 +16,7 @@ export class TestClassQueryHandler implements QueryHandler<TestClassQuery> {
   constructor(private readonly context: QueryContext<TestContext>) {}
 
   async handle(query: TestClassQuery) {
-    await this.context.eventsBus.dispatch<TestEvent>({
-      name: 'TestEvent',
-      payload: true,
-    });
+    await this.context.eventsBus.dispatch<TestEvent>(new TestEvent(true));
 
     return items[query.payload.index] ?? 0;
   }

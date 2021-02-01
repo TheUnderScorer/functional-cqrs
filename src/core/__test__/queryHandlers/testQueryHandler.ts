@@ -16,10 +16,7 @@ const handler: QueryHandlerFn<TestQuery, TestContext, number> = async ({
   query,
   context: { eventsBus },
 }) => {
-  await eventsBus.dispatch<TestEvent>({
-    name: 'TestEvent',
-    payload: true,
-  });
+  await eventsBus.dispatch<TestEvent>(new TestEvent(true));
 
   return items[query.payload.index] ?? 0;
 };

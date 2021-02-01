@@ -13,10 +13,7 @@ export class TestClassHandler implements CommandHandler<TestClassCommand> {
   constructor(private readonly context: CommandContext<TestContext>) {}
 
   async handle(command: TestClassCommand) {
-    await this.context.eventsBus.dispatch<TestEvent>({
-      name: 'TestEvent',
-      payload: false,
-    });
+    await this.context.eventsBus.dispatch<TestEvent>(new TestEvent(false));
 
     return {
       version: this.context.version,

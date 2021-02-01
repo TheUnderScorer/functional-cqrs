@@ -6,7 +6,7 @@ import { eventHandler } from '../../../decorators';
   handlers: [
     {
       method: 'handleTestEvent',
-      eventName: 'TestEvent',
+      eventName: TestEvent,
     },
   ],
 })
