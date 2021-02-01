@@ -1,3 +1,10 @@
+## [1.2.2](https://github.com/TheUnderScorer/functional-cqrs/compare/v1.2.1...v1.2.2) (2021-02-01)
+
+
+### Bug Fixes
+
+* **events-bus:** Support passing event constructor as eventName ([f3eeda7](https://github.com/TheUnderScorer/functional-cqrs/commit/f3eeda7184cf1bf0868cc8beffe4db92ee08ea23))
+
 ## [1.2.1](https://github.com/TheUnderScorer/functional-cqrs/compare/v1.2.0...v1.2.1) (2020-12-10)
 
 
