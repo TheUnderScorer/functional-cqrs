@@ -1,22 +1,32 @@
-import { MaybePromise } from './common';
+import { HandlersMap } from './core';
 
 export interface CommandLike<Payload = any, Type extends string = string> {
-  // Name only is required if it's a "plain" object
-  name?: Type;
+  name: Type;
   payload: Payload;
 }
+
+export type ResolvedHandlerResult<
+  Handlers extends HandlersMap,
+  Command extends CommandLike
+> = Handlers[Command['name']] extends (...args: unknown[]) => infer T
+  ? T
+  : Handlers[Command['name']] extends ClassHandler<any, infer S>
+  ? S
+  : never;
+
+export type CommandLikeName<T extends CommandLike> = CommandLike['name'];
 
 export interface ClassHandler<
   TCommand extends CommandLike = CommandLike,
   ReturnValue = unknown
 > {
-  handle(instruction: Readonly<TCommand>): MaybePromise<ReturnValue>;
+  handle(instruction: Readonly<TCommand>): ReturnValue;
 }
 
 export type HandlerFn<
   TCommand extends CommandLike = CommandLike,
   ReturnType = unknown
-> = (instruction: Readonly<TCommand>) => MaybePromise<ReturnType>;
+> = (instruction: Readonly<TCommand>) => ReturnType;
 
 export type Handler<TCommand extends CommandLike, ReturnType = unknown> =
   | HandlerFn<TCommand, ReturnType>
@@ -25,6 +35,6 @@ export type Handler<TCommand extends CommandLike, ReturnType = unknown> =
 export const isClassHandler = <T extends CommandLike>(
   value: unknown
 ): value is ClassHandler<T> =>
-  value &&
+  Boolean(value) &&
   typeof value === 'object' &&
-  typeof (value as Record<string, unknown>).handle === 'function';
+  typeof (value as Record<string, any>).handle === 'function';

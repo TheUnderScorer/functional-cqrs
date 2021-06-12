@@ -1,7 +1,13 @@
-import { Command, CommandsBusInterface } from '../typings';
+import {
+  Command,
+  CommandHandler,
+  CommandHandlerFn,
+  CommandsBusInterface,
+} from '../typings';
 import { BaseBus } from './BaseBus';
 
-export class CommandsBus extends BaseBus implements CommandsBusInterface {
+export class CommandsBus extends BaseBus<CommandHandler | CommandHandlerFn>
+  implements CommandsBusInterface {
   execute<CommandType extends Command = Command, ReturnValue = any>(
     command: CommandType
   ): ReturnValue | Promise<ReturnValue> {

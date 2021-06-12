@@ -1,13 +1,24 @@
 import { createBuses } from './createBuses';
-import { CqrsConfig } from '../typings/core';
+import {
+  CommandHandlersMap,
+  CqrsConfig,
+  CqrsResult,
+  QueryHandlersMap,
+} from '../typings/core';
 
-export const createCqrs = async ({
-  commandHandlers = {},
-  queryHandlers = {},
+export const createCqrs = <
+  CommandHandlers extends CommandHandlersMap,
+  QueryHandlers extends QueryHandlersMap
+>({
+  commandHandlers = {} as CommandHandlers,
+  queryHandlers = {} as QueryHandlers,
   eventHandlers = {},
   subscribers = [],
   ...rest
-}: CqrsConfig = {}) => {
+}: CqrsConfig<CommandHandlers, QueryHandlers>): CqrsResult<
+  CommandHandlers,
+  QueryHandlers
+> => {
   return {
     buses: createBuses({
       ...rest,

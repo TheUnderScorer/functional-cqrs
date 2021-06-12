@@ -1,15 +1,24 @@
-import { ClassHandler, CommandLike, HandlerFn } from './handler';
-import { MaybePromise } from './common';
+import {
+  ClassHandler,
+  CommandLike,
+  HandlerFn,
+  ResolvedHandlerResult,
+} from './handler';
+import { HandlersMap } from './core';
 
 export type Query<Payload = any, Name extends string = string> = CommandLike<
   Payload,
   Name
 >;
 
-export interface QueriesBusInterface {
-  query: <QueryType extends Query = Query, ReturnValue = any>(
+export interface QueriesBusInterface<
+  Handlers extends HandlersMap<QueryHandler | QueryHandlerFn> = HandlersMap<
+    QueryHandler | QueryHandlerFn
+  >
+> {
+  query: <QueryType extends Query = Query>(
     query: QueryType
-  ) => MaybePromise<ReturnValue>;
+  ) => ResolvedHandlerResult<Handlers, QueryType>;
 }
 
 export type QueryHandler<QueryType extends Query = Query> = ClassHandler<

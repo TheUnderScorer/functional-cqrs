@@ -1,10 +1,10 @@
 import { Constructor, MaybePromise } from './common';
+import { CommandLike } from './handler';
 
-export interface Event<Payload = any, Name extends string = string> {
-  // Name is only required if event is an "plain" object
-  name?: Name;
-  payload: Payload;
-}
+export type Event<Payload = any, Name extends string = string> = CommandLike<
+  Payload,
+  Name
+>;
 
 export interface EventSubscriber<T = any> {
   getSubscribedEvents(): EventHandlerDefinitions<T>;
