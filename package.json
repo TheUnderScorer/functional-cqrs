@@ -66,5 +66,8 @@
       ],
       "@semantic-release/github"
     ]
+  },
+  "dependencies": {
+    "type-fest": "^0.6.0"
   }
 }

@@ -1,282 +1,205 @@
+// eslint-disable-next-line max-classes-per-file
 import { createCqrs } from './cqrs';
-import commandHandler, {
-  TestCommand,
-  TestContext,
-} from './__test__/handlers/testHandler';
-import eventHandler, {
-  eventHandlerCalls,
-  resetEventCalls,
-} from './__test__/eventHandlers/testEventHandler';
 import {
-  items,
-  TestQuery,
-  testQueryHandler,
-} from './__test__/queryHandlers/testQueryHandler';
-import { TestClassEventHandler } from './__test__/eventHandlers/TestClassEventHandler';
-import {
-  TestClassQuery,
-  TestClassQueryHandler,
-} from './__test__/queryHandlers/TestClassQueryHandler';
-import {
-  TestClassCommand,
-  TestClassHandler,
-} from './__test__/handlers/TestClassHandler';
+  Command,
+  CommandHandler,
+  Event,
+  EventSubscriber,
+  Query,
+  QueryHandler,
+} from '../typings';
+import { Buses } from '../typings/buses';
 
-describe('createCqrs', () => {
-  const context: TestContext = {
-    version: '0.1',
-  };
+class TestCommand implements Command {
+  constructor(readonly payload: boolean) {}
+}
 
-  beforeEach(() => {
-    resetEventCalls();
-  });
+class SecondTestCommand implements Command {
+  constructor(readonly payload: boolean) {}
+}
 
-  it('should return buses and loaded handlers count', async () => {
-    const cqrs = await createCqrs();
+class TestQuery implements Query {
+  constructor(readonly payload: string) {}
+}
+
+class TestEvent implements Event<number> {
+  constructor(readonly payload: number) {}
+}
+
+describe('Functional cqrs', () => {
+  it('should create cqrs', async () => {
+    const cqrs = await createCqrs({});
 
     expect(cqrs).toMatchInlineSnapshot(`
       Object {
         "buses": Object {
           "commandsBus": CommandsBus {
-            "caller": Caller {
-              "contextManager": ContextManager {
-                "commandsBus": [Circular],
-                "context": undefined,
-                "eventsBus": EventsBus {
-                  "caller": EventHandlerCaller {
-                    "contextManager": [Circular],
-                  },
-                  "contextManager": [Circular],
-                  "store": Set {},
-                },
-                "queriesBus": QueriesBus {
-                  "caller": Caller {
-                    "contextManager": [Circular],
-                    "type": "query",
-                  },
-                  "contextManager": [Circular],
-                  "store": Map {},
-                },
-              },
-              "type": "command",
-            },
-            "contextManager": ContextManager {
-              "commandsBus": [Circular],
-              "context": undefined,
-              "eventsBus": EventsBus {
-                "caller": EventHandlerCaller {
-                  "contextManager": [Circular],
-                },
-                "contextManager": [Circular],
-                "store": Set {},
-              },
-              "queriesBus": QueriesBus {
-                "caller": Caller {
-                  "contextManager": [Circular],
-                  "type": "query",
-                },
-                "contextManager": [Circular],
-                "store": Map {},
-              },
-            },
-            "store": Map {},
+            "store": Object {},
           },
           "eventsBus": EventsBus {
-            "caller": EventHandlerCaller {
-              "contextManager": ContextManager {
-                "commandsBus": CommandsBus {
-                  "caller": Caller {
-                    "contextManager": [Circular],
-                    "type": "command",
-                  },
-                  "contextManager": [Circular],
-                  "store": Map {},
-                },
-                "context": undefined,
-                "eventsBus": [Circular],
-                "queriesBus": QueriesBus {
-                  "caller": Caller {
-                    "contextManager": [Circular],
-                    "type": "query",
-                  },
-                  "contextManager": [Circular],
-                  "store": Map {},
-                },
-              },
-            },
-            "contextManager": ContextManager {
-              "commandsBus": CommandsBus {
-                "caller": Caller {
-                  "contextManager": [Circular],
-                  "type": "command",
-                },
-                "contextManager": [Circular],
-                "store": Map {},
-              },
-              "context": undefined,
-              "eventsBus": [Circular],
-              "queriesBus": QueriesBus {
-                "caller": Caller {
-                  "contextManager": [Circular],
-                  "type": "query",
-                },
-                "contextManager": [Circular],
-                "store": Map {},
-              },
-            },
-            "store": Set {},
+            "eventHandlers": Object {},
+            "subscribers": Array [],
           },
           "queriesBus": QueriesBus {
-            "caller": Caller {
-              "contextManager": ContextManager {
-                "commandsBus": CommandsBus {
-                  "caller": Caller {
-                    "contextManager": [Circular],
-                    "type": "command",
-                  },
-                  "contextManager": [Circular],
-                  "store": Map {},
-                },
-                "context": undefined,
-                "eventsBus": EventsBus {
-                  "caller": EventHandlerCaller {
-                    "contextManager": [Circular],
-                  },
-                  "contextManager": [Circular],
-                  "store": Set {},
-                },
-                "queriesBus": [Circular],
-              },
-              "type": "query",
-            },
-            "contextManager": ContextManager {
-              "commandsBus": CommandsBus {
-                "caller": Caller {
-                  "contextManager": [Circular],
-                  "type": "command",
-                },
-                "contextManager": [Circular],
-                "store": Map {},
-              },
-              "context": undefined,
-              "eventsBus": EventsBus {
-                "caller": EventHandlerCaller {
-                  "contextManager": [Circular],
-                },
-                "contextManager": [Circular],
-                "store": Set {},
-              },
-              "queriesBus": [Circular],
-            },
-            "store": Map {},
+            "store": Object {},
           },
         },
       }
     `);
   });
 
-  it('should handle query', async () => {
-    const { buses } = await createCqrs({
-      context,
-      commandHandlers: [commandHandler],
-      eventHandlers: [eventHandler],
-      queryHandlers: [testQueryHandler],
-    });
+  it('should run command via function', async () => {
+    const handler = jest.fn();
 
-    const item = await buses.queriesBus.query<TestQuery>({
-      name: 'TestQuery',
-      payload: {
-        index: 2,
+    const cqrs = await createCqrs({
+      commandHandlers: {
+        [TestCommand.name]: handler,
       },
     });
 
-    expect(item).toEqual(items[2]);
-    expect(eventHandlerCalls).toEqual([
-      {
-        version: context.version,
-        event: {
-          payload: true,
-        },
-      },
-    ]);
+    const command = new TestCommand(true);
+
+    await cqrs.buses.commandsBus.execute(command);
+
+    expect(handler).toHaveBeenCalledWith(command);
   });
 
-  it('should handle query as class', async () => {
-    const { buses } = await createCqrs({
-      context,
-      commandHandlers: [commandHandler],
-      eventHandlers: [TestClassEventHandler],
-      queryHandlers: [TestClassQueryHandler],
-    });
+  it('should run command via class', async () => {
+    const handler = jest.fn();
 
-    const item = await buses.queriesBus.query<TestClassQuery>({
-      name: 'TestClassQuery',
-      payload: {
-        index: 2,
+    class Handler implements CommandHandler<TestCommand> {
+      handle(command: Readonly<TestCommand>) {
+        return handler(command);
+      }
+    }
+
+    const cqrs = await createCqrs({
+      commandHandlers: {
+        [TestCommand.name]: new Handler(),
       },
     });
 
-    expect(item).toEqual(items[2]);
-    expect(eventHandlerCalls).toEqual([
-      {
-        version: context.version,
-        event: {
-          payload: true,
-        },
-      },
-    ]);
+    const command = new TestCommand(true);
+
+    await cqrs.buses.commandsBus.execute(command);
+
+    expect(handler).toHaveBeenCalledWith(command);
   });
 
-  it('should handle commands', async () => {
-    const { buses } = await createCqrs({
-      context,
-      commandHandlers: [commandHandler],
-      eventHandlers: [TestClassEventHandler],
-      queryHandlers: [testQueryHandler],
-    });
+  it('should run query via function', async () => {
+    const handler = jest.fn();
 
-    const result = await buses.commandsBus.execute<TestCommand>({
-      name: 'TestCommand',
-      payload: true,
-    });
-
-    expect(result).toEqual({
-      version: context.version,
-      payload: true,
-    });
-
-    expect(eventHandlerCalls).toEqual([
-      {
-        version: context.version,
-        event: {
-          payload: false,
-        },
+    const cqrs = await createCqrs({
+      queryHandlers: {
+        [TestQuery.name]: handler,
       },
-    ]);
+    });
+
+    const query = new TestQuery('test');
+
+    await cqrs.buses.queriesBus.query(query);
+
+    expect(handler).toHaveBeenCalledWith(query);
   });
 
-  it('should handle class command handler', async () => {
-    const { buses } = await createCqrs({
-      context,
-      commandHandlers: [TestClassHandler],
-      eventHandlers: [TestClassEventHandler],
-      queryHandlers: [testQueryHandler],
-    });
+  it('should run query via class', async () => {
+    const handler = jest.fn();
 
-    const result = await buses.commandsBus.execute(new TestClassCommand(true));
+    class Handler implements QueryHandler<TestQuery> {
+      handle(command: Readonly<TestQuery>) {
+        return handler(command);
+      }
+    }
 
-    expect(result).toEqual({
-      version: context.version,
-      payload: true,
-    });
-
-    expect(eventHandlerCalls).toEqual([
-      {
-        version: context.version,
-        event: {
-          payload: false,
-        },
+    const cqrs = await createCqrs({
+      queryHandlers: {
+        [TestQuery.name]: new Handler(),
       },
-    ]);
+    });
+
+    const command = new TestQuery('test');
+
+    await cqrs.buses.queriesBus.query(command);
+
+    expect(handler).toHaveBeenCalledWith(command);
+  });
+
+  it('should run event via function', async () => {
+    const handler = jest.fn();
+
+    const cqrs = await createCqrs({
+      eventHandlers: {
+        [TestEvent.name]: [handler],
+      },
+    });
+
+    const event = new TestEvent(1);
+
+    await cqrs.buses.eventsBus.dispatch(event);
+
+    expect(handler).toHaveBeenCalledWith(event);
+  });
+
+  it('should run event via class subscriber', async () => {
+    const handler = jest.fn();
+
+    class Subscriber implements EventSubscriber<Subscriber> {
+      getSubscribedEvents() {
+        return {
+          onEvent: [TestEvent],
+        };
+      }
+
+      async onEvent(event: TestEvent) {
+        handler(event);
+      }
+    }
+
+    const cqrs = await createCqrs({
+      subscribers: [new Subscriber()],
+    });
+
+    const event = new TestEvent(1);
+
+    await cqrs.buses.eventsBus.dispatch(event);
+
+    expect(handler).toHaveBeenCalledWith(event);
+  });
+
+  it('should run command and dispatch event', async () => {
+    let buses: Buses;
+
+    const testEvent = new TestEvent(1);
+
+    const commandHandler = jest.fn(() => {
+      buses.eventsBus.dispatch(testEvent);
+    });
+
+    const secondCommandHandler = jest.fn();
+    const secondTestCommand = new SecondTestCommand(false);
+
+    const eventHandler = jest.fn(() => {
+      buses.commandsBus.execute(secondTestCommand);
+    });
+
+    const cqrs = await createCqrs({
+      commandHandlers: {
+        [TestCommand.name]: commandHandler,
+        [SecondTestCommand.name]: secondCommandHandler,
+      },
+      eventHandlers: {
+        [TestEvent.name]: [eventHandler],
+      },
+    });
+
+    buses = cqrs.buses;
+
+    const command = new TestCommand(true);
+
+    await buses.commandsBus.execute(command);
+
+    expect(commandHandler).toHaveBeenCalledWith(command);
+    expect(eventHandler).toHaveBeenCalledWith(testEvent);
+    expect(secondCommandHandler).toHaveBeenCalledWith(secondTestCommand);
   });
 });

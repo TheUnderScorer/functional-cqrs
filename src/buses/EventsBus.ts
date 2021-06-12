@@ -1,44 +1,30 @@
-import { Event, EventsBusInterface } from '../typings';
-import {
-  EventHandlerDefinition,
-  EventHandlerMetadataStore,
-} from '../stores/metadata/eventHandlerMetadataStore';
-import { storeToArray } from '../utils';
-import { ContextManager } from '../context/ContextManager';
-import { EventHandlerCaller } from '../callers/EventHandlerCaller';
+import { Event, EventsBusInterface, EventSubscriber } from '../typings';
+import { callSubscribers } from '../callers/callSubscribers';
+import { EventHandlersMap } from '../typings/core';
 import { getName } from '../utils/getName';
+import { MaybePromise } from '../typings/common';
 
-export class EventsBus<Context = any> implements EventsBusInterface<Context> {
-  private readonly caller: EventHandlerCaller<Context>;
-
+export class EventsBus implements EventsBusInterface {
   constructor(
-    private readonly store: EventHandlerMetadataStore,
-    private readonly contextManager: ContextManager<Context>
-  ) {
-    this.caller = new EventHandlerCaller<Context>(this.contextManager);
-  }
+    private readonly subscribers: EventSubscriber<object>[],
+    private readonly eventHandlers: EventHandlersMap
+  ) {}
 
   async dispatch<EventType extends Event = Event>(
     event: EventType
   ): Promise<void> {
-    const name = getName(event);
-    const handlers = this.getHandlersForEvent(name);
+    const promises: MaybePromise<void>[] = [
+      ...this.subscribers.map((subscriber) =>
+        callSubscribers(event, subscriber)
+      ),
+    ];
 
-    await Promise.all(
-      handlers.map((handler) => this.caller.call(event, handler))
-    );
-  }
+    const handlers = this.eventHandlers[getName(event)];
 
-  private getHandlersForEvent(eventName: string) {
-    return storeToArray(this.store).filter(
-      ({ eventName: handlerEventName, handlers }) => {
-        return (
-          handlerEventName === eventName ||
-          Boolean(
-            handlers?.find((entry: EventHandlerDefinition) => entry.eventName)
-          )
-        );
-      }
-    );
+    if (handlers?.length) {
+      promises.push(...handlers.map((handler) => handler(event)));
+    }
+
+    await Promise.all(promises);
   }
 }

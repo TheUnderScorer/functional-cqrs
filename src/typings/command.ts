@@ -1,37 +1,21 @@
-import { EventsBusInterface } from './event';
-import { QueriesBusInterface } from './query';
-import { Handler, HandlerInstruction } from './handler';
+import { ClassHandler, CommandLike, HandlerFn } from './handler';
 
-export type Command<
-  Type extends string = string,
-  Payload = any
-> = HandlerInstruction<Type, Payload>;
+export type Command<Payload = any, Type extends string = string> = CommandLike<
+  Payload,
+  Type
+>;
 
-export type CommandContext<Context = any> = Context & {
-  eventsBus: EventsBusInterface<Context>;
-  queriesBus: QueriesBusInterface<Context>;
-};
-
-export interface CommandsBusInterface<Context = any> {
+export interface CommandsBusInterface {
   execute: <CommandType extends Command = Command, ReturnValue = any>(
-    command: CommandType
+    command: Readonly<CommandType>
   ) => ReturnValue | Promise<ReturnValue>;
 }
 
-export interface CommandHandlerFnParams<
-  CommandType extends Command = Command,
-  Context = any
-> {
-  context: CommandContext<Context>;
-  command: CommandType;
-}
-
-export type CommandHandler<CommandType extends Command = Command> = Handler<
-  CommandType
->;
+export type CommandHandler<
+  CommandType extends Command = Command
+> = ClassHandler<CommandType>;
 
 export type CommandHandlerFn<
   CommandType extends Command = Command,
-  Context = any,
   ReturnValue = any
-> = (params: CommandHandlerFnParams<CommandType, Context>) => ReturnValue;
+> = HandlerFn<CommandType, ReturnValue>;

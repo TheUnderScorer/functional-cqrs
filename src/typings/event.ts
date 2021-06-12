@@ -1,30 +1,29 @@
-import { CommandsBusInterface } from './command';
-import { QueriesBusInterface } from './query';
+import { Constructor, MaybePromise } from './common';
 
-export interface Event<Name extends string = string, Payload = any> {
+export interface Event<Payload = any, Name extends string = string> {
   // Name is only required if event is an "plain" object
   name?: Name;
   payload: Payload;
 }
 
-export type EventSubscriberMethod = (event: Event) => Promise<void>;
+export interface EventSubscriber<T = any> {
+  getSubscribedEvents(): EventHandlerDefinitions<T>;
+}
 
-export type EventContext<Context = any> = Context & {
-  commandsBus: CommandsBusInterface<Context>;
-  queriesBus: QueriesBusInterface<Context>;
+export type EventHandlerFn<EventType extends Event = Event> = (
+  event: Readonly<EventType>
+) => MaybePromise<void>;
+
+export type EventHandlerDefinitions<T> = {
+  [Key in keyof T]?: T[Key] extends (param: infer Param) => unknown
+    ? Param extends Event
+      ? Constructor<Param>[]
+      : never
+    : never;
 };
 
-export interface EventsBusInterface<Context = any> {
+export interface EventsBusInterface {
   dispatch: <EventType extends Event = Event>(
     event: EventType
-  ) => void | Promise<void>;
+  ) => MaybePromise<void>;
 }
-
-export interface EventHandlerParams<EventType extends Event, Context = any> {
-  event: EventType;
-  context: Context;
-}
-
-export type EventHandlerFn<EventType extends Event = Event, Context = any> = (
-  params: EventHandlerParams<EventType, Context>
-) => void | Promise<void>;

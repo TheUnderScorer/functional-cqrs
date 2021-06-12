@@ -1,35 +1,22 @@
-import { EventsBusInterface } from './event';
-import { Handler, HandlerInstruction } from './handler';
+import { ClassHandler, CommandLike, HandlerFn } from './handler';
+import { MaybePromise } from './common';
 
-export type Query<
-  Name extends string = string,
-  Payload = any
-> = HandlerInstruction<Name, Payload>;
+export type Query<Payload = any, Name extends string = string> = CommandLike<
+  Payload,
+  Name
+>;
 
-export type QueryContext<Context = any> = Context & {
-  eventsBus: EventsBusInterface;
-};
-
-export interface QueriesBusInterface<Context = any> {
+export interface QueriesBusInterface {
   query: <QueryType extends Query = Query, ReturnValue = any>(
     query: QueryType
-  ) => ReturnValue | Promise<ReturnValue>;
+  ) => MaybePromise<ReturnValue>;
 }
 
-export type QueryHandler<QueryType extends Query> = Handler<QueryType>;
-
-export interface QueryHandlerFnParams<
-  QueryType extends Query = Query,
-  Context = any
-> {
-  context: QueryContext<Context>;
-  query: QueryType;
-}
+export type QueryHandler<QueryType extends Query = Query> = ClassHandler<
+  QueryType
+>;
 
 export type QueryHandlerFn<
   QueryType extends Query = Query,
-  Context = any,
   ReturnValue = any
-> = (
-  params: QueryHandlerFnParams<QueryType, Context>
-) => ReturnValue | Promise<ReturnValue>;
+> = HandlerFn<QueryType, ReturnValue>;
