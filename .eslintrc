@@ -9,7 +9,7 @@
   },
   "plugins": ["prettier", "unicorn", "no-only-tests"],
   "parserOptions": {
-    "project": "./tsconfig.json"
+    "project": "./tsconfig.lint.json"
   },
   "rules": {
     "no-console": "off",

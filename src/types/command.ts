@@ -8,9 +8,9 @@ import { HandlersMap } from './core';
 import { EventsBusInterface } from './event';
 import { BaseBusInterface } from './buses';
 
-export type Command<Payload = any, Type extends string = string> = CommandLike<
+export type Command<Payload = any, Name extends string = string> = CommandLike<
   Payload,
-  Type
+  Name
 >;
 
 export interface CommandContext {

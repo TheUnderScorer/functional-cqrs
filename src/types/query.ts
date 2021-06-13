@@ -21,10 +21,10 @@ export interface QueriesBusInterface<
   ) => ResolvedHandlerResult<Handlers, QueryType>;
 }
 
-export type QueryHandler<QueryType extends Query = Query> =
+export type QueryHandler<QueryType extends Query<any, any> = Query<any, any>> =
   ClassHandler<QueryType>;
 
 export type QueryHandlerFn<
-  QueryType extends Query = Query,
+  QueryType extends Query<any, any> = Query<any, any>,
   ReturnValue = any
-> = HandlerFn<QueryType, ReturnValue>;
+> = HandlerFn<QueryType, ReturnValue, never>;

@@ -2,6 +2,7 @@
 import { createCqrs } from './cqrs';
 import {
   Command,
+  CommandContext,
   CommandHandler,
   Event,
   EventSubscriber,
@@ -10,9 +11,12 @@ import {
 } from '../types';
 import { Buses } from '../types/buses';
 import { NoHandlerFoundError } from '../errors/NoHandlerFoundError';
+import { EventsBus } from '../buses/EventsBus';
+
+const TestCommandName = 'TestCommand' as const;
 
 class TestCommand implements Command<boolean> {
-  name = 'TestCommand' as const;
+  name = TestCommandName;
 
   constructor(readonly payload: boolean) {}
 }
@@ -23,8 +27,10 @@ class SecondTestCommand implements Command {
   constructor(readonly payload: boolean) {}
 }
 
+const TestQueryName = 'TestQuery' as const;
+
 class TestQuery implements Query {
-  name = 'TestQuery' as const;
+  name = TestQueryName;
 
   constructor(readonly payload: string) {}
 }
@@ -86,11 +92,15 @@ describe('Functional cqrs', () => {
   });
 
   it('should run command via function', async () => {
-    const handler = jest.fn(() => true);
+    const handler = jest.fn((command: TestCommand, context: CommandContext) => {
+      expect(context.eventsBus).toBeInstanceOf(EventsBus);
+
+      return command.payload;
+    });
 
     const cqrs = createCqrs({
       commandHandlers: {
-        TestCommand: handler,
+        [TestCommandName]: handler,
       },
     });
 
@@ -98,21 +108,27 @@ describe('Functional cqrs', () => {
 
     cqrs.buses.commandsBus.execute(command);
 
-    expect(handler).toHaveBeenCalledWith(command);
+    expect(handler).toHaveBeenCalledWith(command, {
+      eventsBus: cqrs.buses.eventsBus,
+    });
   });
 
   it('should run command via class', async () => {
-    const handler = jest.fn((command: TestCommand) => command.payload);
+    const handler = jest.fn((command: TestCommand, context: CommandContext) => {
+      expect(context.eventsBus).toBeInstanceOf(EventsBus);
+
+      return command.payload;
+    });
 
     class Handler implements CommandHandler<TestCommand> {
-      handle(command: Readonly<TestCommand>) {
-        return handler(command);
+      handle(command: Readonly<TestCommand>, context: CommandContext) {
+        return handler(command, context);
       }
     }
 
     const cqrs = createCqrs({
       commandHandlers: {
-        TestCommand: new Handler(),
+        [TestCommandName]: new Handler(),
       },
     });
 
@@ -120,7 +136,9 @@ describe('Functional cqrs', () => {
 
     cqrs.buses.commandsBus.execute(command);
 
-    expect(handler).toHaveBeenCalledWith(command);
+    expect(handler).toHaveBeenCalledWith(command, {
+      eventsBus: cqrs.buses.eventsBus,
+    });
   });
 
   it('should run query via function', async () => {
@@ -128,7 +146,7 @@ describe('Functional cqrs', () => {
 
     const cqrs = createCqrs({
       queryHandlers: {
-        [TestQuery.name]: handler,
+        [TestQueryName]: handler,
       },
     });
 
@@ -140,7 +158,7 @@ describe('Functional cqrs', () => {
   });
 
   it('should run query via class', async () => {
-    const handler = jest.fn();
+    const handler = jest.fn((query: TestQuery) => query.payload);
 
     class Handler implements QueryHandler<TestQuery> {
       handle(query: Readonly<TestQuery>) {
@@ -150,7 +168,7 @@ describe('Functional cqrs', () => {
 
     const cqrs = await createCqrs({
       queryHandlers: {
-        TestQuery: new Handler(),
+        [TestQueryName]: new Handler(),
       },
     });
 

@@ -3,10 +3,7 @@ import { CommandLike } from './handler';
 import { CommandsBusInterface } from './command';
 import { BaseBusInterface } from './buses';
 
-export type Event<Payload = any, Name extends string = string> = CommandLike<
-  Payload,
-  Name
->;
+export type Event<Payload = any> = Pick<CommandLike<Payload, never>, 'payload'>;
 
 export interface EventSubscriber<T = any> {
   getSubscribedEvents(): EventHandlerDefinitions<T>;

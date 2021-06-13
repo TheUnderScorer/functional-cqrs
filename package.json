@@ -1,6 +1,9 @@
 {
   "name": "functional-cqrs",
   "version": "1.2.3",
+  "workspaces": [
+    "examples/todo-app"
+  ],
   "author": "Przemysław Żydek <przemyslawzydek@gmail.com>",
   "typings": "build/index.d.ts",
   "main": "build/index.js",

@@ -1,14 +1,17 @@
 import { HandlersMap } from './core';
 
-export interface CommandLike<Payload = any, Type extends string = string> {
-  name: Type;
+export interface CommandLike<Payload = any, Name extends string = string> {
+  name: Name;
   payload: Payload;
 }
 
 export type ResolvedHandlerResult<
   Handlers extends HandlersMap,
   Command extends CommandLike
-> = Handlers[CommandLikeName<Command>] extends (...args: unknown[]) => infer T
+> = Handlers[CommandLikeName<Command>] extends (
+  arg1: any,
+  arg2?: any
+) => infer T
   ? T
   : Handlers[CommandLikeName<Command>] extends ClassHandler<any, infer S>
   ? S

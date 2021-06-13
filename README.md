@@ -114,6 +114,8 @@ We don't do that for events, because they always return `void | Promise<void>` :
 
 ## 📖 Learn more
 
-* [Commands](docs/commands.md)
-* [Queries](docs/commands.md)
-* [Events](docs/commands.md)
+* [📥 Commands](docs/commands.md)
+* [📤 Queries](docs/commands.md)
+* [🗓 Events](docs/commands.md)
+
+Need more? Check [examples](examples) 😎.
