@@ -7,3 +7,4 @@ export * from './typings/query';
 export * from './typings/command';
 export * from './typings/handler';
 export * from './typings/event';
+export * from './errors/NoHandlerFoundError';

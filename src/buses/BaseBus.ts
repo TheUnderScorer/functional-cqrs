@@ -8,6 +8,7 @@ import {
 } from '../typings/handler';
 import { HandlersMap } from '../typings/core';
 import { MaybePromise } from '../typings/common';
+import { NoHandlerFoundError } from '../errors/NoHandlerFoundError';
 
 export class BaseBus<
   HandlerType extends ClassHandler | HandlerFn = ClassHandler | HandlerFn,
@@ -22,7 +23,7 @@ export class BaseBus<
     const handler = this.store[name];
 
     if (!handler) {
-      throw new Error(`No handler for ${name} found.`);
+      throw new NoHandlerFoundError(name);
     }
 
     return callHandler(handler, command);

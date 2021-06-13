@@ -9,6 +9,7 @@ import {
   QueryHandler,
 } from '../typings';
 import { Buses } from '../typings/buses';
+import { NoHandlerFoundError } from '../errors/NoHandlerFoundError';
 
 class TestCommand implements Command {
   name = 'TestCommand' as const;
@@ -56,10 +57,38 @@ describe('Functional cqrs', () => {
     `);
   });
 
+  it('should throw for not found command handlers', () => {
+    const cqrs = createCqrs({});
+
+    const command = new TestCommand(true);
+
+    expect(() => cqrs.buses.commandsBus.execute(command)).toThrow(
+      NoHandlerFoundError
+    );
+  });
+
+  it('should throw for not found query handlers', () => {
+    const cqrs = createCqrs({});
+
+    const query = new TestQuery('1');
+
+    expect(() => cqrs.buses.queriesBus.query(query)).toThrow(
+      NoHandlerFoundError
+    );
+  });
+
+  it('should not throw for not found event handlers', () => {
+    const cqrs = createCqrs({});
+
+    const event = new TestEvent(1);
+
+    expect(() => cqrs.buses.eventsBus.dispatch(event)).not.toThrow();
+  });
+
   it('should run command via function', async () => {
     const handler = jest.fn(() => true);
 
-    const cqrs = await createCqrs({
+    const cqrs = createCqrs({
       commandHandlers: {
         TestCommand: handler,
       },
