@@ -2,9 +2,13 @@ import { Event, EventSubscriber } from '../types';
 import { getName } from '../utils/getName';
 import { Constructor } from '../types/common';
 
-export const callSubscribers = async <EventType extends Event = Event>(
+export const callSubscribers = async <
+  EventType extends Event = Event,
+  Context = any
+>(
   event: EventType,
-  subscriber: EventSubscriber<object>
+  subscriber: EventSubscriber<object>,
+  context: Context
 ) => {
   const eventName = getName(event);
 
@@ -19,6 +23,6 @@ export const callSubscribers = async <EventType extends Event = Event>(
     .map(([method]) => method);
 
   await methods.map((method) =>
-    (subscriber as Record<string, any>)[method](event)
+    (subscriber as Record<string, any>)[method](event, context)
   );
 };

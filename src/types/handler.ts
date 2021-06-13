@@ -18,15 +18,17 @@ export type CommandLikeName<T extends CommandLike> = T['name'];
 
 export interface ClassHandler<
   TCommand extends CommandLike = CommandLike,
-  ReturnValue = unknown
+  ReturnValue = unknown,
+  Context = any
 > {
-  handle(instruction: Readonly<TCommand>): ReturnValue;
+  handle(instruction: Readonly<TCommand>, context: Context): ReturnValue;
 }
 
 export type HandlerFn<
   TCommand extends CommandLike = CommandLike,
-  ReturnType = unknown
-> = (instruction: Readonly<TCommand>) => ReturnType;
+  ReturnType = unknown,
+  Context = any
+> = (instruction: Readonly<TCommand>, context: Context) => ReturnType;
 
 export type Handler<TCommand extends CommandLike, ReturnType = unknown> =
   | HandlerFn<TCommand, ReturnType>

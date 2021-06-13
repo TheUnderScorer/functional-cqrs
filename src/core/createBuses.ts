@@ -27,6 +27,14 @@ export const createBuses = <
   const eventsBus = new EventsBusConstructor(subscribers, eventHandlers);
   const queriesBus = new QueriesBusConstructor(queryHandlers);
 
+  commandsBus.context = {
+    eventsBus,
+  };
+
+  eventsBus.context = {
+    commandsBus,
+  };
+
   return {
     commandsBus,
     eventsBus,

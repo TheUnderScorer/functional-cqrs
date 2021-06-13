@@ -1,5 +1,6 @@
 import {
   Command,
+  CommandContext,
   CommandHandler,
   CommandHandlerFn,
   CommandsBusInterface,
@@ -13,7 +14,7 @@ export class CommandsBus<
       CommandHandler | CommandHandlerFn
     > = HandlersMap<CommandHandler | CommandHandlerFn>
   >
-  extends BaseBus<CommandHandler | CommandHandlerFn, Handlers>
+  extends BaseBus<CommandHandler | CommandHandlerFn, Handlers, CommandContext>
   implements CommandsBusInterface<Handlers>
 {
   execute<CommandType extends Command = Command>(

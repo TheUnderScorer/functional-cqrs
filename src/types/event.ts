@@ -1,5 +1,7 @@
 import { Constructor, MaybePromise } from './common';
 import { CommandLike } from './handler';
+import { CommandsBusInterface } from './command';
+import { BaseBusInterface } from './buses';
 
 export type Event<Payload = any, Name extends string = string> = CommandLike<
   Payload,
@@ -10,8 +12,13 @@ export interface EventSubscriber<T = any> {
   getSubscribedEvents(): EventHandlerDefinitions<T>;
 }
 
+export interface EventContext {
+  commandsBus: CommandsBusInterface;
+}
+
 export type EventHandlerFn<EventType extends Event = Event> = (
-  event: Readonly<EventType>
+  event: Readonly<EventType>,
+  context: EventContext
 ) => MaybePromise<void>;
 
 export type EventHandlerDefinitions<T> = {
@@ -22,7 +29,7 @@ export type EventHandlerDefinitions<T> = {
     : never;
 };
 
-export interface EventsBusInterface {
+export interface EventsBusInterface extends BaseBusInterface<EventContext> {
   dispatch: <EventType extends Event = Event>(
     event: EventType
   ) => MaybePromise<void>;

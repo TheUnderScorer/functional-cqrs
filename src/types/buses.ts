@@ -11,3 +11,7 @@ export interface Buses<
   queriesBus: QueriesBusInterface<QueryHandlers>;
   eventsBus: EventsBusInterface;
 }
+
+export interface BaseBusInterface<Context = any> {
+  context: Context;
+}

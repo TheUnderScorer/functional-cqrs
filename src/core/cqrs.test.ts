@@ -11,7 +11,7 @@ import {
 import { Buses } from '../types/buses';
 import { NoHandlerFoundError } from '../errors/NoHandlerFoundError';
 
-class TestCommand implements Command {
+class TestCommand implements Command<boolean> {
   name = 'TestCommand' as const;
 
   constructor(readonly payload: boolean) {}
