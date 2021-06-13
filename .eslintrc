@@ -2,7 +2,7 @@
   "extends": [
     "airbnb-typescript/base",
     "plugin:prettier/recommended",
-    "prettier/@typescript-eslint"
+    "prettier"
   ],
   "env": {
     "mocha": true
@@ -41,6 +41,6 @@
     "no-param-reassign": ["error", { "props": true, "ignorePropertyModificationsFor": ["propertyDesciptor", "handlers", "req", "res"]}],
     "curly": "error",
     "@typescript-eslint/dot-notation": "off",
-    "@typescript-eslint/lines-between-class-members": "off",
+    "@typescript-eslint/lines-between-class-members": "off"
   }
 }

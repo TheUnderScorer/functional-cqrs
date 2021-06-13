@@ -5,9 +5,8 @@ import {
   CommandLike,
   HandlerFn,
   ResolvedHandlerResult,
-} from '../typings/handler';
-import { HandlersMap } from '../typings/core';
-import { MaybePromise } from '../typings/common';
+} from '../types/handler';
+import { HandlersMap } from '../types/core';
 import { NoHandlerFoundError } from '../errors/NoHandlerFoundError';
 
 export class BaseBus<
@@ -18,7 +17,7 @@ export class BaseBus<
 
   protected run<CommandType extends CommandLike = CommandLike>(
     command: CommandType
-  ): MaybePromise<ResolvedHandlerResult<Handlers, CommandType>> {
+  ) {
     const name = getName(command);
     const handler = this.store[name];
 
@@ -26,6 +25,9 @@ export class BaseBus<
       throw new NoHandlerFoundError(name);
     }
 
-    return callHandler(handler, command);
+    return callHandler(handler, command) as ResolvedHandlerResult<
+      Handlers,
+      CommandType
+    >;
   }
 }

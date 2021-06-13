@@ -1,8 +1,8 @@
-import { Event, EventsBusInterface, EventSubscriber } from '../typings';
+import { Event, EventsBusInterface, EventSubscriber } from '../types';
 import { callSubscribers } from '../callers/callSubscribers';
-import { EventHandlersMap } from '../typings/core';
+import { EventHandlersMap } from '../types/core';
 import { getName } from '../utils/getName';
-import { MaybePromise } from '../typings/common';
+import { MaybePromise } from '../types/common';
 
 export class EventsBus implements EventsBusInterface {
   constructor(

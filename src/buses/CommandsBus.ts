@@ -3,14 +3,22 @@ import {
   CommandHandler,
   CommandHandlerFn,
   CommandsBusInterface,
-} from '../typings';
+} from '../types';
 import { BaseBus } from './BaseBus';
+import { HandlersMap } from '../types/core';
+import { ResolvedHandlerResult } from '../types/handler';
 
-export class CommandsBus extends BaseBus<CommandHandler | CommandHandlerFn>
-  implements CommandsBusInterface {
-  execute<CommandType extends Command = Command, ReturnValue = any>(
+export class CommandsBus<
+    Handlers extends HandlersMap<
+      CommandHandler | CommandHandlerFn
+    > = HandlersMap<CommandHandler | CommandHandlerFn>
+  >
+  extends BaseBus<CommandHandler | CommandHandlerFn, Handlers>
+  implements CommandsBusInterface<Handlers>
+{
+  execute<CommandType extends Command = Command>(
     command: CommandType
-  ): ReturnValue | Promise<ReturnValue> {
+  ): ResolvedHandlerResult<Handlers, CommandType> {
     return this.run(command);
   }
 }

@@ -32,7 +32,12 @@ export interface CqrsConfig<
   queryHandlers?: QueryHandlers;
   eventHandlers?: EventHandlersMap;
   subscribers?: EventSubscriber<object>[];
+  // Custom implementation of Command Bus
   CommandsBusConstructor?: Constructor<CommandsBus>;
+
+  // Custom implementation of Queries Bus
   QueriesBusConstructor?: Constructor<QueriesBus>;
+
+  // Custom implementation of Events Bus
   EventsBusConstructor?: Constructor<EventsBus>;
 }

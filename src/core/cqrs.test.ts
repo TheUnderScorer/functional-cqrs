@@ -7,8 +7,8 @@ import {
   EventSubscriber,
   Query,
   QueryHandler,
-} from '../typings';
-import { Buses } from '../typings/buses';
+} from '../types';
+import { Buses } from '../types/buses';
 import { NoHandlerFoundError } from '../errors/NoHandlerFoundError';
 
 class TestCommand implements Command {

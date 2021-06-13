@@ -8,13 +8,13 @@ export interface CommandLike<Payload = any, Type extends string = string> {
 export type ResolvedHandlerResult<
   Handlers extends HandlersMap,
   Command extends CommandLike
-> = Handlers[Command['name']] extends (...args: unknown[]) => infer T
+> = Handlers[CommandLikeName<Command>] extends (...args: unknown[]) => infer T
   ? T
-  : Handlers[Command['name']] extends ClassHandler<any, infer S>
+  : Handlers[CommandLikeName<Command>] extends ClassHandler<any, infer S>
   ? S
   : never;
 
-export type CommandLikeName<T extends CommandLike> = CommandLike['name'];
+export type CommandLikeName<T extends CommandLike> = T['name'];
 
 export interface ClassHandler<
   TCommand extends CommandLike = CommandLike,

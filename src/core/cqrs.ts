@@ -4,7 +4,7 @@ import {
   CqrsConfig,
   CqrsResult,
   QueryHandlersMap,
-} from '../typings/core';
+} from '../types/core';
 
 export const createCqrs = <
   CommandHandlers extends CommandHandlersMap,

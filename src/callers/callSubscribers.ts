@@ -1,6 +1,6 @@
-import { Event, EventSubscriber } from '../typings';
+import { Event, EventSubscriber } from '../types';
 import { getName } from '../utils/getName';
-import { Constructor } from '../typings/common';
+import { Constructor } from '../types/common';
 
 export const callSubscribers = async <EventType extends Event = Event>(
   event: EventType,

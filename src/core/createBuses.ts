@@ -1,9 +1,9 @@
-import { Buses } from '../typings/buses';
+import { Buses } from '../types/buses';
 import {
   CommandHandlersMap,
   CqrsConfig,
   QueryHandlersMap,
-} from '../typings/core';
+} from '../types/core';
 import { CommandsBus } from '../buses/CommandsBus';
 import { QueriesBus } from '../buses/QueriesBus';
 import { EventsBus } from '../buses/EventsBus';

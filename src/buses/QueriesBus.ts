@@ -1,10 +1,24 @@
-import { QueriesBusInterface, Query } from '../typings';
+import {
+  QueriesBusInterface,
+  Query,
+  QueryHandler,
+  QueryHandlerFn,
+} from '../types';
 import { BaseBus } from './BaseBus';
+import { HandlersMap } from '../types/core';
+import { ResolvedHandlerResult } from '../types/handler';
 
-export class QueriesBus extends BaseBus implements QueriesBusInterface {
-  query<QueryType extends Query = Query, ReturnValue = any>(
+export class QueriesBus<
+    Handlers extends HandlersMap<QueryHandler | QueryHandlerFn> = HandlersMap<
+      QueryHandler | QueryHandlerFn
+    >
+  >
+  extends BaseBus
+  implements QueriesBusInterface<Handlers>
+{
+  query<QueryType extends Query = Query>(
     query: QueryType
-  ): ReturnValue | Promise<ReturnValue> {
+  ): ResolvedHandlerResult<Handlers, QueryType> {
     return this.run(query);
   }
 }

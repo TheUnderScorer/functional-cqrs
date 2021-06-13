@@ -1,5 +1,5 @@
-import { CommandLike, Handler, isClassHandler } from '../typings/handler';
-import { MaybePromise } from '../typings/common';
+import { CommandLike, Handler, isClassHandler } from '../types/handler';
+import { MaybePromise } from '../types/common';
 
 export const callHandler = <ReturnValue>(
   handler: Handler<any>,
