@@ -1,30 +1,25 @@
-import { Command, CommandsBusInterface } from '../typings';
-import { CommandHandlerMetadataStore } from '../stores/metadata/commandHandlerMetadataStore';
-import { Caller } from '../callers/Caller';
-import { ContextManager } from '../context/ContextManager';
-import { getName } from '../utils/getName';
+import {
+  Command,
+  CommandContext,
+  CommandHandler,
+  CommandHandlerFn,
+  CommandsBusInterface,
+} from '../types';
+import { BaseBus } from './BaseBus';
+import { HandlersMap } from '../types/core';
+import { ResolvedHandlerResult } from '../types/handler';
 
-export class CommandsBus<Context = any>
-  implements CommandsBusInterface<Context> {
-  private readonly caller: Caller<Context>;
-
-  constructor(
-    private readonly store: CommandHandlerMetadataStore,
-    private readonly contextManager: ContextManager<Context>
-  ) {
-    this.caller = new Caller<Context>(this.contextManager, 'command');
-  }
-
-  execute<CommandType extends Command = Command, ReturnValue = any>(
+export class CommandsBus<
+    Handlers extends HandlersMap<
+      CommandHandler | CommandHandlerFn
+    > = HandlersMap<CommandHandler | CommandHandlerFn>
+  >
+  extends BaseBus<CommandHandler | CommandHandlerFn, Handlers, CommandContext>
+  implements CommandsBusInterface<Handlers>
+{
+  execute<CommandType extends Command = Command>(
     command: CommandType
-  ): ReturnValue | Promise<ReturnValue> {
-    const name = getName(command);
-    const handler = this.store.get(name);
-
-    if (!handler) {
-      throw new Error(`No handler for command ${name} found.`);
-    }
-
-    return this.caller.call(handler, command);
+  ): ResolvedHandlerResult<Handlers, CommandType> {
+    return this.run(command);
   }
 }

@@ -1,57 +1,43 @@
-import { CommandsBus, EventsBus, QueriesBus } from '../buses';
-import { Stores } from './cqrs';
-import { Buses } from '../typings/buses';
-import { ContextCreator } from '../typings/context';
-import { ContextManager } from '../context/ContextManager';
-import { Constructor } from '../typings/common';
+import { Buses } from '../types/buses';
+import {
+  CommandHandlersMap,
+  CqrsConfig,
+  QueryHandlersMap,
+} from '../types/core';
+import { CommandsBus } from '../buses/CommandsBus';
+import { QueriesBus } from '../buses/QueriesBus';
+import { EventsBus } from '../buses/EventsBus';
 
-export interface CreateBusesParams<Context> {
-  stores: Stores;
-  context?: Context | ContextCreator<Context>;
-  CommandsBusConstructor?: Constructor<CommandsBus<Context>>;
-  QueriesBusConstructor?: Constructor<QueriesBus<Context>>;
-  EventsBusConstructor?: Constructor<EventsBus<Context>>;
-}
-
-export const createBuses = <Context = any>({
-  context,
-  stores: { queryHandlersStore, eventHandlersStore, commandHandlersStore },
+export const createBuses = <
+  CommandHandlers extends CommandHandlersMap,
+  QueryHandlers extends QueryHandlersMap
+>({
+  commandHandlers,
+  queryHandlers,
+  eventHandlers,
+  subscribers,
   EventsBusConstructor = EventsBus,
   CommandsBusConstructor = CommandsBus,
   QueriesBusConstructor = QueriesBus,
-}: CreateBusesParams<Context>): Buses => {
-  const isContextCreator = typeof context === 'function';
-  const initialContext = isContextCreator ? undefined : context;
+}: CqrsConfig<CommandHandlers, QueryHandlers>): Buses<
+  CommandHandlers,
+  QueryHandlers
+> => {
+  const commandsBus = new CommandsBusConstructor(commandHandlers);
+  const eventsBus = new EventsBusConstructor(subscribers, eventHandlers);
+  const queriesBus = new QueriesBusConstructor(queryHandlers);
 
-  const contextManager = new ContextManager<Context>(initialContext as Context);
+  commandsBus.context = {
+    eventsBus,
+  };
 
-  const commandsBus = new CommandsBusConstructor(
-    commandHandlersStore,
-    contextManager
-  );
-  const eventsBus = new EventsBusConstructor(
-    eventHandlersStore,
-    contextManager
-  );
-  const queriesBus = new QueriesBusConstructor(
-    queryHandlersStore,
-    contextManager
-  );
+  eventsBus.context = {
+    commandsBus,
+  };
 
-  contextManager.setCommandsBus(commandsBus);
-  contextManager.setEventsBus(eventsBus);
-  contextManager.setQueriesBus(queriesBus);
-
-  const buses = {
+  return {
     commandsBus,
     eventsBus,
     queriesBus,
   };
-
-  if (isContextCreator) {
-    const createdContext = (context as ContextCreator<Context>)(buses);
-    contextManager.setContext(createdContext);
-  }
-
-  return buses;
 };

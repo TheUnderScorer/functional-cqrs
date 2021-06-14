@@ -1,6 +1,6 @@
 # Module related files
-node_modules
-build
+**/node_modules
+**/build
 
 # Lerna files
 lerna.debug.log
@@ -9,8 +9,8 @@ lerna.debug.log
 packages/*/build
 packages/*/*.tsbuildinfo
 packages/*/.cache
-example/build
-example/data
+examples/build
+examples/data
 
 # IDE related files
 .idea

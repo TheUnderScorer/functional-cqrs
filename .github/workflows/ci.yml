@@ -43,30 +43,3 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-
-  docs:
-    name: Generate docs
-    needs:
-      - release
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-
-      - name: Configure CI Git User
-        run: |
-          git config --global user.name 'TheUnderScorer'
-          git config --global user.email 'przemyslawzydek@gmail.com'
-          git remote set-url origin https://TheUnderScorer:$GITHUB_TOKEN@github.com/TheUnderScorer/functional-cqrs
-
-      - name: Install and generate docs
-        run: |
-          npm install
-          npm run generate-docs
-
-      - name: Commit docs
-        uses: stefanzweifel/git-auto-commit-action@v4
-        with:
-          commit_message: 'docs: Generate docs'
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

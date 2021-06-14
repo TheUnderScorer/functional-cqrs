@@ -1,65 +1,31 @@
-import { createBuses, CreateBusesParams } from './createBuses';
-
-import { Buses } from '../typings/buses';
+import { createBuses } from './createBuses';
 import {
-  CommandHandlerMetadataStore,
-  getCommandHandlersByHandlers,
-} from '../stores/metadata/commandHandlerMetadataStore';
-import {
-  getQueryHandlersByHandlers,
-  QueryHandlerMetadataStore,
-} from '../stores/metadata/queryHandlerMetadataStore';
-import {
-  EventHandlerMetadataStore,
-  getEventHandlersByHandlers,
-} from '../stores/metadata/eventHandlerMetadataStore';
-import { Constructor } from '../typings/common';
+  CommandHandlersMap,
+  CqrsConfig,
+  CqrsResult,
+  QueryHandlersMap,
+} from '../types/core';
 
-type HandlerToRegister = ((...args: any[]) => any) | Constructor<any>;
-
-export interface CqrsConfig<Context = any>
-  extends Pick<
-    CreateBusesParams<Context>,
-    'CommandsBusConstructor' | 'EventsBusConstructor' | 'QueriesBusConstructor'
-  > {
-  context?: Context | ((buses: Buses) => Context);
-  commandHandlers?: HandlerToRegister[];
-  eventHandlers?: HandlerToRegister[];
-  queryHandlers?: HandlerToRegister[];
-}
-
-export interface Stores {
-  commandHandlersStore: CommandHandlerMetadataStore;
-  eventHandlersStore: EventHandlerMetadataStore;
-  queryHandlersStore: QueryHandlerMetadataStore;
-}
-
-export const createCqrs = async <Context = any>({
-  context,
-  eventHandlers = [],
-  commandHandlers = [],
-  queryHandlers = [],
+export const createCqrs = <
+  CommandHandlers extends CommandHandlersMap,
+  QueryHandlers extends QueryHandlersMap
+>({
+  commandHandlers = {} as CommandHandlers,
+  queryHandlers = {} as QueryHandlers,
+  eventHandlers = {},
+  subscribers = [],
   ...rest
-}: CqrsConfig<Context> = {}) => {
-  const commandHandlersStore = getCommandHandlersByHandlers(
-    commandHandlers ?? []
-  );
-
-  const queryHandlersStore = getQueryHandlersByHandlers(queryHandlers ?? []);
-
-  const eventHandlersStore = getEventHandlersByHandlers(eventHandlers ?? []);
-
-  const stores: Stores = {
-    commandHandlersStore,
-    queryHandlersStore,
-    eventHandlersStore,
-  };
-
+}: CqrsConfig<CommandHandlers, QueryHandlers>): CqrsResult<
+  CommandHandlers,
+  QueryHandlers
+> => {
   return {
     buses: createBuses({
-      stores,
-      context,
       ...rest,
+      subscribers,
+      eventHandlers,
+      commandHandlers,
+      queryHandlers,
     }),
   };
 };

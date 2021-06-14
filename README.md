@@ -2,26 +2,18 @@
 
 This library provides functional approach to CQRS (Command Query Responsibility Segregation).
 
-NOTE: Readme is in progress
+It includes all basic components - Commands Bus, Queries Bus and Events Bus with advanced typescript support.
 
 ![CI](https://github.com/TheUnderScorer/functional-cqrs/workflows/CI/badge.svg)
 [![Coverage Status](https://coveralls.io/repos/github/TheUnderScorer/functional-cqrs/badge.svg?branch=master)](https://coveralls.io/github/TheUnderScorer/functional-cqrs?branch=master)
-
-## Content list
-
-1. [✨ Getting Started](#-getting-started)
-    - [Prerequisites](#prerequisites)
-    - [Installation](#installation)
-2. [🚀 Usage](#-usage)
-3. Examples
-
 
 ## ✨ Getting Started
 
 ### Prerequsites
 
 You will need:
-- [nodejs](https://nodejs.org/en/) (>=12.13.1, not tested on older versions, but might work)
+
+- [nodejs](https://nodejs.org/en/) (>=12.13.1, not tested on older versions, but might work). It should also work in browsers (not tested).
 
 ### Installation
 
@@ -29,121 +21,101 @@ You will need:
 
 ## 🚀 Usage
 
-Functional Cqrs splits into three basic components:
+Let's say that we have a simple to-do app:
 
-### Commands
+```ts
+import {
+  Command,
+  CommandContext,
+  createCqrs,
+  Event,
+  EventContext,
+} from 'functional-cqrs';
+import { connectToDatabse } from 'your-database-library';
 
-Commands are parts of applications that change it's state (for example by creating new record in database) and dispatch events respective to these actions. Commands can be executed by using `CommandsBus`.
-
-> Typescript
-
-```typescript
-commandsBus.execute<SaveTodo>({
-    name: 'SaveTodo',
-    payload: todo,
-  });
-```
-
-> Javascript
-
-```javascript
-commandsBus.execute({
-    name: 'SaveTodo',
-    payload: todo,
-  });
-```
-
-Commands always come with two properties: 
-- `name` definies name of the command (usually named after certain domain action, ex. "SaveTodo"),
-- `payload` Data attached to command (ex. input of entity that should be validated and saved in database)
-
-Every command should have only one handle
-
->Hint: Commands are usualy named in present tense
-
-Bonus for Typescript users, you can define commands types in following way:
-
-```typescript
-import { Command } from 'functional-cqrs';
-
-export name SaveTodo = Command<'SaveTodo', Todo>;
-```
-
-First generic argument defines command `name` property, and second defines `payload`. 
-
-#### Command Handlers
-
-#### As function
-
-Handlers are always bound to single command, and they can return value. They can also execute [queries](#queries) and dispatch [events](#events.)
-
->Typescript
-
-```typescript
-import { commandHandler, CommandHandlerFn } from 'functional-cqrs';
-
-export interface Context {
-  connection: Connection;
+interface Task {
+  id: string;
+  title: string;
+  done: boolean;
 }
 
-const saveTodoHandler: CommandHandlerFn<SaveTodo, Context> = async ({
-  context: {
-    eventsBus,
-    connection,  
-  },
-  command: {payload}
-}) => {
-  if (!payload.title) {
-    throw new Error('Title is required.');
-  }
+// Command name - required for type inference
+const AddTask = 'AddTask' as const;
 
-  const todo = connection.save(payload);
+// Your command for adding new Task
+class AddTaskCommand implements Command<Task> {
+  readonly name = AddTask;
 
-  await eventsBus.dispatch<TodoSaved>({
-    name: 'TodoSaved',
-    payload: todo,
-  });
+  constructor(readonly payload: Task) {}
+}
 
-  return todo;
+// Event emitted after Task have been created
+class TaskAddedEvent implements Event<Task> {
+  constructor(readonly payload: Task) {}
+}
+
+// Your handler for adding new Task
+const addTaskHandler = (connection: Connection) => async (
+  command: AddTaskCommand,
+  // CommandContext includes EventsBus for dispatching events
+  ctx: CommandContext
+) => {
+  await connection.saveTask(command.payload);
+
+  await ctx.eventsBus.dispatch(new TaskAddedEvent(command.payload));
+
+  // Note that we return created task here
+  return command.payload;
 };
 
-export default commandHandler.asFunction<SaveTodo, Context>('SaveTodo', saveTodoHandler);
-```
-
->Javascript
-
-```javascript
-import { commandHandler } from 'functional-cqrs';
-
-const saveTodoHandler = async ({
-  context: {
-    eventsBus,
-    connection,  
-  },
-  command: {payload}
-}) => {
-  if (!payload.title) {
-    throw new Error('Title is required.');
-  }
-
-  const todo = connection.save(payload);
-
-  await eventsBus.dispatch({
-    name: 'TodoSaved',
-    payload: todo,
-  });
-
-  return todo;
+const onTaskAdded = (
+  event: TaskAddedEvent,
+  // EventContext includes CommandsBus so we can execute commands from here
+  context: EventContext
+) => {
+  // Log created Task into console
+  console.log(event.payload);
 };
 
-module.exports = commandHandler.asFunction('SaveTodo', saveTodoHandler);
+// Let's bootstrap our app
+
+const connection = connectToDatabse();
+const cqrs = createCqrs({
+  commandHandlers: {
+    // Here we create and register our command handler
+    [AddTask]: addTaskHandler(connection),
+  },
+  eventHandlers: {
+    // Events can have multiple handlers
+    [TaskAddedEvent.name]: [onTaskAdded],
+  },
+});
+
+const task = await cqrs.buses.commandsBus.execute(
+  new AddTaskCommand({
+    id: '1',
+    done: false,
+    title: 'Test task',
+  })
+);
+
+// Typescript knows that this is a "Task"!
+console.log(task.id);
 ```
+You can very quickly integrate above example with any kind of application.
 
-Handler is a function that takes one parameter which contains "Context" (which basically contains all dependencies from your application, such as database connection and also buses related to it's name.) and query, event or command.
+Now, you might ask:
+> Why do we need to set command name as "'AddTask' as const;" and then use it to register the command handler, but we don't do the same for events?
 
-<br>
-Command handlers get's injected with two buses - [Queries Bus](#queries-bus) and [Events Bus](#events-bus) in addition to the context.
-<br>
-This function returns another function that takes in this case command as a parameter that then get's resolved.
+In order to get the type inference from Typescript, we need a way to map command to handler - and we use it's name for it.
+We have to define it "as const" so Typescript knows it's exact value.
 
-> Hint: Remember that you always have to "decorate" your handler using "commandHandler.asFunction" or "commandHandler.asClass"
+We don't do that for events, because they always return `void | Promise<void>` :)
+
+## 📖 Learn more
+
+* [📥 Commands](docs/commands.md)
+* [📤 Queries](docs/commands.md)
+* [🗓 Events](docs/commands.md)
+
+Need more? Check [examples](examples) 😎.

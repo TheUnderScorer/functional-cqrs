@@ -17,7 +17,7 @@
     "rootDir": "src",
     "sourceMap": true,
     "outDir": "build",
-    "target": "ES2019",
+    "target": "ES2020",
     "types": ["node", "jest"]
   },
   "exclude": ["node_modules"],

@@ -1,6 +1,9 @@
 {
   "name": "functional-cqrs",
   "version": "1.2.3",
+  "workspaces": [
+    "examples/todo-app"
+  ],
   "author": "Przemysław Żydek <przemyslawzydek@gmail.com>",
   "typings": "build/index.d.ts",
   "main": "build/index.js",
@@ -17,31 +20,29 @@
     "node": ">=12.13.1"
   },
   "devDependencies": {
-    "@semantic-release/changelog": "5.0.1",
-    "@semantic-release/git": "9.0.0",
-    "@semantic-release/github": "7.2.0",
-    "@semantic-release/npm": "7.0.9",
+    "@semantic-release/changelog": "^5.0.1",
+    "@semantic-release/git": "^9.0.0",
+    "@semantic-release/github": "^7.2.3",
+    "@semantic-release/npm": "^7.1.3",
     "@types/faker": "^4.1.12",
     "@types/jest": "^26.0.5",
-    "@typescript-eslint/eslint-plugin": "3.7.0",
-    "@typescript-eslint/parser": "^3.7.0",
-    "awilix": "^4.3.1",
-    "eslint": "7.5.0",
-    "eslint-config-airbnb-typescript": "9.0.0",
-    "eslint-config-prettier": "6.11.0",
-    "eslint-plugin-import": "2.20.2",
-    "eslint-plugin-no-only-tests": "^2.4.0",
-    "eslint-plugin-prettier": "3.1.4",
-    "eslint-plugin-unicorn": "21.0.0",
+    "@typescript-eslint/eslint-plugin": "^4.26.1",
+    "@typescript-eslint/parser": "^4.26.1",
+    "eslint": "^7.28.0",
+    "eslint-config-airbnb-typescript": "^12.3.1",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-import": "^2.23.4",
+    "eslint-plugin-no-only-tests": "^2.6.0",
+    "eslint-plugin-prettier": "^3.4.0",
+    "eslint-plugin-unicorn": "^33.0.1",
     "faker": "^4.1.0",
     "jest": "26.1.0",
-    "prettier": "2.0.5",
-    "reflect-metadata": "0.1.13",
-    "semantic-release": "17.3.0",
+    "prettier": "^2.3.1",
+    "reflect-metadata": "^0.1.13",
+    "semantic-release": "^17.4.3",
     "ts-jest": "^26.1.3",
     "ts-node": "8.10.2",
-    "typedoc": "^0.19.2",
-    "typescript": "3.9.7"
+    "typescript": "^4.3.2"
   },
   "release": {
     "plugins": [
@@ -66,5 +67,8 @@
       ],
       "@semantic-release/github"
     ]
+  },
+  "dependencies": {
+    "type-fest": "^0.6.0"
   }
 }
