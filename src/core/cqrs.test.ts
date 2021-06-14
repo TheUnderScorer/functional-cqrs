@@ -49,9 +49,26 @@ describe('Functional cqrs', () => {
       Object {
         "buses": Object {
           "commandsBus": CommandsBus {
+            "context": Object {
+              "eventsBus": EventsBus {
+                "context": Object {
+                  "commandsBus": [Circular],
+                },
+                "eventHandlers": Object {},
+                "subscribers": Array [],
+              },
+            },
             "store": Object {},
           },
           "eventsBus": EventsBus {
+            "context": Object {
+              "commandsBus": CommandsBus {
+                "context": Object {
+                  "eventsBus": [Circular],
+                },
+                "store": Object {},
+              },
+            },
             "eventHandlers": Object {},
             "subscribers": Array [],
           },
@@ -154,7 +171,7 @@ describe('Functional cqrs', () => {
 
     await cqrs.buses.queriesBus.query(query);
 
-    expect(handler).toHaveBeenCalledWith(query);
+    expect(handler).toHaveBeenCalledWith(query, undefined);
   });
 
   it('should run query via class', async () => {
@@ -192,7 +209,9 @@ describe('Functional cqrs', () => {
 
     await cqrs.buses.eventsBus.dispatch(event);
 
-    expect(handler).toHaveBeenCalledWith(event);
+    expect(handler).toHaveBeenCalledWith(event, {
+      commandsBus: cqrs.buses.commandsBus,
+    });
   });
 
   it('should run event via class subscriber', async () => {
@@ -253,8 +272,14 @@ describe('Functional cqrs', () => {
 
     await buses.commandsBus.execute(command);
 
-    expect(commandHandler).toHaveBeenCalledWith(command);
-    expect(eventHandler).toHaveBeenCalledWith(testEvent);
-    expect(secondCommandHandler).toHaveBeenCalledWith(secondTestCommand);
+    expect(commandHandler).toHaveBeenCalledWith(command, {
+      eventsBus: buses.eventsBus,
+    });
+    expect(eventHandler).toHaveBeenCalledWith(testEvent, {
+      commandsBus: buses.commandsBus,
+    });
+    expect(secondCommandHandler).toHaveBeenCalledWith(secondTestCommand, {
+      eventsBus: buses.eventsBus,
+    });
   });
 });
