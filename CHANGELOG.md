@@ -1,3 +1,11 @@
+# [1.3.0](https://github.com/TheUnderScorer/functional-cqrs/compare/v1.2.3...v1.3.0) (2021-06-14)
+
+
+### Features
+
+* Add typed CommandBus and QueryBus ([af70231](https://github.com/TheUnderScorer/functional-cqrs/commit/af70231f78a5b8697da883a76c55df32291a94f3))
+* Simplify handlers, remove DI ([93a4a4e](https://github.com/TheUnderScorer/functional-cqrs/commit/93a4a4e3dc9e329c4554cf83222460591ee8df10))
+
 ## [1.2.3](https://github.com/TheUnderScorer/functional-cqrs/compare/v1.2.2...v1.2.3) (2021-02-01)
 
 
